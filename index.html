@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MP High Court Hindi Typing Simulator</title>
+    <style>
+        @font-face {
+            font-family: 'KrutiDev010';
+            src: local('Kruti Dev 010'), local('KrutiDev-010'), local('KrutiDev010');
+        }
+        body { font-family: 'Arial', sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 950px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #1e3d59; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 25px; font-size: 0.95em; }
+        
+        .config-panel { display: flex; justify-content: space-between; align-items: center; background: #f0f4f8; padding: 15px; border-radius: 6px; margin-bottom: 15px; border: 1px solid #dcdcdc; }
+        .config-group { display: flex; align-items: center; gap: 8px; }
+        .config-group label { font-weight: bold; color: #1e3d59; }
+        .config-group select { padding: 6px 12px; border-radius: 4px; border: 1px solid #ccc; font-size: 14px; }
+
+        .dashboard { display: flex; justify-content: space-between; background: #e8eef1; padding: 15px; border-radius: 6px; margin-bottom: 20px; font-weight: bold; flex-wrap: wrap; gap: 10px; }
+        .stat-box { min-width: 130px; }
+        .stat-box span { color: #d9534f; font-size: 1.1em; }
+        #timer-display { color: #e65100; font-size: 1.3em; }
+        #net-wpm-display { color: #0288d1 !important; font-size: 1.3em; }
+        #score-display { color: #2e7d32 !important; font-size: 1.3em; }
+        
+        .text-panel { border: 2px solid #ccd1d9; border-radius: 6px; padding: 15px; background: #fafafa; min-height: 120px; max-height: 180px; overflow-y: auto; font-size: 20px; line-height: 1.8; margin-bottom: 20px; white-space: pre-wrap; user-select: none; }
+        .word { display: inline-block; margin-right: 8px; border-bottom: 2px solid transparent; }
+        .current-word { background-color: #fff9c4; border-bottom-color: #fbc02d; }
+        .correct-word { color: #2e7d32; }
+        .wrong-word { color: #c62828; text-decoration: line-through; }
+        
+        .font-unicode { font-family: 'Arial', 'Mangal', sans-serif !important; }
+        .font-krutidev { font-family: 'KrutiDev010', sans-serif !important; font-size: 24px !important; }
+
+        textarea { width: 100%; height: 110px; font-size: 20px; padding: 12px; border: 2px solid #1e3d59; border-radius: 6px; resize: none; box-sizing: border-box; }
+        textarea:focus { outline: none; border-color: #17b978; }
+        .controls { margin-top: 15px; text-align: right; }
+        button { background: #1e3d59; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #17b978; }
+        .clear-btn { background: #78909c; margin-right: 10px; }
+        .clear-btn:hover { background: #d9534f; }
+        
+        .timer-warning { color: #c62828 !important; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0.5; } }
+
+        /* History Table Styles */
+        .history-section { margin-top: 40px; border-top: 2px solid #e0e0e0; padding-top: 20px; }
+        .history-section h3 { color: #1e3d59; margin-bottom: 15px; }
+        table { width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-radius: 4px; overflow: hidden; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e0e0e0; font-size: 14px; }
+        th { background-color: #1e3d59; color: #fff; font-weight: 600; }
+        tr:hover { background-color: #f8f9fa; }
+        .no-data { text-align: center; color: #888; font-style: italic; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>MPHC Hindi Typing Exam Simulation</h2>
+    <div class="subtitle">(Supports Remington Gail / Inscript via Unicode and Native Kruti Dev 010 mapping)</div>
+    
+    <div class="config-panel">
+        <div class="config-group">
+            <label for="font-select">Font & Layout Mode:</label>
+            <select id="font-select">
+                <option value="unicode">Unicode (Mangal / Remington Gail / Inscript)</option>
+                <option value="krutidev">Kruti Dev 010 (Legacy Layout)</option>
+            </select>
+        </div>
+        <div>
+            <button id="clear-history-btn" class="clear-btn">Clear Saved History</button>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <div class="stat-box">Time Left: <span id="timer-display">10:00</span></div>
+        <div class="stat-box">Net WPM: <span id="net-wpm-display">0</span></div>
+        <div class="stat-box">Total Words: <span id="word-count" style="color:#333;">0/350</span></div>
+        <div class="stat-box">Backspace: <span id="backspace-count">0</span></div>
+        <div class="stat-box">Wrong Words: <span id="wrong-count">0</span></div>
+        <div class="stat-box">Score: <span id="score-display">50.00</span> / 50</div>
+    </div>
+
+    <div id="text-panel" class="text-panel font-unicode"></div>
+    <textarea id="typing-area" class="font-unicode" placeholder="यहाँ टाइप करना शुरू करें... (पहला अक्षर दबाते ही टाइमर शुरू हो जाएगा)"></textarea>
+    
+    <div class="controls">
+        <button id="reset-btn">Reset Test</button>
+    </div>
+
+    <!-- Practice Log History Layout -->
+    <div class="history-section">
+        <h3>Your Performance History Log</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date & Time</th>
+                    <th>Layout Font</th>
+                    <th>Final Score</th>
+                    <th>Net WPM</th>
+                    <th>Wrong Words</th>
+                    <th>Backspaces</th>
+                </tr>
+            </thead>
+            <tbody id="history-table-body">
+                <!-- Log entries will inject dynamically here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
