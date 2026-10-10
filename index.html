@@ -22,16 +22,25 @@
         .stat-box { min-width: 120px; }
         .stat-box span { color: #d9534f; font-size: 1.1em; }
         
-        /* Text Panel with Smooth Auto Scroll Layout */
-        .text-panel { border: 2px solid #ccd1d9; border-radius: 6px; padding: 15px; background: #fafafa; min-height: 120px; max-height: 180px; overflow-y: auto; font-size: 22px; line-height: 2; margin-bottom: 20px; white-space: pre-wrap; user-select: none; scroll-behavior: smooth; }
-        .word { display: inline-block; margin-right: 10px; border-bottom: 2px solid transparent; padding: 0 2px; transition: all 0.2s ease; }
+        /* Master Text Panel Layout */
+        .text-panel { border: 2px solid #ccd1d9; border-radius: 6px; padding: 15px; background: #fafafa; min-height: 150px; max-height: 150px; overflow-y: auto; font-size: 22px; line-height: 2; margin-bottom: 15px; white-space: pre-wrap; user-select: none; scroll-behavior: smooth; box-sizing: border-box; }
+        .word { display: inline-block; margin-right: 10px; border-bottom: 2px solid transparent; padding: 0 2px; }
         .current-word { background-color: #fff9c4; border-bottom-color: #fbc02d; border-radius: 4px; }
         .correct-word { color: #2e7d32; font-weight: bold; background-color: #e8f5e9; border-radius: 4px; }
         .wrong-word { color: #c62828; text-decoration: line-through; background-color: #ffebee; border-radius: 4px; }
         .omitted-word { color: #7f8c8d; border-bottom: 2px dashed #7f8c8d; }
         
-        textarea { width: 100%; height: 110px; font-size: 22px; padding: 12px; border: 2px solid #1e3d59; border-radius: 6px; resize: none; box-sizing: border-box; font-family: 'Arial', 'Mangal', sans-serif; }
-        textarea:focus { outline: none; border-color: #17b978; }
+        /* Typing Area - Resized to exactly match the Master Text Panel height */
+        .typing-panel-wrapper { border: 2px solid #1e3d59; border-radius: 6px; padding: 15px; background: #ffffff; min-height: 150px; max-height: 150px; overflow-y: auto; font-size: 22px; line-height: 2; margin-bottom: 20px; scroll-behavior: smooth; cursor: text; box-sizing: border-box; }
+        .typing-panel-wrapper:focus-within { border-color: #17b978; box-shadow: 0 0 8px rgba(23, 185, 120, 0.2); }
+        .typed-word-span { display: inline-block; margin-right: 10px; padding: 0 2px; border-radius: 4px; }
+        .typed-correct { color: #2e7d32; background-color: #e8f5e9; }
+        .typed-wrong { color: #c62828; background-color: #ffebee; text-decoration: line-through; }
+        
+        /* Hidden Input Mirror Field for Remington Gail Engine */
+        #hidden-typing-input { position: absolute; left: -9999px; opacity: 0; }
+        .input-blink-cursor { display: inline-block; width: 2px; height: 24px; background-color: #1e3d59; animation: cursorBlink 1s infinite; vertical-align: middle; }
+        @keyframes cursorBlink { 50% { opacity: 0; } }
         
         .controls { margin-top: 15px; display: flex; justify-content: space-between; align-items: center; }
         button { background: #1e3d59; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 4px; cursor: pointer; font-weight: bold; }
@@ -90,8 +99,18 @@
         <div class="stat-box">Backspace: <span id="backspace-count">0</span></div>
     </div>
 
+    <!-- Master Text Reference Window -->
     <div id="text-panel" class="text-panel"></div>
-    <textarea id="typing-area" placeholder="यहाँ टाइप करना शुरू करें... (सभी शब्द स्क्रीन पर स्थिर रहेंगे, प्रत्येक बैकस्पेस पर 0.10 अंक कटेंगे)"></textarea>
+    
+    <!-- Resized Dynamic Multi-line Input Box -->
+    <div id="typing-panel-container" class="typing-panel-wrapper">
+        <span id="typed-history-container"></span>
+        <span id="current-typing-word" style="background-color: #e3f2fd; border-radius: 4px; padding: 0 2px;"></span>
+        <span class="input-blink-cursor"></span>
+    </div>
+    
+    <!-- Hidden input controller to receive system layout keystrokes -->
+    <input type="text" id="hidden-typing-input" autocomplete="off">
     
     <div class="controls">
         <button id="reset-btn">Reset Test</button>
@@ -133,6 +152,7 @@ const DEDUCTION_PER_ERROR = 0.50;
 const DEDUCTION_PER_BACKSPACE = 0.10; 
 
 let targetWords = [];
+let typedWordsHistory = []; 
 let currentWordIndex = 0;
 let backspaceCount = 0;
 let wrongWordsCount = 0;
@@ -146,12 +166,18 @@ const timeSelect = document.getElementById('time-select');
 const fileInput = document.getElementById('file-input');
 const customOption = document.getElementById('custom-option');
 const textPanel = document.getElementById('text-panel');
-const typingArea = document.getElementById('typing-area');
+const typingPanelContainer = document.getElementById('typing-panel-container');
+const typedHistoryContainer = document.getElementById('typed-history-container');
+const currentTypingWord = document.getElementById('current-typing-word');
+const hiddenInput = document.getElementById('hidden-typing-input');
 const timerDisplay = document.getElementById('timer-display');
 const netWpmDisplay = document.getElementById('net-wpm-display');
 const scoreDisplay = document.getElementById('score-display');
 const backspaceDisplay = document.getElementById('backspace-count');
 const resultModal = document.getElementById('result-modal');
+
+// Focus Mirror Controller
+typingPanelContainer.addEventListener('click', () => hiddenInput.focus());
 
 function initTest() {
     clearInterval(timer);
@@ -162,11 +188,16 @@ function initTest() {
     wrongWordsCount = 0;
     correctWordsCount = 0;
     testStarted = false;
-    typingArea.value = '';
-    typingArea.disabled = false;
+    typedWordsHistory = [];
+    
+    hiddenInput.value = '';
+    hiddenInput.disabled = false;
     timeSelect.disabled = false;
     matterSelect.disabled = false;
     fileInput.disabled = false;
+    
+    typedHistoryContainer.innerHTML = '';
+    currentTypingWord.textContent = '';
     
     let displayMins = Math.floor(TOTAL_TIME / 60);
     timerDisplay.textContent = `${displayMins}:00`;
@@ -178,21 +209,35 @@ function initTest() {
     targetWords = selectedMatterText.trim().split(/\s+/).filter(w => w.length > 0);
 
     textPanel.innerHTML = targetWords.map((word, idx) => `<span class="word" id="word-${idx}">${word}</span>`).join('');
-    highlightWord();
+    highlightWordAndScroll();
 }
 
-function highlightWord() {
+function highlightWordAndScroll() {
+    // Reference Window Autoscroll
     document.querySelectorAll('.word').forEach(el => el.classList.remove('current-word'));
     const currentWordEl = document.getElementById(`word-${currentWordIndex}`);
     if (currentWordEl) {
         currentWordEl.classList.add('current-word');
-        
         let parentTop = textPanel.offsetTop;
         let currentTop = currentWordEl.offsetTop;
-        if ((currentTop - parentTop) > 80) {
+        if ((currentTop - parentTop) > 90) {
             textPanel.scrollTop = currentTop - parentTop - 40;
         } else if (currentWordIndex === 0) {
             textPanel.scrollTop = 0;
+        }
+    }
+
+    // Typing Window Balanced Autoscroll
+    if (currentWordIndex === 0) {
+        typingPanelContainer.scrollTop = 0;
+    } else {
+        const lastChild = typedHistoryContainer.lastElementChild;
+        if (lastChild) {
+            let boxParentTop = typingPanelContainer.offsetTop;
+            let childTop = lastChild.offsetTop;
+            if ((childTop - boxParentTop) > 90) {
+                typingPanelContainer.scrollTop = childTop - boxParentTop - 40;
+            }
         }
     }
 }
@@ -214,7 +259,7 @@ function startTimer() {
 }
 
 fileInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files;
     if (!file) return;
     const reader = new FileReader();
     reader.onload = function(evt) {
@@ -226,8 +271,8 @@ fileInput.addEventListener('change', (e) => {
     reader.readAsText(file);
 });
 
-typingArea.addEventListener('keydown', (e) => {
-    if (!testStarted && typingArea.value.trim() === '' && e.key !== 'Process') {
+hiddenInput.addEventListener('keydown', (e) => {
+    if (!testStarted && hiddenInput.value.trim() === '' && e.key !== 'Process' && e.key !== 'Backspace') {
         startTimer();
     }
 
@@ -238,30 +283,41 @@ typingArea.addEventListener('keydown', (e) => {
     }
 });
 
-typingArea.addEventListener('input', (e) => {
-    const value = typingArea.value;
+hiddenInput.addEventListener('input', (e) => {
+    const value = hiddenInput.value;
+    
     if (value.endsWith(' ')) {
         const typedWord = value.trim();
         if (typedWord.length > 0) {
             evaluateWord(typedWord);
             currentWordIndex++;
-            typingArea.value = '';
-            if (currentWordIndex >= targetWords.length) { endTest(); } else { highlightWord(); }
+            hiddenInput.value = '';
+            currentTypingWord.textContent = '';
+            if (currentWordIndex >= targetWords.length) { endTest(); } else { highlightWordAndScroll(); }
             calculateStats();
+        } else {
+            hiddenInput.value = '';
         }
+    } else {
+        currentTypingWord.textContent = value;
     }
 });
 
 function evaluateWord(typedWord) {
     const targetWord = targetWords[currentWordIndex];
     const wordEl = document.getElementById(`word-${currentWordIndex}`);
+    
+    let isCorrect = (typedWord === targetWord);
+    let spanClass = isCorrect ? "typed-correct" : "typed-wrong";
+    
+    typedHistoryContainer.innerHTML += `<span class="typed-word-span ${spanClass}">${typedWord}</span>`;
+    
     if (wordEl) {
-        if (typedWord === targetWord) {
-            wordEl.classList.remove('current-word');
+        wordEl.classList.remove('current-word');
+        if (isCorrect) {
             wordEl.classList.add('correct-word');
             correctWordsCount++;
         } else {
-            wordEl.classList.remove('current-word');
             wordEl.classList.add('wrong-word');
             wrongWordsCount++;
         }
@@ -279,7 +335,7 @@ function calculateStats() {
 
 function endTest() {
     clearInterval(timer);
-    typingArea.disabled = true;
+    hiddenInput.disabled = true;
     
     const timeElapsed = TOTAL_TIME - timeLeft;
     const timeInMinutes = timeElapsed > 0 ? (timeElapsed / 60) : 0.01;
@@ -323,7 +379,10 @@ document.getElementById('submit-btn').addEventListener('click', () => {
     if (confirm("क्या आप वाकई अपनी टाइपिंग परीक्षा सबमिट करना चाहते हैं?")) endTest();
 });
 
-window.onload = initTest;
+window.onload = () => {
+    initTest();
+    hiddenInput.focus();
+};
 </script>
 </body>
 </html>
