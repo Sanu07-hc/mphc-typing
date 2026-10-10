@@ -90,53 +90,70 @@ typingArea.addEventListener('keydown', (e) => {
     }
 });
 
+// शब्द को गायब होने से रोकने के लिए अपडेटेड इनपुट लॉजिक
 typingArea.addEventListener('input', (e) => {
     if (!isTestStarted && typingArea.value.length > 0) startTimer();
 
     const rawInput = typingArea.value;
     
-    if (rawInput.endsWith(' ') || rawInput.endsWith('  ')) {
-        const typedWord = rawInput.trim();
-        if (typedWord.length > 0) {
-            evaluateWord(typedWord);
+    // शब्दों को स्पेस के आधार पर अलग करके एरे में बदलें
+    const typedWordsArray = rawInput.split(/\s+/);
+    
+    // अगर यूजर ने लास्ट में स्पेस दबाया है, तो अंतिम शब्द टाइप हो चुका है
+    const hasTrailingSpace = rawInput.endsWith(' ') || rawInput.endsWith('\n');
+    
+    // जितने शब्द टाइप हो चुके हैं, उनकी लाइव चेकिंग करें
+    let completedWordsCount = typedWordsArray.length;
+    if (!hasTrailingSpace && completedWordsCount > 0) {
+        completedWordsCount--; // जो शब्द अभी टाइप हो रहा है उसे छोड़ दें
+    }
+    
+    // पुरानी गलतियों की गिनती साफ़ करके नए सिरे से लाइव काउंट करें
+    wrongWordsCount = 0;
+    
+    for (let i = 0; i < completedWordsCount; i++) {
+        if (i >= sourceWords.length) break;
+        
+        const currentSpan = document.getElementById(`word-${i}`);
+        const expectedWord = sourceWords[i];
+        const currentTyped = typedWordsArray[i];
+        
+        const cleanTyped = currentTyped.replace(/[\u200B-\u200D\uFEFF]/g, "");
+        const cleanExpected = expectedWord.replace(/[\u200B-\u200D\uFEFF]/g, "");
+        
+        if (cleanTyped === cleanExpected) {
+            if (currentSpan) currentSpan.className = 'word correct-word';
+        } else {
+            if (currentSpan) currentSpan.className = 'word wrong-word';
+            wrongWordsCount++;
         }
     }
-});
-
-function evaluateWord(typedWord) {
-    const currentSpan = document.getElementById(`word-${currentWordIndex}`);
-    const expectedWord = sourceWords[currentWordIndex];
     
-    const cleanTyped = typedWord.replace(/[\u200B-\u200D\uFEFF]/g, "");
-    const cleanExpected = expectedWord.replace(/[\u200B-\u200D\uFEFF]/g, "");
+    // सक्रिय शब्द पर हाईलाइट ले जाएं
+    currentWordIndex = completedWordsCount;
     
-    if (cleanTyped === cleanExpected) {
-        if (currentSpan) currentSpan.className = 'word correct-word';
-    } else {
-        if (currentSpan) currentSpan.className = 'word wrong-word';
-        wrongWordsCount++;
+    // पुराने सभी हाईलाइट हटाएं और सिर्फ करंट शब्द को पीला करें
+    const allWordSpans = textPanel.querySelectorAll('.word');
+    allWordSpans.forEach(span => span.classList.remove('current-word'));
+    
+    const nextSpan = document.getElementById(`word-${currentWordIndex}`);
+    if (nextSpan) {
+        nextSpan.classList.add('current-word');
+        nextSpan.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
     
-    currentWordIndex++;
-    typingArea.value = ''; 
-    
-    if (currentWordIndex >= sourceWords.length) {
+    // यदि सारे शब्द सफलतापूर्वक पूरे टाइप हो गए हैं
+    if (currentWordIndex >= sourceWords.length && hasTrailingSpace) {
         endExam("परीक्षा पूर्ण! (Exam Complete!)");
-    } else {
-        const nextSpan = document.getElementById(`word-${currentWordIndex}`);
-        if(nextSpan) {
-            nextSpan.classList.add('current-word');
-            nextSpan.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
     }
     
     updateScoreboard();
-}
+});
 
 function endExam(statusMessage) {
     clearInterval(countdownInterval);
     typingArea.disabled = true;
-    typingArea.value = statusMessage;
+    updateScoreboard();
     
     const metrics = updateScoreboard();
     saveResultToLocalStorage(metrics);
@@ -228,18 +245,3 @@ function loadHistoryTable() {
         historyTableBody.appendChild(row);
     });
 }
-
-if (clearHistoryBtn) {
-    clearHistoryBtn.addEventListener('click', () => {
-        if (confirm("Are you sure you want to delete all saved practice logs? This cannot be undone.")) {
-            localStorage.removeItem('mphc_history');
-            loadHistoryTable();
-        }
-    });
-}
-
-if (resetBtn) {
-    resetBtn.addEventListener('click', initExam);
-}
-
-initExam();
