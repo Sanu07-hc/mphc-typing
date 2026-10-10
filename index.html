@@ -31,11 +31,15 @@
         
         textarea { width: 100%; height: 110px; font-size: 22px; padding: 12px; border: 2px solid #1e3d59; border-radius: 6px; resize: none; box-sizing: border-box; font-family: 'Arial', 'Mangal', sans-serif; }
         textarea:focus { outline: none; border-color: #17b978; }
-        .controls { margin-top: 15px; text-align: right; }
-        button { background: #1e3d59; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 4px; cursor: pointer; }
-        button:hover { background: #17b978; }
-        .clear-btn { background: #78909c; margin-right: 10px; }
-        .clear-btn:hover { background: #d9534f; }
+        
+        .controls { margin-top: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-group { display: flex; gap: 10px; }
+        button { background: #1e3d59; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #112233; }
+        #submit-btn { background: #2e7d32; }
+        #submit-btn:hover { background: #1b5e20; }
+        .clear-btn { background: #78909c; }
+        .clear-btn:hover { background: #c62828; }
         
         .timer-warning { color: #c62828 !important; animation: blink 1s infinite; }
         @keyframes blink { 50% { opacity: 0.5; } }
@@ -88,6 +92,9 @@
     
     <div class="controls">
         <button id="reset-btn">Reset Test</button>
+        <div class="btn-group">
+            <button id="submit-btn">Submit Exam</button>
+        </div>
     </div>
 
     <div class="history-section">
