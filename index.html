@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MPHC Hindi Typing Simulator (Remington Gail Engine)</title>
+    <title>MP High Court Hindi Typing Simulator</title>
     <style>
         body { font-family: 'Arial', 'Mangal', sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; color: #333; }
         .container { max-width: 950px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         h2 { text-align: center; color: #1e3d59; margin-bottom: 5px; }
-        .subtitle { text-align: center; color: #d9534f; margin-bottom: 25px; font-size: 1em; font-weight: bold; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 25px; font-size: 0.95em; }
         
         .config-panel { display: flex; justify-content: space-between; align-items: center; background: #f0f4f8; padding: 15px; border-radius: 6px; margin-bottom: 15px; border: 1px solid #dcdcdc; flex-wrap: wrap; gap: 15px; }
         .config-group { display: flex; align-items: center; gap: 8px; }
         .config-group label { font-weight: bold; color: #1e3d59; }
         .config-group select { padding: 6px 12px; border-radius: 4px; border: 1px solid #ccc; font-size: 14px; background: white; font-weight: bold; color: #1e3d59; cursor: pointer; }
-        .config-info { background: #ffebee; color: #c62828; padding: 6px 12px; border-radius: 4px; font-size: 14px; font-weight: bold; border: 1px solid #ef9a9a; }
         
         .file-upload-btn { background: #0288d1; color: white; padding: 6px 12px; border-radius: 4px; font-size: 14px; font-weight: bold; cursor: pointer; border: none; }
         #file-input { display: none; }
@@ -31,14 +30,13 @@
         .wrong-word { color: #c62828; text-decoration: line-through; background-color: #ffebee; border-radius: 4px; }
         .omitted-word { color: #7f8c8d; border-bottom: 2px dashed #7f8c8d; }
         
-        /* Typing Area - Equal Size with Auto Scroll */
+        /* Typing Area Box - Resized to exactly match the Master Text Panel height */
         .typing-panel-wrapper { border: 2px solid #1e3d59; border-radius: 6px; padding: 15px; background: #ffffff; min-height: 150px; max-height: 150px; overflow-y: auto; font-size: 22px; line-height: 2; margin-bottom: 20px; scroll-behavior: smooth; cursor: text; box-sizing: border-box; text-align: left; display: block; width: 100%; }
         .typing-panel-wrapper:focus-within { border-color: #17b978; box-shadow: 0 0 8px rgba(23, 185, 120, 0.2); }
-        .typed-word-span { display: inline-block; margin-right: 10px; padding: 0 2px; border-radius: 4px; text-align: left; }
+        .typed-word-span { display: inline-block; margin-right: 10px; padding: 0 2px; border-radius: 4px; }
         .typed-correct { color: #2e7d32; background-color: #e8f5e9; }
         .typed-wrong { color: #c62828; background-color: #ffebee; text-decoration: line-through; }
-        
-        /* Input Blink Cursor Configuration */
+        /* Hidden Input Mirror Field Configuration */
         #hidden-typing-input { position: absolute; left: -9999px; opacity: 0; }
         .input-blink-cursor { display: inline-block; width: 2px; height: 24px; background-color: #1e3d59; animation: cursorBlink 1s infinite; vertical-align: middle; }
         @keyframes cursorBlink { 50% { opacity: 0; } }
@@ -63,9 +61,10 @@
     </style>
 </head>
 <body>
+
 <div class="container">
     <h2>MPHC Hindi Typing Exam Simulation</h2>
-    <div class="subtitle">⚠️ WARNING: Remington Gail Engine Active (Parallel Scroller Mod)</div>
+    <div class="subtitle">(Official Remington Gail / Inscript Mangal Font Engine)</div>
     
     <div class="config-panel">
         <div class="config-group">
@@ -75,6 +74,12 @@
                 <option value="1">Legal Matter 2 (Civil Dispute)</option>
                 <option value="2">Legal Matter 3 (Bail Application)</option>
                 <option value="3">Legal Matter 4 (Writ Petition)</option>
+                <option value="4">Legal Matter 5 (New Case Draft)</option>
+                <option value="5">Legal Matter 6 (Criminal Revision)</option>
+                <option value="6">Legal Matter 7 (Civil Injunction)</option>
+                <option value="7">Legal Matter 8 (Anticipatory Bail)</option>
+                <option value="8">Legal Matter 9 (Service Writ)</option>
+                <option value="9">Legal Matter 10 (Accident Claim)</option>
                 <option value="custom" id="custom-option" style="display:none;">Custom Uploaded Matter</option>
             </select>
         </div>
@@ -88,7 +93,12 @@
             </select>
         </div>
         <div class="config-group">
-            <div class="config-info">Backspace: Full Allowed</div>
+            <label for="backspace-mode-select">Backspace Mode:</label>
+            <select id="backspace-mode-select">
+                <option value="full" selected>Full Backspace</option>
+                <option value="oneword">One Word Backspace</option>
+                <option value="none">No Backspace</option>
+            </select>
         </div>
         <div>
             <label for="file-input" class="file-upload-btn">📁 Upload (.txt)</label>
@@ -103,14 +113,17 @@
         <div class="stat-box">Backspace: <span id="backspace-count">0</span></div>
     </div>
 
+    <!-- Master Text Reference Window -->
     <div id="text-panel" class="text-panel"></div>
     
+    <!-- Resized Dynamic Multi-line Input Box -->
     <div id="typing-panel-container" class="typing-panel-wrapper">
         <span id="typed-history-container"></span>
         <span id="current-typing-word" style="background-color: #e3f2fd; border-radius: 4px; padding: 0 2px;"></span>
         <span class="input-blink-cursor"></span>
     </div>
     
+    <!-- Hidden input controller to receive system layout keystrokes -->
     <input type="text" id="hidden-typing-input" autocomplete="off">
     
     <div class="controls">
@@ -142,8 +155,14 @@
 const legalMattersList = [
     "अपीलार्थी की ओर से प्रस्तुत आपराधिक अपील अधीनस्थ न्यायालय द्वारा पारित दोषसिद्धि और दंडादेश के विरुद्ध इस न्यायालय के समक्ष प्रस्तुत की गई है। विद्वान विचारण न्यायाधीश ने अभियुक्त को भारतीय दंड संहिता की धारा के अंतर्गत दोषी पाते हुए कठोर कारावास और अर्थदंड से दंडित किया था। अभियोजन कथानक के अनुसार घटना की दिनांक को फरियादी ने आरक्षी केंद्र में इस आशय की प्रथम सूचना रिपोर्ट दर्ज कराई थी कि आरोपी ने भूमि विवाद को लेकर उसके साथ गाली-गलौज की और जान से मारने की धमकी देते हुए लाठी से प्रहार किया। इस प्रहार के कारण आहत को गंभीर चोटें आईं और उसे उपचार के लिए जिला चिकित्सालय ले जाया गया। अन्वेषण अधिकारी ने घटनास्थल का नक्शा मौका तैयार किया और साक्षियों के कथन दंड प्रक्रिया संहिता की धारा के अंतर्गत लेखबद्ध किए। विचारण के दौरान अभियोजन पक्ष ने अपने मामले के समर्थन में मौखिक और दस्तावेजी साक्ष्य प्रस्तुत किए। अभियुक्त ने अपने परीक्षण में स्वयं को निर्दोष बताया और कहा कि उसे रंजिश के कारण झूठा फंसाया गया है। अधीनस्थ न्यायालय ने साक्ष्यों का मूल्यांकन करने के पश्चात आरोपी को दोषी ठहराया था। अपीलार्थी के विद्वान अधिवक्ता ने तर्क दिया कि अधीनस्थ न्यायालय का निर्णय विधि के सिद्धांतों के विपरीत है। चश्मदीद साक्षियों के कथनों में गंभीर विरोधाभास है और स्वतंत्र साक्षियों ने अभियोजन कहानी का समर्थन नहीं किया है। इसके अतिरिक्त चिकित्सा अधिकारी की रिपोर्ट से भी चोटों की प्रकृति गंभीर सिद्ध नहीं होती है। इसलिए अभियुक्त को संदेह का लाभ दिया जाना न्यायोचित होगा। इसके विपरीत शासकीय अधिवक्ता ने तर्क दिया कि अभियोजन ने अपना मामला संदेह से परे प्रमाणित किया है और निर्णय में किसी हस्तक्षेप की आवश्यकता नहीं है। दोनों पक्षों के तर्कों पर विचार करने और अभिलेख का परिशीलन करने के पश्चात यह न्यायालय इस निष्कर्ष पर पहुंचता है कि न्याय के हित में दंडादेश को स्थिर रखा जाए और अपील निरस्त की जाए।",
     "वादी ने प्रतिवादी के विरुद्ध स्थायी निषेधाज्ञा और स्वत्व की घोषणा के लिए यह दीवानी वाद व्यवहार न्यायाधीश के समक्ष प्रस्तुत किया है। वाद पत्र के अनुसार वादी विवादित भूमि का एकमात्र पंजीकृत स्वामी और अधिपत्य धारी है जिसे उसने अपने स्वयं के उपार्जित धन से क्रय किया था। प्रतिवादी जो कि वादी का सगा भाई है वह बिना किसी वैध अधिकार के उक्त भूमि के कुछ हिस्से पर अवैध कब्जा करने का प्रयास कर रहा है। वादी ने जब प्रतिवादी को निर्माण कार्य करने से रोका तो प्रतिवादी ने विवाद खड़ा कर दिया जिससे विवश होकर वादी को न्यायालय की शरण लेनी पड़ी। प्रतिवादी ने अपने लिखित कथन में वादी के दावों का खंडन किया है और यह तर्क दिया है कि विवादित संपत्ति पैतृक है और इसका विभाजन अभी तक नहीं हुआ है। अतः उसे भी इस संपत्ति पर निर्माण करने का पूर्ण विधिक अधिकार प्राप्त है। न्यायालय द्वारा उभयपक्ष के तर्कों के आधार पर वाद प्रश्न विरचित किए गए। वादी ने अपने पक्ष में राजस्व अभिलेख और क्रय विलेख प्रस्तुत किए जो यह साबित करते हैं कि संपत्ति केवल वादी के नाम पर दर्ज है। प्रतिवादी ऐसा कोई साक्ष्य प्रस्तुत करने में असफल रहा जिससे यह प्रमाणित हो सके कि संपत्ति में पैतृक धन का उपयोग हुआ था। अतः विलेखों के आधार पर प्रतिवादी का दावा खारिज किया जाता है और वादी के पक्ष में डिक्री पारित की जाती है।",
-    "आवेदक की ओर से दंड प्रक्रिया संहिता की धारा के तहत यह द्वितीय जमानत आवेदन आरक्षी केंद्र में दर्ज अपराध के अंतर्गत प्रस्तुत किया गया है। आवेदक का प्रथम जमानत आवेदन इस न्यायालय द्वारा गुण-दोष के आधार पर पूर्व में निरस्त किया चुका है। आवेदक के विद्वान अधिवक्ता ने तर्क दिया कि आवेदक पिछले छह माह से न्यायिक निरोध में है और मामले की विवेचना पूर्ण हो चुकी है तथा आरोप पत्र न्यायालय में प्रस्तुत किया जा चुका है। मुख्य साक्षियों के कथन विचारण न्यायालय के समक्ष दर्ज किए जा चुके हैं जिन्होंने अभियोजन की कहानी का समर्थन नहीं किया है और वे मुकर गए हैं। अब आवेदक से किसी भी प्रकार की जब्ती शेष नहीं है और विचारण पूरा होने में लंबा समय लगने की संभावना है। ऐसी स्थिति में आवेदक को जेल में बंद रखना न्यायसंगत नहीं होगा। शासकीय अधिवक्ता ने जमानत का तीव्र विरोध करते हुए कहा कि आवेदक के विरुद्ध गंभीर प्रकृति के अपराध दर्ज हैं और यदि उसे जमानत पर रिहा किया गया तो वह साक्षियों को डराने और प्रभावित करने का प्रयास कर सकता है। दोनों पक्षों को सुनने के बाद और केस डायरी का अवलोकन करने के पश्चात न्यायालय यह पाता है कि परिस्थितियों में भौतिक परिवर्तन हुआ है। साक्षियों के मुकर जाने के कारण आवेदक को और अधिक समय तक जेल में रखना उचित प्रतीत नहीं होता। अतः शर्तों के अधीन आवेदन स्वीकार किया जाता है।",
-    "याचिकाकर्ता ने भारत के सक्षम प्राधिकारी द्वारा निलंबन की कार्रवाई की गई है। न्यायालय ने दोनों पक्षों के अभिलेखों का बारीकी से अध्ययन किया। यह स्थापित विधि है कि किसी भी कर्मचारी को निलंबित करने से पूर्व या तत्काल बाद विभागीय जांच प्रारंभ की जानी अनिवार्य है परंतु इस मामले में निलंबन के तीन माह बीत जाने के बाद भी आरोप पत्र जारी नहीं किया गया है। यह प्रक्रिया प्रशासनिक नियमों का उल्लंघन है। अतः न्यायालय इस याचिका को स्वीकार करते हुए निलंबन आदेश को निरस्त करता है और याचिकाकर्ता को समस्त लाभों के साथ सेवा में बहाल करने का निर्देश जारी करता है।"
+    "आवेदक की ओर से दंड प्रक्रिया संहिता की धारा के तहत यह द्वितीय जमानत आवेदन आरक्षी केंद्र में दर्ज अपराध के अंतर्गत प्रस्तुत किया गया है। आवेदक का प्रथम जमानत आवेदन इस न्यायालय द्वारा गुण-दोष के आधार पर पूर्व में निरस्त किया चुका है। आवेदक के विद्वान अधिवक्ता ने तर्क दिया कि आवेदक पिछले छह माह से न्यायिक निरोध में है और मामले की विवेचना पूर्ण हो चुकी है तथा आरोप पत्र न्यायालय में प्रस्तुत किया चुका है। मुख्य साक्षियों के कथन विचारण न्यायालय के समक्ष दर्ज किए जा चुके हैं जिन्होंने अभियोजन की कहानी का समर्थन नहीं किया है और वे मुकर गए हैं। अब आवेदक से किसी भी प्रकार की जब्ती शेष नहीं है और विचारण पूरा होने में लंबा समय लगने की संभावना है। ऐसी स्थिति में आवेदक को जेल में बंद रखना न्यायसंगत नहीं होगा। शासकीय अधिवक्ता ने जमानत का तीव्र विरोध करते हुए कहा कि आवेदक के विरुद्ध गंभीर प्रकृति के अपराध दर्ज हैं और यदि उसे जमानत पर रिहा किया गया तो वह साक्षियों को डराने और प्रभावित करने का प्रयास कर सकता है। दोनों पक्षों को सुनने के बाद और केस डायरी का अवलोकन करने के पश्चात न्यायालय यह पाता है कि परिस्थितियों में भौतिक परिवर्तन हुआ है। साक्षियों के मुकर जाने के कारण आवेदक को और अधिक समय तक जेल में रखना उचित प्रतीत नहीं होता। अतः शर्तों के अधीन आवेदन स्वीकार किया जाता है।",
+    "याचिकाकर्ता ने भारत के संविधान के अनुच्छेद 226 के अंतर्गत यह रिट याचिका राज्य शासन के उस आदेश के विरुद्ध प्रस्तुत की है जिसके द्वारा उसे बिना किसी जांच के सेवा से निलंबित कर दिया गया है। याचिकाकर्ता का तर्क है कि वह लोक स्वास्थ्य यांत्रिकी विभाग में उपयंत्री के पद पर कार्यरत है और उसके सेवा अभिलेख हमेशा उत्कृष्ट रहे हैं। प्रतिवादी गण ने बिना किसी कारण बताओ नोटिस और नैसर्गिक न्याय के सिद्धांतों का पालन किए बिना दुर्भावनापूर्ण तरीके से यह निलंबन आदेश जारी किया है जो कि पूर्णतः मनमाना और अवैध है। शासकीय अधिवक्ता ने तर्क दिया कि याचिकाकर्ता के विरुद्ध वित्तीय अनियमितताओं और शासकीय धन के गबन की गंभीर शिकायतें प्राप्त हुई थीं जिसकी प्रारंभिक जांच के बाद ही सक्षम प्राधिकारी द्वारा निलंबन की कार्रवाई की गई है। न्यायालय ने दोनों पक्षों के अभिलेखों का बारीकी से अध्ययन किया। यह स्थापित विधि है कि किसी भी कर्मचारी को निलंबित करने से पूर्व या तत्काल बाद विभागीय जांच प्रारंभ की जानी अनिवार्य है परंतु इस मामले में निलंबन के तीन माह बीत जाने के बाद भी आरोप पत्र जारी नहीं किया गया है। यह प्रक्रिया प्रशासनिक नियमों का उल्लंघन है। अतः न्यायालय इस याचिका को स्वीकार करते हुए निलंबन आदेश को निरस्त करता है और याचिकाकर्ता को समस्त लाभों के साथ सेवा में बहाल करने का निर्देश जारी करता है।",
+    "प्रस्तुत प्रकरण में वादी द्वारा प्रतिवादी के विरुद्ध प्रस्तुत वाद-पत्र का अवलोकन किया गया। भारतीय संविधान के अनुच्छेद 226 के तहत न्यायालय को यह अधिकार प्राप्त है कि वह मौलिक अधिकारों के संरक्षण तथा लोकहित की रक्षा के लिए आवश्यक निर्देश जारी कर सके। उभय पक्षों के विद्वान अधिवक्ताओं की दलीलें सुनी गईं तथा पत्रावली पर उपलब्ध समस्त अभिलेखों एवं साक्ष्यों का परीक्षण किया गया। यह निर्विवाद रूप से स्थापित है कि किसी भी वाद की कार्यवाही में प्राकृतिक न्याय के सिद्धांतों का कड़ाई से पालन किया जाना अनिवार्य है। वादी का यह मुख्य कथन है कि प्रतिवादी द्वारा उसके विधिवत अधिकृत संपत्ति पर अवैध रूप से कब्जा करने का प्रयास किया गया है, जिसके संबंध में पूर्व में भी एक लिखित शिकायत संबंधित थाने में दर्ज कराई गई थी, किंतु स्थानीय पुलिस द्वारा इस मामले में समय पर कोई प्रभावी वैधानिक कार्रवाई नहीं की गई। इसके विपरीत, प्रतिवादी के अधिवक्ता का यह तर्क रहा है कि प्रस्तुत वाद विचारणीय नहीं है क्योंकि यह आवश्यक पक्षों की अनुपस्थिति से ग्रसित है और इसमें विलंब का उचित कारण नहीं दर्शाया गया है। तथापि, न्यायालय का यह स्पष्ट मत है कि न्यायहित में दोनों पक्षों को अपना पक्ष रखने का पर्याप्त अवसर दिया जाना उचित होगा ताकि किसी भी पक्ष के साथ अन्याय न हो। अतः समस्त परिस्थितियों एवं साक्ष्यों पर गंभीर विचार करने के पश्चात् यह आदेश दिया जाता है कि इस प्रकरण में आगामी सुनवाई की तिथि नियत की जाए। दोनों पक्ष आगामी सुनवाई पर अपने-अपने साक्ष्य एवं दस्तावेजी प्रमाण न्यायालय के समक्ष प्रस्तुत करें। आदेश की एक प्रति संबंधित पक्षकारों को नियमानुसार प्रेषित की जाए। यह आदेश आज दिनांक को मेरी उपस्थिति में खुले न्यायालय में लिखवाया गया और हस्ताक्षरित किया गया।",
+    "क्रिमिनल रिवीजन की इस कार्यवाही में पुनरीक्षणकर्ता ने अधीनस्थ सत्र न्यायालय के आक्षेपित आदेश को चुनौती दी है, जिसके तहत घरेलू हिंसा और भरण-पोषण के मामले में आवेदिका के पक्ष में अंतरिम आर्थिक सहायता मंजूर की गई थी। पुनरीक्षणकर्ता के विद्वान अधिवक्ता का तर्क है कि अधीनस्थ न्यायालय ने उपलब्ध साक्ष्यों का निष्पक्ष मूल्यांकन नहीं किया और बिना किसी विधिक आधार के अत्यधिक भरण-पोषण की राशि निर्धारित कर दी, जो वर्तमान परिस्थितियों में न्यायसंगत नहीं कही जा सकती। इसके विपरीत, आवेदिका के अधिवक्ता ने यह प्रतिवाद किया कि आवेदिका के पास आजीविका का कोई स्वतंत्र साधन नहीं है और वह पूरी तरह से अपने पति पर आश्रित है, जबकि पति का मासिक वेतन विधिक दस्तावेजों से पर्याप्त सिद्ध होता है। न्यायालय ने उभय पक्षों के लिखित और मौखिक तर्कों का ध्यानपूर्वक परिशीलन किया और पत्रावली पर मौजूद बैंक खातों के विवरणों का सूक्ष्म परीक्षण किया। विधिक सिद्धांतों के अनुसार, विवश पत्नी को गरिमापूर्ण जीवन जीने के लिए पर्याप्त वित्तीय सहायता प्रदान करना पति का परम सामाजिक और कानूनी दायित्व है। अधीनस्थ न्यायालय के आदेश में कोई क्षेत्राधिकार संबंधी त्रुटि अथवा विधिक अवैधता प्रतीत नहीं होती है, जिसके कारण इस पुनरीक्षण याचिका में कोई हस्तक्षेप किया जाए। अतः यह पुनरीक्षण याचिका आधारहीन होने के कारण पूर्णतः खारिज की जाती है और अंतरिम भरण-पोषण का आदेश यथावत लागू रहेगा।",
+    "दीवानी वाद की इस महत्वपूर्ण कार्यवाही में वादी ने प्रतिवादी के विरुद्ध विवादित भूमि पर किसी भी प्रकार के अवैध निर्माण को रोकने तथा यथास्थिति बनाए रखने के लिए स्थायी निषेधाज्ञा की डिक्री जारी करने की प्रार्थना की है। वाद-पत्र के कथनों के अनुसार, वादी उक्त राजस्व भूमि का एकमात्र पंजीकृत भूस्वामी है और उसका नाम राजस्व अभिलेखों में स्पष्ट रूप से दर्ज है, किंतु प्रतिवादी दुर्भावनापूर्ण तरीके से उसकी पैतृक सीमा का अतिक्रमण कर कंक्रीट का निर्माण कार्य प्रारंभ कर रहा है। प्रतिवादी ने अपने प्रतिवाद-पत्र में इन आरोपों से साफ इनकार किया और दावा किया कि यह संपत्ति संयुक्त परिवार की है जिसका अभी तक कोई विधिक बंटवारा नहीं हुआ है। वाद प्रश्नों के निर्धारण के पश्चात् न्यायालय ने दोनों पक्षों द्वारा प्रस्तुत मौखिक गवाहियों और सीमांकन रिपोर्ट का विस्तृत परीक्षण किया। शासकीय राजस्व निरीक्षक द्वारा प्रस्तुत की गई आधिकारिक सीमांकन रिपोर्ट से यह पूर्णतः सिद्ध होता है कि प्रतिवादी वादी की निजी भूमि की सीमा के भीतर अनधिकृत रूप से अतिक्रमण करने का प्रयास कर रहा थी। अतः न्याय के हित में वादी के स्वत्व की रक्षा करना विधिक रूप से आवश्यक है। प्रतिवादी को आदेशित किया जाता है कि वह विवादित भूमि पर तुरंत निर्माण कार्य रोक दे और भविष्य में वादी के शांतिपूर्ण आधिपत्य में किसी भी प्रकार का हस्तक्षेप न करे।",
+    "आवेदक की ओर से प्रस्तुत यह अग्रिम जमानत आवेदन भारतीय नागरिक सुरक्षा संहिता के अंतर्गत उस कथित अपराध के संबंध में प्रस्तुत किया गया है, जिसमें पुलिस द्वारा आवेदक के विरुद्ध धोखाधड़ी और कूटरचित विलेख तैयार करने का मामला दर्ज किया गया है। आवेदक के विद्वान अधिवक्ता ने पुरजोर तर्क दिया कि आवेदक कानून का पालन करने वाला एक सम्मानित नागरिक है और उसे व्यावसायिक रंजिश के चलते इस मामले में झूठा फंसाया गया है। पुलिस द्वारा लगाए गए आरोपों का कोई भी ठोस दस्तावेजी विधिक आधार केस डायरी में मौजूद नहीं है, और आवेदक जांच अधिकारी के साथ पूर्ण सहयोग करने के लिए सदैव तत्पर है, इसलिए उसकी गिरफ्तारी पर रोक लगाई जानी चाहिए। लोक अभियोजक ने जमानत का तीव्र विरोध करते हुए तर्क दिया कि अपराध की प्रकृति अत्यंत गंभीर है और यदि आवेदक को अग्रिम संरक्षण प्रदान किया गया, तो वह महत्वपूर्ण दस्तावेजी साक्ष्यों के साथ छेड़छाड़ कर सकता है और गवाहों को प्रभावित करने का प्रयास कर सकता है। न्यायालय ने दोनों पक्षों की दलीलें सुनीं और केस डायरी का गहन अवलोकन किया। यह ध्यान में रखते हुए कि मुख्य साक्ष्य दस्तावेजी रूप में पहले ही जब्त किए जा चुके हैं, आवेदक को हिरासत में लेकर पूछताछ करने की कोई तार्किक विधिक आवश्यकता प्रतीत नहीं होती है। अतः शर्तों के अधीन यह अग्रिम जमानत आवेदन स्वीकार किया जाता है।",
+    "याचिकाकर्ता ने लोक सेवा विभाग में अपनी वरिष्ठता और पदोन्नति की अनदेखी किए जाने के विरुद्ध संविधान के अनुच्छेद 226 के तहत यह रिट याचिका प्रस्तुत की है। याचिकाकर्ता का मुख्य विधिक तर्क है कि विभाग द्वारा हाल ही में जारी की गई पदोन्नति सूची में उससे कनिष्ठ कर्मचारियों को उच्च पद पर पदोन्नत कर दिया गया है, जबकि उसका सेवा रिकॉर्ड पूर्णतः निष्कलंक और उत्कृष्ट रहा है। विभाग की यह कार्रवाई भारतीय संविधान के अनुच्छेद 14 और 16 में प्रदत्त समानता के मौलिक अधिकारों का खुला उल्लंघन है और पूरी तरह से प्रशासनिक मनमानेपन से ग्रसित है। राज्य शासन की ओर से उपस्थित शासकीय अधिवक्ता ने प्रतिवाद करते हुए कहा कि पदोन्नति की प्रक्रिया केवल वरिष्ठता पर आधारित नहीं थी, बल्कि इसमें विभागीय सतर्कता जांच और गोपनीय चरित्रावली का मूल्यांकन भी शामिल था, जिसके आधार पर याचिकाकर्ता को इस बार अयोग्य पाया गया। न्यायालय ने विभागीय पदोन्नति समिति की मूल पत्रावली और गोपनीय चरित्रावली का सूक्ष्म अवलोकन किया। अभिलेखों से स्पष्ट हुआ कि याचिकाकर्ता के विरुद्ध कोई भी विभागीय जांच अथवा आपराधिक प्रकरण लंबित नहीं था और उसे जानबूझकर प्रक्रिया से बाहर रखा गया। अतः न्यायालय इस याचिका को स्वीकार करते हुए आक्षेपित पदोन्नति सूची को निरस्त करता है और विभाग को निर्देश देता है कि याचिकाकर्ता को समस्त विधिक लाभों के साथ वरिष्ठता सह पदोन्नति प्रदान की जाए।",
+    "मोटर दुर्घटना दावा अधिकरण के समक्ष यह दावा याचिका आवेदक द्वारा उस भीषण सड़क दुर्घटना के संबंध में प्रस्तुत की गई है, जिसमें प्रतिवादी की अनियंत्रित और तेज गति से आ रही बस ने आवेदक की मोटरसाइकिल को पीछे से जोरदार टक्कर मार दी थी। इस दुर्घटना के फलस्वरूप आवेदक को गंभीर शारीरिक चोटें आईं और उसका दाहिना पैर पूरी तरह से अपंग हो गया, जिसके कारण उसकी जीविकोपार्जन की क्षमता समाप्त हो गई। बीमा कंपनी के अधिवक्ता ने अपने लिखित कथन में तर्क दिया कि दुर्घटना बस चालक की लापरवाही से नहीं बल्कि स्वयं मोटरसाइकिल चालक की असावधानी के कारण हुई थी, और बस चालक के पास वैध ड्राइविंग लाइसेंस भी नहीं था, इसलिए बीमा कंपनी किसी भी प्रकार की क्षतिपूर्ति देने के लिए उत्तरद्वीप नहीं है। अधिकरण ने दुर्घटना के चश्मदीद गवाहों के बयानों, पुलिस द्वारा तैयार किए गए घटनास्थल के नक्शा मौका और चिकित्सा विशेषज्ञ की दिव्यांगता रिपोर्ट का विस्तृत मूल्यांकन किया। साक्ष्यों से यह पूर्णतः सिद्ध हुआ कि दुर्घटना पूरी तरह से बस चालक की घोर लापरवाही का परिणाम थी और वाहन का बीमा कवर दुर्घटना की तिथि को वैध था। अतः अधिकरण आवेदक के पक्ष में कुल पंद्रह लाख रुपये की क्षतिपूर्ति राशि छह प्रतिशत वार्षिक ब्याज के साथ मंजूर करता है, जिसका भुगतान बीमा कंपनी द्वारा तीस दिनों के भीतर अनिवार्य रूप से किया जाएगा।"
 ];
 
 let customMatterText = "";
@@ -164,6 +183,7 @@ let testStarted = false;
 
 const matterSelect = document.getElementById('matter-select');
 const timeSelect = document.getElementById('time-select');
+const backspaceModeSelect = document.getElementById('backspace-mode-select');
 const fileInput = document.getElementById('file-input');
 const customOption = document.getElementById('custom-option');
 const textPanel = document.getElementById('text-panel');
@@ -195,6 +215,7 @@ function initTest() {
     timeSelect.disabled = false;
     matterSelect.disabled = false;
     fileInput.disabled = false;
+    backspaceModeSelect.disabled = false;
     
     typedHistoryContainer.innerHTML = '';
     currentTypingWord.textContent = '';
@@ -205,33 +226,32 @@ function initTest() {
     backspaceDisplay.textContent = "0";
     netWpmDisplay.textContent = "0";
     scoreDisplay.textContent = "50.00";
+
     let selectedMatterText = (matterSelect.value === "custom") ? customMatterText : legalMattersList[matterSelect.value];
     targetWords = selectedMatterText.trim().split(/\s+/).filter(w => w.length > 0);
 
     textPanel.innerHTML = targetWords.map((word, idx) => `<span class="word" id="word-${idx}">${word}</span>`).join('');
     highlightWordAndScroll();
 }
-
-// ➔ रेमिंगटन गेल आधा अक्षर (हलंत) और विसर्ग (ः) बाईपास नॉर्मलाइज़र इंजन
 function normalizeHindi(text) {
     if (!text) return "";
     return text.trim()
-        .replace(/्/g, "") // सभी आधे अक्षरों के हलंत टकराव को बाईपास करना
-        .replace(/ः/g, "ः") // विसर्ग मैपिंग को स्थिर रखना
-        .replace(/[\u200B-\u200D\uFEFF]/g, ""); // हिडन यूनिकोड स्पेस हटाना
+        .replace(/्/g, "") 
+        .replace(/ः/g, ":") 
+        .replace(/३/g, ":") 
+        .replace(/#/g, ":")  
+        .replace(/:/g, ":") 
+        .replace(/[\u200B-\u200D\uFEFF]/g, ""); 
 }
 
-// ➔ पैरेलल लाइव स्क्रोलर इंजन (दोनों विंडोज़ को समानांतर चलाना)
 function highlightWordAndScroll() {
     document.querySelectorAll('.word').forEach(el => el.classList.remove('current-word'));
     const currentWordEl = document.getElementById(`word-${currentWordIndex}`);
     if (currentWordEl) {
         currentWordEl.classList.add('current-word');
-        
         let parentTop = textPanel.offsetTop;
         let currentTop = currentWordEl.offsetTop;
         
-        // पैरेलल स्क्रॉल ट्रैकर्स
         textPanel.scrollTop = currentTop - parentTop - 40;
         typingPanelContainer.scrollTop = currentTop - parentTop - 40;
     }
@@ -242,6 +262,7 @@ function startTimer() {
     timeSelect.disabled = true;
     matterSelect.disabled = true;
     fileInput.disabled = true;
+    backspaceModeSelect.disabled = true;
     
     timer = setInterval(() => {
         timeLeft--;
@@ -272,6 +293,23 @@ hiddenInput.addEventListener('keydown', (e) => {
     }
 
     if (e.key === 'Backspace') {
+        let mode = backspaceModeSelect.value;
+        if (mode === "none") { e.preventDefault(); return; }
+        if (mode === "oneword" && hiddenInput.value === "" && typedWordsHistory.length > 0) { e.preventDefault(); return; }
+        if (mode === "full" && hiddenInput.value === "" && typedWordsHistory.length > 0) {
+            e.preventDefault();
+            currentWordIndex--;
+            let lastWordObj = typedWordsHistory.pop();
+            if (lastWordObj.isCorrect) correctWordsCount--; else wrongWordsCount--;
+            hiddenInput.value = lastWordObj.text;
+            currentTypingWord.textContent = lastWordObj.text;
+            const prevWordEl = document.getElementById(`word-${currentWordIndex}`);
+            if (prevWordEl) prevWordEl.classList.remove('correct-word', 'wrong-word');
+            renderTypedHistoryUI();
+            highlightWordAndScroll();
+            calculateStats();
+            return;
+        }
         backspaceCount++;
         backspaceDisplay.textContent = backspaceCount;
         calculateStats();
@@ -280,7 +318,6 @@ hiddenInput.addEventListener('keydown', (e) => {
 
 hiddenInput.addEventListener('input', (e) => {
     const value = hiddenInput.value;
-    
     if (value.endsWith(' ')) {
         const typedWord = value.trim();
         if (typedWord.length > 0) {
@@ -301,11 +338,8 @@ hiddenInput.addEventListener('input', (e) => {
 function evaluateWord(typedWord) {
     const targetWord = targetWords[currentWordIndex];
     const wordEl = document.getElementById(`word-${currentWordIndex}`);
-    
     let isCorrect = (normalizeHindi(typedWord) === normalizeHindi(targetWord));
-    let spanClass = isCorrect ? "typed-correct" : "typed-wrong";
-    
-    typedHistoryContainer.innerHTML += `<span class="typed-word-span ${spanClass}">${typedWord}</span>`;
+    typedWordsHistory.push({ text: typedWord, isCorrect: isCorrect });
     
     if (wordEl) {
         wordEl.classList.remove('current-word');
@@ -317,7 +351,16 @@ function evaluateWord(typedWord) {
             wrongWordsCount++;
         }
     }
+    renderTypedHistoryUI();
 }
+
+function renderTypedHistoryUI() {
+    typedHistoryContainer.innerHTML = typedWordsHistory.map(item => {
+        let spanClass = item.isCorrect ? "typed-correct" : "typed-wrong";
+        return `<span class="typed-word-span ${spanClass}">${item.text}</span>`;
+    }).join('');
+}
+
 function calculateStats() {
     const timeElapsed = TOTAL_TIME - timeLeft;
     const timeInMinutes = timeElapsed > 0 ? (timeElapsed / 60) : 0.01;
@@ -376,6 +419,7 @@ document.getElementById('submit-btn').addEventListener('click', () => {
 
 window.onload = () => {
     initTest();
+    setTimeout(() => { if (targetWords.length === 0) { initTest(); } }, 200);
     hiddenInput.focus();
 };
 </script>
