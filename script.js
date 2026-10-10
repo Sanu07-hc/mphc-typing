@@ -89,6 +89,7 @@ typingArea.addEventListener('keydown', (e) => {
     }
 });
 
+// फिक्स किया गया इनपुट लॉजिक: जब तक स्पेस नहीं दबेगा, अगला शब्द लाल नहीं होगा
 typingArea.addEventListener('input', (e) => {
     if (!isTestStarted && typingArea.value.length > 0) startTimer();
 
@@ -98,17 +99,18 @@ typingArea.addEventListener('input', (e) => {
     
     let completedWordsCount = typedWordsArray.length;
     if (!hasTrailingSpace && completedWordsCount > 0) {
-        completedWordsCount--; 
+        completedWordsCount--; // जो शब्द अभी टाइप हो रहा है उसे छोड़ दें
     }
     
     wrongWordsCount = 0;
     
-    // सभी स्पैन का कलर रीसेट करें ताकि सही लाइव मार्किंग हो
+    // सभी स्पैन का स्टाइल पहले सामान्य (क्लीन) करें
     const allWordSpans = textPanel.querySelectorAll('.word');
     allWordSpans.forEach(span => {
         span.className = 'word';
     });
     
+    // केवल उन्हीं शब्दों को लाल या हरा करें जो पूरी तरह टाइप हो चुके हैं (जिनके बाद स्पेस दब चुका है)
     for (let i = 0; i < completedWordsCount; i++) {
         if (i >= sourceWords.length) break;
         
@@ -127,6 +129,7 @@ typingArea.addEventListener('input', (e) => {
         }
     }
     
+    // वर्तमान में जो शब्द टाइप किया जा रहा है उसे पीला (Highlight) रखें, वह लाल या कटा हुआ नहीं दिखेगा
     currentWordIndex = completedWordsCount;
     
     const nextSpan = document.getElementById(`word-${currentWordIndex}`);
@@ -241,14 +244,3 @@ function loadHistoryTable() {
 if (clearHistoryBtn) {
     clearHistoryBtn.addEventListener('click', () => {
         if (confirm("Are you sure you want to delete all saved practice logs? This cannot be undone.")) {
-            localStorage.removeItem('mphc_history');
-            loadHistoryTable();
-        }
-    });
-}
-
-if (resetBtn) {
-    resetBtn.addEventListener('click', initExam);
-}
-
-initExam();
