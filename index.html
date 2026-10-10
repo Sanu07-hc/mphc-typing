@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MPHC Hindi Typing Simulator (Remington Gail Only)</title>
+    <title>MPHC Hindi Typing Simulator (Remington Gail Engine)</title>
     <style>
         body { font-family: 'Arial', 'Mangal', sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; color: #333; }
         .container { max-width: 950px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
@@ -24,7 +24,7 @@
         .stat-box span { color: #d9534f; font-size: 1.1em; }
         
         /* Master Text Panel Layout */
-        .text-panel { border: 2px solid #ccd1d9; border-radius: 6px; padding: 15px; background: #fafafa; min-height: 150px; max-height: 150px; overflow-y: auto; font-size: 22px; line-height: 2; margin-bottom: 15px; white-space: pre-wrap; user-select: none; scroll-behavior: smooth; box-sizing: border-box; }
+        .text-panel { border: 2px solid #ccd1d9; border-radius: 6px; padding: 15px; background: #fafafa; min-height: 150px; max-height: 150px; overflow-y: auto; font-size: 22px; line-height: 2; margin-bottom: 15px; white-space: pre-wrap; user-select: none; scroll-behavior: smooth; box-sizing: border-box; text-align: left; }
         .word { display: inline-block; margin-right: 10px; border-bottom: 2px solid transparent; padding: 0 2px; }
         .current-word { background-color: #fff9c4; border-bottom-color: #fbc02d; border-radius: 4px; }
         .correct-word { color: #2e7d32; font-weight: bold; background-color: #e8f5e9; border-radius: 4px; }
@@ -32,9 +32,9 @@
         .omitted-word { color: #7f8c8d; border-bottom: 2px dashed #7f8c8d; }
         
         /* Typing Area - Equal Size with Auto Scroll */
-        .typing-panel-wrapper { border: 2px solid #1e3d59; border-radius: 6px; padding: 15px; background: #ffffff; min-height: 150px; max-height: 150px; overflow-y: auto; font-size: 22px; line-height: 2; margin-bottom: 20px; scroll-behavior: smooth; cursor: text; box-sizing: border-box; }
+        .typing-panel-wrapper { border: 2px solid #1e3d59; border-radius: 6px; padding: 15px; background: #ffffff; min-height: 150px; max-height: 150px; overflow-y: auto; font-size: 22px; line-height: 2; margin-bottom: 20px; scroll-behavior: smooth; cursor: text; box-sizing: border-box; text-align: left; display: block; width: 100%; }
         .typing-panel-wrapper:focus-within { border-color: #17b978; box-shadow: 0 0 8px rgba(23, 185, 120, 0.2); }
-        .typed-word-span { display: inline-block; margin-right: 10px; padding: 0 2px; border-radius: 4px; }
+        .typed-word-span { display: inline-block; margin-right: 10px; padding: 0 2px; border-radius: 4px; text-align: left; }
         .typed-correct { color: #2e7d32; background-color: #e8f5e9; }
         .typed-wrong { color: #c62828; background-color: #ffebee; text-decoration: line-through; }
         
@@ -65,7 +65,7 @@
 <body>
 <div class="container">
     <h2>MPHC Hindi Typing Exam Simulation</h2>
-    <div class="subtitle">⚠️ WARNING: Only Remington Gail (Mangal) Layout Active</div>
+    <div class="subtitle">⚠️ WARNING: Remington Gail Engine Active (Parallel Scroller Mod)</div>
     
     <div class="config-panel">
         <div class="config-group">
@@ -88,7 +88,7 @@
             </select>
         </div>
         <div class="config-group">
-            <div class="config-info">Engine: Remington Gail Locked</div>
+            <div class="config-info">Backspace: Full Allowed</div>
         </div>
         <div>
             <label for="file-input" class="file-upload-btn">📁 Upload (.txt)</label>
@@ -212,31 +212,28 @@ function initTest() {
     highlightWordAndScroll();
 }
 
+// ➔ रेमिंगटन गेल आधा अक्षर (हलंत) और विसर्ग (ः) बाईपास नॉर्मलाइज़र इंजन
+function normalizeHindi(text) {
+    if (!text) return "";
+    return text.trim()
+        .replace(/्/g, "") // सभी आधे अक्षरों के हलंत टकराव को बाईपास करना
+        .replace(/ः/g, "ः") // विसर्ग मैपिंग को स्थिर रखना
+        .replace(/[\u200B-\u200D\uFEFF]/g, ""); // हिडन यूनिकोड स्पेस हटाना
+}
+
+// ➔ पैरेलल लाइव स्क्रोलर इंजन (दोनों विंडोज़ को समानांतर चलाना)
 function highlightWordAndScroll() {
     document.querySelectorAll('.word').forEach(el => el.classList.remove('current-word'));
     const currentWordEl = document.getElementById(`word-${currentWordIndex}`);
     if (currentWordEl) {
         currentWordEl.classList.add('current-word');
+        
         let parentTop = textPanel.offsetTop;
         let currentTop = currentWordEl.offsetTop;
-        if ((currentTop - parentTop) > 90) {
-            textPanel.scrollTop = currentTop - parentTop - 40;
-        } else if (currentWordIndex === 0) {
-            textPanel.scrollTop = 0;
-        }
-    }
-
-    if (currentWordIndex === 0) {
-        typingPanelContainer.scrollTop = 0;
-    } else {
-        const lastChild = typedHistoryContainer.lastElementChild;
-        if (lastChild) {
-            let boxParentTop = typingPanelContainer.offsetTop;
-            let childTop = lastChild.offsetTop;
-            if ((childTop - boxParentTop) > 90) {
-                typingPanelContainer.scrollTop = childTop - boxParentTop - 40;
-            }
-        }
+        
+        // पैरेलल स्क्रॉल ट्रैकर्स
+        textPanel.scrollTop = currentTop - parentTop - 40;
+        typingPanelContainer.scrollTop = currentTop - parentTop - 40;
     }
 }
 
@@ -302,15 +299,13 @@ hiddenInput.addEventListener('input', (e) => {
 });
 
 function evaluateWord(typedWord) {
-    // 100% सटीक मिलान .trim() स्ट्रिपिंग लॉजिक के साथ
-    const targetWord = targetWords[currentWordIndex].trim();
-    const cleanTypedWord = typedWord.trim();
+    const targetWord = targetWords[currentWordIndex];
     const wordEl = document.getElementById(`word-${currentWordIndex}`);
     
-    let isCorrect = (cleanTypedWord === targetWord);
+    let isCorrect = (normalizeHindi(typedWord) === normalizeHindi(targetWord));
     let spanClass = isCorrect ? "typed-correct" : "typed-wrong";
     
-    typedHistoryContainer.innerHTML += `<span class="typed-word-span ${spanClass}">${cleanTypedWord}</span>`;
+    typedHistoryContainer.innerHTML += `<span class="typed-word-span ${spanClass}">${typedWord}</span>`;
     
     if (wordEl) {
         wordEl.classList.remove('current-word');
