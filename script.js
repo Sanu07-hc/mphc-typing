@@ -1,7 +1,6 @@
 // MPHC Real Exam Pattern - 350 Words Pure Legal Matter
 const unicodeParagraph = "अपीलार्थी की ओर से प्रस्तुत आपराधिक अपील अधीनस्थ न्यायालय द्वारा पारित दोषसिद्धि और दंडादेश के विरुद्ध इस न्यायालय के समक्ष प्रस्तुत की गई है। विद्वान विचारण न्यायाधीश ने अभियुक्त को भारतीय दंड संहिता की धारा के अंतर्गत दोषी पाते हुए कठोर कारावास और अर्थदंड से दंडित किया था। अभियोजन कथानक के अनुसार घटना की दिनांक को फरियादी ने आरक्षी केंद्र में इस आशय की प्रथम सूचना रिपोर्ट दर्ज कराई थी कि आरोपी ने भूमि विवाद को लेकर उसके साथ गाली-गलौज की और जान से मारने की धमकी देते हुए लाठी से प्रहार किया। इस प्रहार के कारण आहत को गंभीर चोटें आईं और उसे उपचार के लिए जिला चिकित्सालय ले जाया गया। अन्वेषण अधिकारी ने घटनास्थल का नक्शा मौका तैयार किया और साक्षियों के कथन दंड प्रक्रिया संहिता की धारा के अंतर्गत लेखबद्ध किए। विचारण के दौरान अभियोजन पक्ष ने अपने मामले के समर्थन में मौखिक और दस्तावेजी साक्ष्य प्रस्तुत किए। अभियुक्त ने अपने परीक्षण में स्वयं को निर्दोष बताया और कहा कि उसे रंजिश के कारण झूठा फंसाया गया है। अधीनस्थ न्यायालय ने साक्ष्यों का मूल्यांकन करने के पश्चात आरोपी को दोषी ठहराया था। अपीलार्थी के विद्वान अधिवक्ता ने तर्क दिया कि अधीनस्थ न्यायालय का निर्णय विधि के सिद्धांतों के विपरीत है। चश्मदीद साक्षियों के कथनों में गंभीर विरोधाभास है और स्वतंत्र साक्षियों ने अभियोजन कहानी का समर्थन नहीं किया है। इसके अतिरिक्त चिकित्सा अधिकारी की रिपोर्ट से भी चोटों की प्रकृति गंभीर सिद्ध नहीं होती है। इसलिए अभियुक्त को संदेह का लाभ दिया जाना न्यायोचित होगा। इसके विपरीत शासकीय अधिवक्ता ने तर्क दिया कि अभियोजन ने अपना मामला संदेह से परे प्रमाणित किया है और निर्णय में किसी हस्तक्षेप की आवश्यकता नहीं है। दोनों पक्षों के तर्कों पर विचार करने और अभिलेख का परिशीलन करने के पश्चात यह न्यायालय इस निष्कर्ष पर पहुंचता है कि न्याय के हित में दंडादेश को संशोधित किया जाना आवश्यक है। अतः अपील आंशिक रूप से स्वीकार की जाती है और अभियुक्त की सजा को कम करते हुए अर्थदंड में वृद्धि की जाती है। आदेश की प्रति अधीनस्थ न्यायालय को भेजी जाए।";
 
-// Clean string arrays direct mappings
 let sourceWords = unicodeParagraph.trim().split(/\s+/).slice(0, 350);
 
 let backspaceCount = 0;
@@ -90,26 +89,25 @@ typingArea.addEventListener('keydown', (e) => {
     }
 });
 
-// शब्द को गायब होने से रोकने के लिए अपडेटेड इनपुट लॉजिक
 typingArea.addEventListener('input', (e) => {
     if (!isTestStarted && typingArea.value.length > 0) startTimer();
 
     const rawInput = typingArea.value;
-    
-    // शब्दों को स्पेस के आधार पर अलग करके एरे में बदलें
     const typedWordsArray = rawInput.split(/\s+/);
-    
-    // अगर यूजर ने लास्ट में स्पेस दबाया है, तो अंतिम शब्द टाइप हो चुका है
     const hasTrailingSpace = rawInput.endsWith(' ') || rawInput.endsWith('\n');
     
-    // जितने शब्द टाइप हो चुके हैं, उनकी लाइव चेकिंग करें
     let completedWordsCount = typedWordsArray.length;
     if (!hasTrailingSpace && completedWordsCount > 0) {
-        completedWordsCount--; // जो शब्द अभी टाइप हो रहा है उसे छोड़ दें
+        completedWordsCount--; 
     }
     
-    // पुरानी गलतियों की गिनती साफ़ करके नए सिरे से लाइव काउंट करें
     wrongWordsCount = 0;
+    
+    // सभी स्पैन का कलर रीसेट करें ताकि सही लाइव मार्किंग हो
+    const allWordSpans = textPanel.querySelectorAll('.word');
+    allWordSpans.forEach(span => {
+        span.className = 'word';
+    });
     
     for (let i = 0; i < completedWordsCount; i++) {
         if (i >= sourceWords.length) break;
@@ -129,12 +127,7 @@ typingArea.addEventListener('input', (e) => {
         }
     }
     
-    // सक्रिय शब्द पर हाईलाइट ले जाएं
     currentWordIndex = completedWordsCount;
-    
-    // पुराने सभी हाईलाइट हटाएं और सिर्फ करंट शब्द को पीला करें
-    const allWordSpans = textPanel.querySelectorAll('.word');
-    allWordSpans.forEach(span => span.classList.remove('current-word'));
     
     const nextSpan = document.getElementById(`word-${currentWordIndex}`);
     if (nextSpan) {
@@ -142,7 +135,6 @@ typingArea.addEventListener('input', (e) => {
         nextSpan.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
     
-    // यदि सारे शब्द सफलतापूर्वक पूरे टाइप हो गए हैं
     if (currentWordIndex >= sourceWords.length && hasTrailingSpace) {
         endExam("परीक्षा पूर्ण! (Exam Complete!)");
     }
@@ -245,3 +237,18 @@ function loadHistoryTable() {
         historyTableBody.appendChild(row);
     });
 }
+
+if (clearHistoryBtn) {
+    clearHistoryBtn.addEventListener('click', () => {
+        if (confirm("Are you sure you want to delete all saved practice logs? This cannot be undone.")) {
+            localStorage.removeItem('mphc_history');
+            loadHistoryTable();
+        }
+    });
+}
+
+if (resetBtn) {
+    resetBtn.addEventListener('click', initExam);
+}
+
+initExam();
