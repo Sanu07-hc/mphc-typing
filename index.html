@@ -3,30 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MPHC Hindi Typing Exam - Ultimate Portal</title>
-    <!-- Firebase Realtime App SDKs for Live Section -->
-    <script src="https://gstatic.com"></script>
-    <script src="https://gstatic.com"></script>
+    <title>MPHC Hindi Typing Simulator (Remington Gail Engine)</title>
     <style>
         body { font-family: 'Arial', 'Mangal', sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; color: #333; }
         .container { max-width: 950px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         h2 { text-align: center; color: #1e3d59; margin-bottom: 5px; }
-        .subtitle { text-align: center; color: #666; margin-bottom: 20px; font-size: 0.95em; }
+        .subtitle { text-align: center; color: #d9534f; margin-bottom: 25px; font-size: 1em; font-weight: bold; }
         
-        /* Advanced Tab Controller Navigation Layout */
-        .tab-navigation { display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 3px solid #1e3d59; padding-bottom: 2px; }
-        .tab-btn { background: #e2e8f0; color: #1e3d59; border: none; padding: 12px 24px; font-size: 16px; font-weight: bold; border-radius: 6px 6px 0 0; cursor: pointer; transition: all 0.3s ease; }
-        .tab-btn.active-tab { background: #1e3d59; color: white; }
-        .tab-content { display: none; }
-        .tab-content.active-content { display: block; }
-
         .config-panel { display: flex; justify-content: space-between; align-items: center; background: #f0f4f8; padding: 15px; border-radius: 6px; margin-bottom: 15px; border: 1px solid #dcdcdc; flex-wrap: wrap; gap: 15px; }
         .config-group { display: flex; align-items: center; gap: 8px; }
         .config-group label { font-weight: bold; color: #1e3d59; }
         .config-group select { padding: 6px 12px; border-radius: 4px; border: 1px solid #ccc; font-size: 14px; background: white; font-weight: bold; color: #1e3d59; cursor: pointer; }
+        .config-info { background: #ffebee; color: #c62828; padding: 6px 12px; border-radius: 4px; font-size: 14px; font-weight: bold; border: 1px solid #ef9a9a; }
         
         .file-upload-btn { background: #0288d1; color: white; padding: 6px 12px; border-radius: 4px; font-size: 14px; font-weight: bold; cursor: pointer; border: none; }
-        #file-input, #live-file-input { display: none; }
+        #file-input { display: none; }
 
         .dashboard { display: flex; justify-content: space-between; background: #e8eef1; padding: 15px; border-radius: 6px; margin-bottom: 20px; font-weight: bold; flex-wrap: wrap; gap: 10px; }
         .stat-box { min-width: 120px; }
@@ -39,411 +30,353 @@
         .correct-word { color: #2e7d32; font-weight: bold; background-color: #e8f5e9; border-radius: 4px; }
         .wrong-word { color: #c62828; text-decoration: line-through; background-color: #ffebee; border-radius: 4px; }
         .omitted-word { color: #7f8c8d; border-bottom: 2px dashed #7f8c8d; }
-        /* Typing Area Layout Box Setup */
+        
+        /* Typing Area - Equal Size with Auto Scroll */
         .typing-panel-wrapper { border: 2px solid #1e3d59; border-radius: 6px; padding: 15px; background: #ffffff; min-height: 150px; max-height: 150px; overflow-y: auto; font-size: 22px; line-height: 2; margin-bottom: 20px; scroll-behavior: smooth; cursor: text; box-sizing: border-box; text-align: left; display: block; width: 100%; }
         .typing-panel-wrapper:focus-within { border-color: #17b978; box-shadow: 0 0 8px rgba(23, 185, 120, 0.2); }
-        .typed-word-span { display: inline-block; margin-right: 10px; padding: 0 2px; border-radius: 4px; }
+        .typed-word-span { display: inline-block; margin-right: 10px; padding: 0 2px; border-radius: 4px; text-align: left; }
         .typed-correct { color: #2e7d32; background-color: #e8f5e9; }
         .typed-wrong { color: #c62828; background-color: #ffebee; text-decoration: line-through; }
         
-        .hidden-typing-input { position: absolute; left: -9999px; opacity: 0; }
+        /* Input Blink Cursor Configuration */
+        #hidden-typing-input { position: absolute; left: -9999px; opacity: 0; }
         .input-blink-cursor { display: inline-block; width: 2px; height: 24px; background-color: #1e3d59; animation: cursorBlink 1s infinite; vertical-align: middle; }
         @keyframes cursorBlink { 50% { opacity: 0; } }
         
         .controls { margin-top: 15px; display: flex; justify-content: space-between; align-items: center; }
         button { background: #1e3d59; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         button:hover { background: #112233; }
-        .submit-btn { background: #2e7d32; }
-        .submit-btn:hover { background: #1b5e20; }
+        #submit-btn { background: #2e7d32; }
+        #submit-btn:hover { background: #1b5e20; }
 
-        /* Login Screen Panel */
-        .login-box-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; border: 2px dashed #ccd1d9; background: #fafafa; border-radius: 8px; margin-bottom: 20px; }
-        .login-box-wrapper input { width: 100%; max-width: 320px; padding: 12px; margin-bottom: 12px; border: 2px solid #cbd5e1; border-radius: 4px; font-size: 16px; }
-        .lock-notice { background: #fff3cd; border: 2px solid #ffeeba; color: #856404; padding: 15px; border-radius: 6px; text-align: center; font-size: 16px; font-weight: bold; margin-bottom: 20px; display: none; width: 100%; box-sizing: border-box; }
-
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); overflow-y: auto; }
-        .modal-content { background-color: #fff; margin: 4% auto; padding: 25px; border-radius: 10px; width: 85%; max-width: 700px; box-shadow: 0 5px 25px rgba(0,0,0,0.3); }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
+        .modal-content { background-color: #fff; margin: 5% auto; padding: 25px; border-radius: 10px; width: 80%; max-width: 650px; box-shadow: 0 5px 25px rgba(0,0,0,0.3); animation: slideDown 0.4s ease; }
+        @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-header { border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; text-align: center; color: #1e3d59; font-size: 24px; font-weight: bold; }
         .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
         .result-item { background: #f8f9fa; padding: 12px 15px; border-radius: 6px; border-left: 5px solid #1e3d59; font-size: 16px; display: flex; justify-content: space-between; align-items: center; }
         .result-item strong { font-size: 18px; color: #2c3e50; }
         .score-highlight { background: #e8f5e9; border-left-color: #2e7d32; }
         .score-highlight strong { color: #2e7d32; font-size: 22px; }
-        .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        .leaderboard-table th, .leaderboard-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        .leaderboard-table th { background-color: #1e3d59; color: white; }
+        .close-modal-btn { display: block; width: 100%; text-align: center; margin-top: 15px; background: #d9534f; color: white; padding: 10px; border-radius: 6px; font-size: 16px; font-weight: bold; border: none; cursor: pointer; }
+        .close-modal-btn:hover { background: #c62828; }
     </style>
 </head>
 <body>
 <div class="container">
-    <h2>MPHC Hindi Typing Portal</h2>
-    <div class="subtitle" id="portal-clock-sync">सर्वर टाइम: कनेक्टिंग...</div>
+    <h2>MPHC Hindi Typing Exam Simulation</h2>
+    <div class="subtitle">⚠️ WARNING: Remington Gail Engine Active (Parallel Scroller Mod)</div>
     
-    <div class="tab-navigation">
-        <button class="tab-btn active-tab" onclick="switchPortalTab('practice-section', this)">💻 डेली प्रैक्टिस मोड (As It Is)</button>
-        <button class="tab-btn" onclick="switchPortalTab('live-section', this)">🏆 लाइव एग्जाम टूर्नामेंट (10:00 AM)</button>
-    </div>
-
-    <div id="practice-section" class="tab-content active-content">
-        <div class="config-panel">
-            <div class="config-group">
-                <label for="matter-select">Select Matter:</label>
-                <select id="matter-select">
-                    <option value="0">Legal Matter 1 (Criminal Appeal)</option>
-                    <option value="1">Legal Matter 2 (Civil Dispute)</option>
-                    <option value="2">Legal Matter 3 (Bail Application)</option>
-                    <option value="3">Legal Matter 4 (Writ Petition)</option>
-                    <option value="4">Legal Matter 5 (New Case Draft)</option>
-                    <option value="custom" id="custom-option" style="display:none;">Custom Uploaded Matter</option>
-                </select>
-            </div>
-            <div class="config-group">
-                <label for="time-select">Time:</label>
-                <select id="time-select">
-                    <option value="300">5 Min</option>
-                    <option value="600" selected>10 Min</option>
-                    <option value="900">15 Min</option>
-                    <option value="1200">20 Min</option>
-                </select>
-            </div>
-            <div class="config-group">
-                <label for="backspace-mode-select">Backspace Mode:</label>
-                <select id="backspace-mode-select">
-                    <option value="full" selected>Full Backspace</option>
-                    <option value="oneword">One Word Backspace</option>
-                    <option value="none">No Backspace</option>
-                </select>
-            </div>
-            <div>
-                <label for="file-input" class="file-upload-btn">📁 Upload (.txt)</label>
-                <input type="file" id="file-input" accept=".txt">
-            </div>
+    <div class="config-panel">
+        <div class="config-group">
+            <label for="matter-select">Select Matter:</label>
+            <select id="matter-select">
+                <option value="0">Legal Matter 1 (Criminal Appeal)</option>
+                <option value="1">Legal Matter 2 (Civil Dispute)</option>
+                <option value="2">Legal Matter 3 (Bail Application)</option>
+                <option value="3">Legal Matter 4 (Writ Petition)</option>
+                <option value="custom" id="custom-option" style="display:none;">Custom Uploaded Matter</option>
+            </select>
         </div>
-
-        <div class="dashboard">
-            <div class="stat-box">Mode: <span>Practice</span></div>
-            <div class="stat-box">Time Left: <span id="timer-display">10:00</span></div>
-            <div class="stat-box">Net WPM: <span id="net-wpm-display">0</span></div>
-            <div class="stat-box">Score: <span id="score-display">50.00</span>/50</div>
-            <div class="stat-box">Backspace: <span id="backspace-count">0</span></div>
+        <div class="config-group">
+            <label for="time-select">Time:</label>
+            <select id="time-select">
+                <option value="300">5 Min</option>
+                <option value="600" selected>10 Min</option>
+                <option value="900">15 Min</option>
+                <option value="1200">20 Min</option>
+            </select>
         </div>
-
-        <div id="text-panel" class="text-panel"></div>
-        <div id="typing-panel-container" class="typing-panel-wrapper">
-            <span id="typed-history-container"></span>
-            <span id="current-typing-word" style="background-color: #e3f2fd; padding: 0 2px; border-radius: 4px;"></span>
-            <span class="input-blink-cursor"></span>
+        <div class="config-group">
+            <div class="config-info">Backspace: Full Allowed</div>
         </div>
-        <input type="text" id="hidden-typing-input" class="hidden-typing-input" autocomplete="off">
-        
-        <div class="controls">
-            <button onclick="initPracticeTest()">Reset Test</button>
-            <button class="submit-btn" onclick="endPracticeTest(true)">Submit Exam</button>
+        <div>
+            <label for="file-input" class="file-upload-btn">📁 Upload (.txt)</label>
+            <input type="file" id="file-input" accept=".txt">
         </div>
     </div>
 
-    <div id="live-section" class="tab-content">
-        <div id="live-time-lock-notice" class="lock-notice"></div>
+    <div class="dashboard">
+        <div class="stat-box">Time Left: <span id="timer-display">10:00</span></div>
+        <div class="stat-box">Net WPM: <span id="net-wpm-display">0</span></div>
+        <div class="stat-box">Score: <span id="score-display">50.00</span>/50</div>
+        <div class="stat-box">Backspace: <span id="backspace-count">0</span></div>
+    </div>
 
-        <div id="live-login-panel" class="login-box-wrapper">
-            <h3 style="color:#1e3d59; margin-top:0;">Candidate Live Verification Entry</h3>
-            <input type="text" id="live-candidate-name" placeholder="अपना नाम दर्ज करें" required>
-            <input type="text" id="live-candidate-roll" placeholder="रोल नंबर या मोबाइल नंबर दर्ज करें" required>
-            <button class="submit-btn" style="width:100%; max-width:320px;" onclick="submitLiveLogin()">लाइव टूर्नामेंट सर्वर से जुड़ें</button>
-        </div>
-
-        <div id="live-main-portal" style="display: none;">
-            <div class="dashboard">
-                <div class="stat-box">Candidate: <span id="live-user-display" style="color:#0288d1;">Guest</span></div>
-                <div class="stat-box">Live Timer: <span id="live-timer-display" style="color:#e65100;">10:00</span></div>
-                <div class="stat-box">Live WPM: <span id="live-net-wpm-display">0</span></div>
-                <div class="stat-box">Live Score: <span id="live-score-display">50.00</span>/50</div>
-                <div class="stat-box">Backspace: <span id="live-backspace-count">0</span></div>
-            </div>
-
-            <div id="live-text-panel" class="text-panel"></div>
-            <div id="live-typing-panel-container" class="typing-panel-wrapper">
-                <span id="live-typed-history-container"></span>
-                <span id="live-current-typing-word" style="background-color: #e3f2fd; padding: 0 2px; border-radius: 4px;"></span>
-                <span class="input-blink-cursor"></span>
-            </div>
-            <input type="text" id="live-hidden-typing-input" class="hidden-typing-input" autocomplete="off" disabled>
-        </div>
+    <div id="text-panel" class="text-panel"></div>
+    
+    <div id="typing-panel-container" class="typing-panel-wrapper">
+        <span id="typed-history-container"></span>
+        <span id="current-typing-word" style="background-color: #e3f2fd; border-radius: 4px; padding: 0 2px;"></span>
+        <span class="input-blink-cursor"></span>
+    </div>
+    
+    <input type="text" id="hidden-typing-input" autocomplete="off">
+    
+    <div class="controls">
+        <button id="reset-btn">Reset Test</button>
+        <button id="submit-btn">Submit Exam</button>
     </div>
 </div>
 
 <div id="result-modal" class="modal">
     <div class="modal-content">
-        <h2 style="text-align:center; color:#1e3d59; border-bottom:2px solid #eee; padding-bottom:10px; margin-top:0;">🎯 Practice Exam Performance Scorecard</h2>
+        <div class="modal-header">🎯 MPHC Official Performance Scorecard</div>
         <div class="result-grid">
             <div class="result-item score-highlight">Obtained Marks: <strong id="res-score">0.00</strong></div>
             <div class="result-item">Max Marks: <strong>50.00</strong></div>
-            <div class="result-item">Net Speed (WPM): <strong id="res-net-wpm">0</strong></div>
+            <div class="result-item" style="border-left-color:#0288d1;">Net Speed (WPM): <strong id="res-net-wpm">0</strong></div>
             <div class="result-item">Gross Speed (WPM): <strong id="res-gross-wpm">0</strong></div>
             <div class="result-item">Total Words Typed: <strong id="res-total-typed">0</strong></div>
-            <div class="result-item">Correct Words: <strong id="res-correct">0</strong></div>
-            <div class="result-item">Wrong Words: <strong id="res-wrong">0</strong></div>
-            <div class="result-item">Omitted/Skipped Words: <strong id="res-omitted">0</strong></div>
-            <div class="result-item">Backspace Count: <strong id="res-backspace">0</strong></div>
+            <div class="result-item" style="border-left-color:#2e7d32;">Correct Words: <strong id="res-correct">0</strong></div>
+            <div class="result-item" style="border-left-color:#c62828;">Wrong Words: <strong id="res-wrong">0</strong></div>
+            <div class="result-item" style="border-left-color:#e65100;">Omitted/Skipped Words: <strong id="res-omitted">0</strong></div>
+            <div class="result-item" style="border-left-color:#d9534f;">Backspace Penalty (-0.10): <strong id="res-backspace">0</strong></div>
             <div class="result-item">Accuracy Rate: <strong id="res-accuracy">100%</strong></div>
         </div>
-        <button onclick="document.getElementById('result-modal').style.display='none'; initPracticeTest();" style="width:100%; background:#d9534f; padding:12px; border:none; color:white; font-size:16px; font-weight:bold; border-radius:6px; cursor:pointer;">Close Scorecard & Restart</button>
-    </div>
-</div>
-<div id="live-leaderboard-modal" class="modal">
-    <div class="modal-content" style="max-width:850px;">
-        <h2 style="text-align: center; color: #2e7d32; margin-top:0;">🏆 MPHC Live Tournament Official Result Rank Sheet</h2>
-        <p style="text-align: center; font-weight: bold; color: #666; margin-bottom:20px;">घोषणा समय: 11:15 AM | क्लाउड डेटाबेस मेरिट सूची</p>
-        <table class="leaderboard-table">
-            <thead>
-                <tr>
-                    <th>Rank</th>
-                    <th>Candidate Name</th>
-                    <th>Roll Number</th>
-                    <th>Net Speed (WPM)</th>
-                    <th>Backspaces</th>
-                    <th>Errors</th>
-                    <th>Obtained Marks</th>
-                </tr>
-            </thead>
-            <tbody id="live-leaderboard-rows"></tbody>
-        </table>
-        <button onclick="document.getElementById('live-leaderboard-modal').style.display='none';" style="width:100%; margin-top:20px; background:#1e3d59; padding:12px; border:none; color:white; font-size:16px; font-weight:bold; border-radius:6px; cursor:pointer;">Close Merit List Window</button>
+        <button class="close-modal-btn" id="close-modal-btn">Close Scorecard & Restart</button>
     </div>
 </div>
 
 <script>
-const firebaseConfig = { databaseURL: "https://firebaseio.com" };
-firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
-
 const legalMattersList = [
-    "अपीलार्थी की ओर से प्रस्तुत आपराधिक अपील अधीनस्थ न्यायालय द्वारा पारित दोषसिद्धि और दंडादेश के विरुद्ध इस न्यायालय के समक्ष प्रस्तुत की गई है। विद्वान विचारण न्यायाधीश ने अभियुक्त को भारतीय दंड संहिता की धारा के अंतर्गत दोषी पाते हुए कठोर कारावास और अर्थदंड से दंडित किया था। अभियोजन कथानक के अनुसार घटना की दिनांक को फरियादी ने आरक्षी केंद्र में इस आशय की प्रथम सूचना रिपोर्ट दर्ज कराई थी कि आरोपी ने भूमि विवाद को लेकर उसके साथ गाली-गलौज की और जान से मारने की धमकी देते हुए लाठी से प्रहार किया। इस प्रहार के कारण आहत को गंभीर चोटें आईं और उसे उपचार के लिए जिला चिकित्सालय ले जाया गया। अन्वेषण अधिकारी ने घटनास्थल का नक्शा मौका तैयार किया और साक्षियों के कथन दंड प्रक्रिया संहिता की धारा के अंतर्गत लेखबद्ध किए। विचारण के दौरान अभियोजन पक्ष ने अपने मामले के समर्थन में मौखिक और दस्तावेजी साक्ष्य प्रस्तुत किए। अभियुक्त ने अपने परीक्षण में स्वयं को निर्दोष बताया और कहा कि उसे रंजिश के कारण झूठा फंसाया गया है। अधीनस्थ न्यायालय ने साक्ष्यों का मूल्यांकन करने के पश्चात आरोपी को दोषी ठहराया था। अपीलार्थी के विद्वान अधिवक्ता ने तर्क दिया कि अधीनस्थ न्यायालय का निर्णय विधि के सिद्धांतों के विपरीत है। चश्मदीद साक्षियों के कथनों में गंभीर विरोधाभास है और स्वतंत्र साक्षियों ने अभियोजन कहानी का समर्थन नहीं किया है। इसके अतिरिक्त चिकित्सा अधिकारी की रिपोर्ट से भी चोटों की प्रकृति गंभीर सिद्ध नहीं होती है। इसलिए अभियुक्त को संदेह का लाभ दिया जाना न्यायोचित होगा। इसके विपरीत शासकीय अधिवक्ता ने तर्क दिया कि अभियोजन ने अपना मामला संदेह से परे प्रमाणित किया है और निर्णय में किसी हस्तक्षेप की आवश्यकता नहीं है। दोनों पक्षों के तर्कों पर विचार करने और अभिलेख का परिशीलन करने के पश्चात यह न्यायालय इस निष्कर्ष पर पहुंचता है कि न्याय के हित में दंडादेश को स्थिर रखा जाए और अपील निरंतर की जाए।",
+    "अपीलार्थी की ओर से प्रस्तुत आपराधिक अपील अधीनस्थ न्यायालय द्वारा पारित दोषसिद्धि और दंडादेश के विरुद्ध इस न्यायालय के समक्ष प्रस्तुत की गई है। विद्वान विचारण न्यायाधीश ने अभियुक्त को भारतीय दंड संहिता की धारा के अंतर्गत दोषी पाते हुए कठोर कारावास और अर्थदंड से दंडित किया था। अभियोजन कथानक के अनुसार घटना की दिनांक को फरियादी ने आरक्षी केंद्र में इस आशय की प्रथम सूचना रिपोर्ट दर्ज कराई थी कि आरोपी ने भूमि विवाद को लेकर उसके साथ गाली-गलौज की और जान से मारने की धमकी देते हुए लाठी से प्रहार किया। इस प्रहार के कारण आहत को गंभीर चोटें आईं और उसे उपचार के लिए जिला चिकित्सालय ले जाया गया। अन्वेषण अधिकारी ने घटनास्थल का नक्शा मौका तैयार किया और साक्षियों के कथन दंड प्रक्रिया संहिता की धारा के अंतर्गत लेखबद्ध किए। विचारण के दौरान अभियोजन पक्ष ने अपने मामले के समर्थन में मौखिक और दस्तावेजी साक्ष्य प्रस्तुत किए। अभियुक्त ने अपने परीक्षण में स्वयं को निर्दोष बताया और कहा कि उसे रंजिश के कारण झूठा फंसाया गया है। अधीनस्थ न्यायालय ने साक्ष्यों का मूल्यांकन करने के पश्चात आरोपी को दोषी ठहराया था। अपीलार्थी के विद्वान अधिवक्ता ने तर्क दिया कि अधीनस्थ न्यायालय का निर्णय विधि के सिद्धांतों के विपरीत है। चश्मदीद साक्षियों के कथनों में गंभीर विरोधाभास है और स्वतंत्र साक्षियों ने अभियोजन कहानी का समर्थन नहीं किया है। इसके अतिरिक्त चिकित्सा अधिकारी की रिपोर्ट से भी चोटों की प्रकृति गंभीर सिद्ध नहीं होती है। इसलिए अभियुक्त को संदेह का लाभ दिया जाना न्यायोचित होगा। इसके विपरीत शासकीय अधिवक्ता ने तर्क दिया कि अभियोजन ने अपना मामला संदेह से परे प्रमाणित किया है और निर्णय में किसी हस्तक्षेप की आवश्यकता नहीं है। दोनों पक्षों के तर्कों पर विचार करने और अभिलेख का परिशीलन करने के पश्चात यह न्यायालय इस निष्कर्ष पर पहुंचता है कि न्याय के हित में दंडादेश को स्थिर रखा जाए और अपील निरस्त की जाए।",
     "वादी ने प्रतिवादी के विरुद्ध स्थायी निषेधाज्ञा और स्वत्व की घोषणा के लिए यह दीवानी वाद व्यवहार न्यायाधीश के समक्ष प्रस्तुत किया है। वाद पत्र के अनुसार वादी विवादित भूमि का एकमात्र पंजीकृत स्वामी और अधिपत्य धारी है जिसे उसने अपने स्वयं के उपार्जित धन से क्रय किया था। प्रतिवादी जो कि वादी का सगा भाई है वह बिना किसी वैध अधिकार के उक्त भूमि के कुछ हिस्से पर अवैध कब्जा करने का प्रयास कर रहा है। वादी ने जब प्रतिवादी को निर्माण कार्य करने से रोका तो प्रतिवादी ने विवाद खड़ा कर दिया जिससे विवश होकर वादी को न्यायालय की शरण लेनी पड़ी। प्रतिवादी ने अपने लिखित कथन में वादी के दावों का खंडन किया है और यह तर्क दिया है कि विवादित संपत्ति पैतृक है और इसका विभाजन अभी तक नहीं हुआ है। अतः उसे भी इस संपत्ति पर निर्माण करने का पूर्ण विधिक अधिकार प्राप्त है। न्यायालय द्वारा उभयपक्ष के तर्कों के आधार पर वाद प्रश्न विरचित किए गए। वादी ने अपने पक्ष में राजस्व अभिलेख और क्रय विलेख प्रस्तुत किए जो यह साबित करते हैं कि संपत्ति केवल वादी के नाम पर दर्ज है। प्रतिवादी ऐसा कोई साक्ष्य प्रस्तुत करने में असफल रहा जिससे यह प्रमाणित हो सके कि संपत्ति में पैतृक धन का उपयोग हुआ था। अतः विलेखों के आधार पर प्रतिवादी का दावा खारिज किया जाता है और वादी के पक्ष में डिक्री पारित की जाती है।",
     "आवेदक की ओर से दंड प्रक्रिया संहिता की धारा के तहत यह द्वितीय जमानत आवेदन आरक्षी केंद्र में दर्ज अपराध के अंतर्गत प्रस्तुत किया गया है। आवेदक का प्रथम जमानत आवेदन इस न्यायालय द्वारा गुण-दोष के आधार पर पूर्व में निरस्त किया चुका है। आवेदक के विद्वान अधिवक्ता ने तर्क दिया कि आवेदक पिछले छह माह से न्यायिक निरोध में है और मामले की विवेचना पूर्ण हो चुकी है तथा आरोप पत्र न्यायालय में प्रस्तुत किया जा चुका है। मुख्य साक्षियों के कथन विचारण न्यायालय के समक्ष दर्ज किए जा चुके हैं जिन्होंने अभियोजन की कहानी का समर्थन नहीं किया है और वे मुकर गए हैं। अब आवेदक से किसी भी प्रकार की जब्ती शेष नहीं है और विचारण पूरा होने में लंबा समय लगने की संभावना है। ऐसी स्थिति में आवेदक को जेल में बंद रखना न्यायसंगत नहीं होगा। शासकीय अधिवक्ता ने जमानत का तीव्र विरोध करते हुए कहा कि आवेदक के विरुद्ध गंभीर प्रकृति के अपराध दर्ज हैं और यदि उसे जमानत पर रिहा किया गया तो वह साक्षियों को डराने और प्रभावित करने का प्रयास कर सकता है। दोनों पक्षों को सुनने के बाद और केस डायरी का अवलोकन करने के पश्चात न्यायालय यह पाता है कि परिस्थितियों में भौतिक परिवर्तन हुआ है। साक्षियों के मुकर जाने के कारण आवेदक को और अधिक समय तक जेल में रखना उचित प्रतीत नहीं होता। अतः शर्तों के अधीन आवेदन स्वीकार किया जाता है।",
-    "याचिकाकर्ता ने भारत के संविधान के अनुच्छेद 226 के अंतर्गत यह रिट याचिका राज्य शासन के उस आदेश के विरुद्ध प्रस्तुत की है जिसके द्वारा उसे बिना किसी जांच के सेवा से निलंबित कर दिया गया है। याचिकाकर्ता का तर्क है कि वह लोक स्वास्थ्य यांत्रिकी विभाग में उपयंत्री के पद पर कार्यरत है और उसके सेवा अभिलेख हमेशा उत्कृष्ट रहे हैं। प्रतिवादी गण ने बिना किसी कारण बताओ नोटिस और नैसर्गिक न्याय के सिद्धांतों का पालन किए बिना दुर्भावनापूर्ण तरीके से यह निलंबन आदेश जारी किया है जो कि पूर्णतः मनमाना और अवैध है। शासकीय अधिवक्ता ने तर्क दिया कि याचिकाकर्ता के विरुद्ध वित्तीय अनियमितताओं और शासकीय धन के गबन की गंभीर शिकायतें प्राप्त हुई थीं जिसकी प्रारंभिक जांच के बाद ही सक्षम प्राधिकारी द्वारा निलंबन की कार्रवाई की गई है। न्यायालय ने दोनों पक्षों के अभिलेखों का बारीकी से अध्ययन किया। यह स्थापित विधि है कि किसी भी कर्मचारी को निलंबित करने से पूर्व या तत्काल बाद विभागीय जांच प्रारंभ की जानी अनिवार्य है परंतु इस मामले में निलंबन के तीन माह बीत जाने के बाद भी आरोप पत्र जारी नहीं किया गया है। यह प्रक्रिया प्रशासनिक नियमों का उल्लंघन है। अतः न्यायालय इस याचिका को स्वीकार करते हुए निलंबन आदेश को निरस्त करता है और याचिकाकर्ता को समस्त लाभों के साथ सेवा में बहाल करने का निर्देश जारी करता है।",
-    "प्रस्तुत प्रकरण में वादी द्वारा प्रतिवादी के विरुद्ध प्रस्तुत वाद-पत्र का अवलोकन किया गया। भारतीय संविधान के अनुच्छेद 226 के तहत न्यायालय को यह अधिकार प्राप्त है कि वह मौलिक अधिकारों के संरक्षण तथा लोकहित की रक्षा के लिए आवश्यक निर्देश जारी कर सके। उभय पक्षों के विद्वान अधिवक्ताओं की दलीलें सुनी गईं तथा पत्रावली पर उपलब्ध समस्त अभिलेखों एवं साक्ष्यों का परीक्षण किया गया। यह निर्विवाद रूप से स्थापित है कि किसी भी वाद की कार्यवाही में प्राकृतिक न्याय के सिद्धांतों का कड़ाई से पालन किया जाना अनिवार्य है। वादी का यह मुख्य कथन है कि प्रतिवादी द्वारा उसके विधिवत अधिकृत संपत्ति पर अवैध रूप से कब्जा करने का प्रयास किया गया है, जिसके संबंध में पूर्व में भी एक लिखित शिकायत संबंधित थाने में दर्ज कराई गई थी, किंतु स्थानीय पुलिस द्वारा इस मामले में समय पर कोई प्रभावी वैधानिक कार्रवाई नहीं की गई। इसके विपरीत, प्रतिवादी के अधिवक्ता का यह तर्क रहा है कि प्रस्तुत वाद विचारणीय नहीं है क्योंकि यह आवश्यक पक्षों की अनुपस्थिति से ग्रसित है और इसमें विलंब का उचित कारण नहीं दर्शाया गया है। तथापि, न्यायालय का यह स्पष्ट मत है कि न्यायहित में दोनों पक्षों को अपना पक्ष रखने का पर्याप्त अवसर दिया जाना उचित होगा ताकि किसी भी पक्ष के साथ अन्याय न हो। अतः समस्त परिस्थितियों एवं साक्ष्यों पर गंभीर विचार करने के पश्चात् यह आदेश दिया जाता है कि इस प्रकरण में आगामी सुनवाई की तिथि नियत की जाए। दोनों पक्ष आगामी सुनवाई पर अपने-अपने साक्ष्य एवं दस्तावेजी प्रमाण न्यायालय के समक्ष प्रस्तुत करें। आदेश की एक प्रति संबंधित पक्षकारों को नियमानुसार प्रेषित की जाए। यह आदेश आज दिनांक को मेरी उपस्थिति में खुले न्यायालय में लिखवाया गया और हस्ताक्षरित किया गया।"
+    "याचिकाकर्ता ने भारत के सक्षम प्राधिकारी द्वारा निलंबन की कार्रवाई की गई है। न्यायालय ने दोनों पक्षों के अभिलेखों का बारीकी से अध्ययन किया। यह स्थापित विधि है कि किसी भी कर्मचारी को निलंबित करने से पूर्व या तत्काल बाद विभागीय जांच प्रारंभ की जानी अनिवार्य है परंतु इस मामले में निलंबन के तीन माह बीत जाने के बाद भी आरोप पत्र जारी नहीं किया गया है। यह प्रक्रिया प्रशासनिक नियमों का उल्लंघन है। अतः न्यायालय इस याचिका को स्वीकार करते हुए निलंबन आदेश को निरस्त करता है और याचिकाकर्ता को समस्त लाभों के साथ सेवा में बहाल करने का निर्देश जारी करता है।"
 ];
 
-let customMatterText = ""; const TOTAL_MARKS = 50; const DEDUCTION_PER_ERROR = 0.50; const DEDUCTION_PER_BACKSPACE = 0.10;
-let targetWords = []; let typedWordsHistory = []; let currentWordIndex = 0; let backspaceCount = 0; let wrongWordsCount = 0; let correctWordsCount = 0;
-let timer = null; let timeLeft = 600; let testStarted = false;
+let customMatterText = "";
+let TOTAL_TIME = 600; 
+const TOTAL_MARKS = 50;
+const DEDUCTION_PER_ERROR = 0.50; 
+const DEDUCTION_PER_BACKSPACE = 0.10; 
 
+let targetWords = [];
+let typedWordsHistory = []; 
+let currentWordIndex = 0;
+let backspaceCount = 0;
+let wrongWordsCount = 0;
+let correctWordsCount = 0;
+let timer = null;
+let timeLeft = TOTAL_TIME;
+let testStarted = false;
+
+const matterSelect = document.getElementById('matter-select');
+const timeSelect = document.getElementById('time-select');
+const fileInput = document.getElementById('file-input');
+const customOption = document.getElementById('custom-option');
+const textPanel = document.getElementById('text-panel');
+const typingPanelContainer = document.getElementById('typing-panel-container');
+const typedHistoryContainer = document.getElementById('typed-history-container');
+const currentTypingWord = document.getElementById('current-typing-word');
+const hiddenInput = document.getElementById('hidden-typing-input');
+const timerDisplay = document.getElementById('timer-display');
+const netWpmDisplay = document.getElementById('net-wpm-display');
+const scoreDisplay = document.getElementById('score-display');
+const backspaceDisplay = document.getElementById('backspace-count');
+const resultModal = document.getElementById('result-modal');
+
+typingPanelContainer.addEventListener('click', () => hiddenInput.focus());
+
+function initTest() {
+    clearInterval(timer);
+    TOTAL_TIME = parseInt(timeSelect.value);
+    timeLeft = TOTAL_TIME;
+    currentWordIndex = 0;
+    backspaceCount = 0;
+    wrongWordsCount = 0;
+    correctWordsCount = 0;
+    testStarted = false;
+    typedWordsHistory = [];
+    
+    hiddenInput.value = '';
+    hiddenInput.disabled = false;
+    timeSelect.disabled = false;
+    matterSelect.disabled = false;
+    fileInput.disabled = false;
+    
+    typedHistoryContainer.innerHTML = '';
+    currentTypingWord.textContent = '';
+    
+    let displayMins = Math.floor(TOTAL_TIME / 60);
+    timerDisplay.textContent = `${displayMins}:00`;
+    timerDisplay.classList.remove('timer-warning');
+    backspaceDisplay.textContent = "0";
+    netWpmDisplay.textContent = "0";
+    scoreDisplay.textContent = "50.00";
+    let selectedMatterText = (matterSelect.value === "custom") ? customMatterText : legalMattersList[matterSelect.value];
+    targetWords = selectedMatterText.trim().split(/\s+/).filter(w => w.length > 0);
+
+    textPanel.innerHTML = targetWords.map((word, idx) => `<span class="word" id="word-${idx}">${word}</span>`).join('');
+    highlightWordAndScroll();
+}
+
+// ➔ रेमिंगटन गेल आधा अक्षर (हलंत) और विसर्ग (ः) बाईपास नॉर्मलाइज़र इंजन
 function normalizeHindi(text) {
     if (!text) return "";
-    return text.trim().replace(/्/g, "").replace(/ः/g, ":").replace(/३/g, ":").replace(/#/g, ":").replace(/:/g, ":").replace(/[\u200B-\u200D\uFEFF]/g, "");
-}
-function switchPortalTab(tabId, btnEl) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-tab'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active-content'));
-    btnEl.classList.add('active-tab');
-    document.getElementById(tabId).classList.add('active-content');
-    if (tabId === 'practice-section') initPracticeTest(); else syncLiveClockSchedules();
+    return text.trim()
+        .replace(/्/g, "") // सभी आधे अक्षरों के हलंत टकराव को बाईपास करना
+        .replace(/ः/g, "ः") // विसर्ग मैपिंग को स्थिर रखना
+        .replace(/[\u200B-\u200D\uFEFF]/g, ""); // हिडन यूनिकोड स्पेस हटाना
 }
 
-function initPracticeTest() {
-    clearInterval(timer);
-    const timeSelect = document.getElementById('time-select');
-    const matterSelect = document.getElementById('matter-select');
-    timeLeft = parseInt(timeSelect.value);
-    currentWordIndex = 0; backspaceCount = 0; wrongWordsCount = 0; correctWordsCount = 0; testStarted = false; typedWordsHistory = [];
-    
-    document.getElementById('hidden-typing-input').value = '';
-    document.getElementById('hidden-typing-input').disabled = false;
-    document.getElementById('typed-history-container').innerHTML = '';
-    document.getElementById('current-typing-word').textContent = '';
-    document.getElementById('timer-display').textContent = `${Math.floor(timeLeft / 60)}:00`;
-    document.getElementById('backspace-count').textContent = "0";
-    document.getElementById('net-wpm-display').textContent = "0";
-    document.getElementById('score-display').textContent = "50.00";
-
-    let srcText = (matterSelect.value === "custom") ? customMatterText : legalMattersList[matterSelect.value];
-    targetWords = srcText.trim().split(/\s+/).filter(w => w.length > 0);
-    document.getElementById('text-panel').innerHTML = targetWords.map((w, idx) => `<span class="word" id="word-${idx}">${w}</span>`).join('');
-    scrollParallelEngine('text-panel', 'typing-panel-container');
-}
-
-function scrollParallelEngine(panelId, containerId) {
-    document.querySelectorAll(`#${panelId} .word`).forEach(el => el.classList.remove('current-word'));
-    const curEl = document.getElementById(`word-${currentWordIndex}`);
-    if (curEl) {
-        curEl.classList.add('current-word');
-        document.getElementById(panelId).scrollTop = curEl.offsetTop - document.getElementById(panelId).offsetTop - 40;
-        document.getElementById(containerId).scrollTop = curEl.offsetTop - document.getElementById(panelId).offsetTop - 40;
-    }
-}
-
-document.getElementById('hidden-typing-input').addEventListener('keydown', (e) => {
-    if (!testStarted && document.getElementById('hidden-typing-input').value.trim() === '' && e.key !== 'Backspace') {
-        testStarted = true;
-        timer = setInterval(() => {
-            timeLeft--;
-            document.getElementById('timer-display').textContent = `${Math.floor(timeLeft/60)}:${timeLeft%60 < 10?'0':''}${timeLeft%60}`;
-            if (timeLeft <= 0) endPracticeTest(false); else calcPracticeStats();
-        }, 1000);
-    }
-    if (e.key === 'Backspace') {
-        let mode = document.getElementById('backspace-mode-select').value;
-        if(mode === "none") { e.preventDefault(); return; }
-        if(mode === "oneword" && document.getElementById('hidden-typing-input').value === "") { e.preventDefault(); return; }
-        if(mode === "full" && document.getElementById('hidden-typing-input').value === "" && typedWordsHistory.length > 0) {
-            e.preventDefault(); currentWordIndex--;
-            let item = typedWordsHistory.pop();
-            if(item.isCorrect) correctWordsCount--; else wrongWordsCount--;
-            document.getElementById('hidden-typing-input').value = item.text;
-            document.getElementById('current-typing-word').textContent = item.text;
-            document.getElementById(`word-${currentWordIndex}`).classList.remove('correct-word', 'wrong-word');
-            document.getElementById('typed-history-container').innerHTML = typedWordsHistory.map(i => `<span class="typed-word-span ${i.isCorrect?'typed-correct':'typed-wrong'}">${i.text}</span>`).join('');
-            scrollParallelEngine('text-panel', 'typing-panel-container'); calcPracticeStats(); return;
-        }
-        backspaceCount++; document.getElementById('backspace-count').textContent = backspaceCount; calcPracticeStats();
-    }
-});
-
-document.getElementById('hidden-typing-input').addEventListener('input', () => {
-    let val = document.getElementById('hidden-typing-input').value;
-    if(val.endsWith(' ')) {
-        let word = val.trim();
-        if(word.length > 0) {
-            let isCorrect = (normalizeHindi(word) === normalizeHindi(targetWords[currentWordIndex]));
-            typedWordsHistory.push({ text: word, isCorrect: isCorrect });
-            let el = document.getElementById(`word-${currentWordIndex}`);
-            if(el) el.classList.add(isCorrect ? 'correct-word' : 'wrong-word');
-            if(isCorrect) correctWordsCount++; else wrongWordsCount++;
-            document.getElementById('typed-history-container').innerHTML = typedWordsHistory.map(i => `<span class="typed-word-span ${i.isCorrect?'typed-correct':'typed-wrong'}">${i.text}</span>`).join('');
-            currentWordIndex++; document.getElementById('hidden-typing-input').value = ''; document.getElementById('current-typing-word').textContent = '';
-            if(currentWordIndex >= targetWords.length) endPracticeTest(false); else scrollParallelEngine('text-panel', 'typing-panel-container');
-            calcPracticeStats();
-        } else document.getElementById('hidden-typing-input').value = '';
-    } else document.getElementById('current-typing-word').textContent = val;
-});
-function calcPracticeStats() {
-    let mins = (parseInt(document.getElementById('time-select').value) - timeLeft) / 60 || 0.01;
-    document.getElementById('net-wpm-display').textContent = Math.round(correctWordsCount / mins);
-    document.getElementById('score-display').textContent = Math.max(0, 50 - (wrongWordsCount * 0.5) - (backspaceCount * 0.1)).toFixed(2);
-}
-
-function endPracticeTest(isManual) {
-    clearInterval(timer); document.getElementById('hidden-typing-input').disabled = true;
-    let totalTyped = currentWordIndex; let omitted = Math.max(0, targetWords.length - totalTyped);
-    let score = Math.max(0, 50 - ((wrongWordsCount + omitted) * 0.5) - (backspaceCount * 0.1)).toFixed(2);
-    document.getElementById('res-score').textContent = score;
-    document.getElementById('res-net-wpm').textContent = document.getElementById('net-wpm-display').textContent;
-    document.getElementById('res-total-typed').textContent = totalTyped;
-    document.getElementById('res-correct').textContent = correctWordsCount;
-    document.getElementById('res-wrong').textContent = wrongWordsCount;
-    document.getElementById('res-omitted').textContent = omitted;
-    document.getElementById('res-backspace').textContent = backspaceCount;
-    document.getElementById('res-accuracy').textContent = (totalTyped > 0 ? Math.round((correctWordsCount / totalTyped) * 100) : 100) + "%";
-    document.getElementById('result-modal').style.display = "block";
-}
-
-document.getElementById('file-input').addEventListener('change', (e) => {
-    const reader = new FileReader(); reader.onload = (evt) => { customMatterText = evt.target.result; document.getElementById('custom-option').style.display = "block"; document.getElementById('matter-select').value = "custom"; initPracticeTest(); }; reader.readAsText(e.target.files);
-});
-
-// LIVE TOURNAMENT ENGINE
-let liveTargetWords = legalMattersList[4].trim().split(/\s+/); // Connect to Match 5
-let liveWordIdx = 0; let liveBackspaces = 0; let liveWrongs = 0; let liveCorrects = 0; let liveTimerClock = null; let liveTimeLeft = 600; let liveActive = false;
-let liveUser = ""; let liveRoll = "";
-
-function syncLiveClockSchedules() {
-    setInterval(() => {
-        let now = new Date(); let hrs = now.getHours(); let mins = now.getMinutes();
-        document.getElementById('portal-clock-sync').textContent = `सिस्टम सर्वर क्लॉक: ${now.toLocaleTimeString('hi-IN')}`;
+// ➔ पैरेलल लाइव स्क्रोलर इंजन (दोनों विंडोज़ को समानांतर चलाना)
+function highlightWordAndScroll() {
+    document.querySelectorAll('.word').forEach(el => el.classList.remove('current-word'));
+    const currentWordEl = document.getElementById(`word-${currentWordIndex}`);
+    if (currentWordEl) {
+        currentWordEl.classList.add('current-word');
         
-        if (hrs === 10) {
-            document.getElementById('live-time-lock-notice').style.display = "none";
-            if(liveUser !== "" && !liveActive && liveTimeLeft === 600) { document.getElementById('live-hidden-typing-input').disabled = false; }
-        } else if (hrs === 11 && mins < 15) {
-            document.getElementById('live-hidden-typing-input').disabled = true;
-            document.getElementById('live-time-lock-notice').style.display = "block";
-            document.getElementById('live-time-lock-notice').innerHTML = `⏳ परीक्षा समाप्त। कंबाइंड मेरिट लिस्ट ठीक 11:15 AM पर जारी होगी। (बचे मिनट: ${15-mins})`;
-            if(liveActive) endLiveExamServer();
-        } else if (hrs >= 11 && mins >= 15) {
-            document.getElementById('live-time-lock-notice').style.display = "none";
-            document.getElementById('live-leaderboard-modal').style.display = "block"; fetchCloudLeaderboard();
-        } else {
-            document.getElementById('live-hidden-typing-input').disabled = true;
-            document.getElementById('live-time-lock-notice').style.display = "block";
-            document.getElementById('live-time-lock-notice').innerHTML = `🔒 लाइव मेगा टूर्नामेंट क्लोज्ड। यह केवल सुबह 10:00 AM से 11:00 AM के बीच ओपन होगा।`;
-        }
+        let parentTop = textPanel.offsetTop;
+        let currentTop = currentWordEl.offsetTop;
+        
+        // पैरेलल स्क्रॉल ट्रैकर्स
+        textPanel.scrollTop = currentTop - parentTop - 40;
+        typingPanelContainer.scrollTop = currentTop - parentTop - 40;
+    }
+}
+
+function startTimer() {
+    testStarted = true;
+    timeSelect.disabled = true;
+    matterSelect.disabled = true;
+    fileInput.disabled = true;
+    
+    timer = setInterval(() => {
+        timeLeft--;
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        if (timeLeft <= 60) timerDisplay.classList.add('timer-warning');
+        if (timeLeft <= 0) { endTest(); } else { calculateStats(); }
     }, 1000);
 }
 
-function submitLiveLogin() {
-    liveUser = document.getElementById('live-candidate-name').value.trim();
-    liveRoll = document.getElementById('live-candidate-roll').value.trim();
-    if(!liveUser || !liveRoll) { alert("दोनों फ़ील्ड भरना अनिवार्य है!"); return; }
-    document.getElementById('live-user-display').textContent = `${liveUser} (${liveRoll})`;
-    document.getElementById('live-login-panel').style.display = "none";
-    document.getElementById('live-main-portal').style.display = "block";
-    document.getElementById('live-text-panel').innerHTML = liveTargetWords.map((w, i) => `<span class="word" id="lw-${i}">${w}</span>`).join('');
-    syncLiveWordUI();
-}
+fileInput.addEventListener('change', (e) => {
+    const file = e.target.files;
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+        customMatterText = evt.target.result;
+        customOption.style.display = "block";
+        matterSelect.value = "custom";
+        initTest();
+    };
+    reader.readAsText(file);
+});
 
-function syncLiveWordUI() {
-    document.querySelectorAll('#live-text-panel .word').forEach(el => el.classList.remove('current-word'));
-    let el = document.getElementById(`lw-${liveWordIdx}`);
-    if(el) { el.classList.add('current-word'); document.getElementById('live-text-panel').scrollTop = el.offsetTop - document.getElementById('live-text-panel').offsetTop - 40; document.getElementById('live-typing-panel-container').scrollTop = el.offsetTop - document.getElementById('live-text-panel').offsetTop - 40; }
-}
-
-document.getElementById('live-hidden-typing-input').addEventListener('keydown', (e) => {
-    if(!liveActive && document.getElementById('live-hidden-typing-input').value.trim() === '' && e.key !== 'Backspace') {
-        liveActive = true;
-        liveTimerClock = setInterval(() => {
-            liveTimeLeft--;
-            document.getElementById('live-timer-display').textContent = `${Math.floor(liveTimeLeft/60)}:${liveTimeLeft%60 < 10?'0':''}${liveTimeLeft%60}`;
-            if(liveTimeLeft <= 0) endLiveExamServer(); else calcLiveStats();
-        }, 1000);
+hiddenInput.addEventListener('keydown', (e) => {
+    if (!testStarted && hiddenInput.value.trim() === '' && e.key !== 'Process' && e.key !== 'Backspace') {
+        startTimer();
     }
-    if (e.key === 'Backspace') { liveBackspaces++; document.getElementById('live-backspace-count').textContent = liveBackspaces; calcLiveStats(); }
+
+    if (e.key === 'Backspace') {
+        backspaceCount++;
+        backspaceDisplay.textContent = backspaceCount;
+        calculateStats();
+    }
 });
 
-document.getElementById('live-hidden-typing-input').addEventListener('input', () => {
-    let val = document.getElementById('live-hidden-typing-input').value;
-    if(val.endsWith(' ')) {
-        let word = val.trim();
-        if(word.length > 0) {
-            let isCorrect = (normalizeHindi(word) === normalizeHindi(liveTargetWords[liveWordIdx]));
-            if(isCorrect) liveCorrects++; else liveWrongs++;
-            document.getElementById('live-typed-history-container').innerHTML += `<span class="typed-word-span ${isCorrect?'typed-correct':'typed-wrong'}">${word}</span>`;
-            let el = document.getElementById(`lw-${liveWordIdx}`); if(el) el.classList.add(isCorrect?'correct-word':'wrong-word');
-            liveWordIdx++; document.getElementById('live-hidden-typing-input').value = ''; document.getElementById('live-current-typing-word').textContent = '';
-            if(liveWordIdx >= liveTargetWords.length) endLiveExamServer(); else syncLiveWordUI();
-            calcLiveStats();
-        } else document.getElementById('live-hidden-typing-input').value = '';
-    } else document.getElementById('live-current-typing-word').textContent = val;
+hiddenInput.addEventListener('input', (e) => {
+    const value = hiddenInput.value;
+    
+    if (value.endsWith(' ')) {
+        const typedWord = value.trim();
+        if (typedWord.length > 0) {
+            evaluateWord(typedWord);
+            currentWordIndex++;
+            hiddenInput.value = '';
+            currentTypingWord.textContent = '';
+            if (currentWordIndex >= targetWords.length) { endTest(); } else { highlightWordAndScroll(); }
+            calculateStats();
+        } else {
+            hiddenInput.value = '';
+        }
+    } else {
+        currentTypingWord.textContent = value;
+    }
 });
 
-function calcLiveStats() {
-    let mins = (600 - liveTimeLeft) / 60 || 0.01;
-    document.getElementById('live-net-wpm-display').textContent = Math.round(liveCorrects / mins);
-    document.getElementById('live-score-display').textContent = Math.max(0, 50 - (liveWrongs * 0.5) - (liveBackspaces * 0.1)).toFixed(2);
+function evaluateWord(typedWord) {
+    const targetWord = targetWords[currentWordIndex];
+    const wordEl = document.getElementById(`word-${currentWordIndex}`);
+    
+    let isCorrect = (normalizeHindi(typedWord) === normalizeHindi(targetWord));
+    let spanClass = isCorrect ? "typed-correct" : "typed-wrong";
+    
+    typedHistoryContainer.innerHTML += `<span class="typed-word-span ${spanClass}">${typedWord}</span>`;
+    
+    if (wordEl) {
+        wordEl.classList.remove('current-word');
+        if (isCorrect) {
+            wordEl.classList.add('correct-word');
+            correctWordsCount++;
+        } else {
+            wordEl.classList.add('wrong-word');
+            wrongWordsCount++;
+        }
+    }
+}
+function calculateStats() {
+    const timeElapsed = TOTAL_TIME - timeLeft;
+    const timeInMinutes = timeElapsed > 0 ? (timeElapsed / 60) : 0.01;
+    const netWPM = Math.max(0, Math.round(correctWordsCount / timeInMinutes));
+    netWpmDisplay.textContent = netWPM;
+
+    let finalScore = TOTAL_MARKS - (wrongWordsCount * DEDUCTION_PER_ERROR) - (backspaceCount * DEDUCTION_PER_BACKSPACE);
+    scoreDisplay.textContent = Math.max(0, finalScore).toFixed(2);
 }
 
-function endLiveExamServer() {
-    clearInterval(liveTimerClock); document.getElementById('live-hidden-typing-input').disabled = true;
-    let omitted = Math.max(0, liveTargetWords.length - liveWordIdx);
-    let finalScore = Math.max(0, 50 - ((liveWrongs + omitted) * 0.5) - (liveBackspaces * 0.1));
-    database.ref('mphc_tournament/' + liveRoll).set({ name: liveUser, roll: liveRoll, netSpeed: document.getElementById('live-net-wpm-display').textContent, backspaces: liveBackspaces, errors: liveWrongs, score: finalScore });
-    alert("आपका डेटा लाइव सर्वर पर सुरक्षित सहेज दिया गया है! रिजल्ट 11:15 AM पर मेरिट लिस्ट टैब में दिखेगा।");
+function endTest() {
+    clearInterval(timer);
+    hiddenInput.disabled = true;
+    
+    const timeElapsed = TOTAL_TIME - timeLeft;
+    const timeInMinutes = timeElapsed > 0 ? (timeElapsed / 60) : 0.01;
+    const totalTyped = currentWordIndex;
+    const omittedWords = Math.max(0, targetWords.length - totalTyped);
+    
+    for(let i = currentWordIndex; i < targetWords.length; i++) {
+        const el = document.getElementById(`word-${i}`);
+        if(el) el.classList.add('omitted-word');
+    }
+
+    const grossWPM = Math.round(totalTyped / timeInMinutes) || 0;
+    const netWPM = Math.round(correctWordsCount / timeInMinutes) || 0;
+    const accuracy = totalTyped > 0 ? Math.round((correctWordsCount / totalTyped) * 100) : 100;
+    
+    let finalScore = TOTAL_MARKS - ((wrongWordsCount + omittedWords) * DEDUCTION_PER_ERROR) - (backspaceCount * DEDUCTION_PER_BACKSPACE);
+    finalScore = Math.max(0, finalScore).toFixed(2);
+
+    document.getElementById('res-score').textContent = finalScore;
+    document.getElementById('res-net-wpm').textContent = netWPM;
+    document.getElementById('res-gross-wpm').textContent = grossWPM;
+    document.getElementById('res-total-typed').textContent = totalTyped;
+    document.getElementById('res-correct').textContent = correctWordsCount;
+    document.getElementById('res-wrong').textContent = wrongWordsCount;
+    document.getElementById('res-omitted').textContent = omittedWords;
+    document.getElementById('res-backspace').textContent = `${backspaceCount} (-${(backspaceCount * DEDUCTION_PER_BACKSPACE).toFixed(2)} Marks)`;
+    document.getElementById('res-accuracy').textContent = accuracy + "%";
+
+    resultModal.style.display = "block";
 }
 
-function fetchCloudLeaderboard() {
-    database.ref('mphc_tournament').orderByChild('score').once('value', (snap) => {
-        let html = ""; let rank = 1; let list = []; snap.forEach(c => { list.push(c.val()); }); list.reverse();
-        list.forEach(d => { html += `<tr><td>${rank++}</td><td>${d.name}</td><td>${d.roll}</td><td>${d.netSpeed} WPM</td><td>${d.backspaces}</td><td>${d.errors}</td><td><strong style="color:#2e7d32;">${d.score.toFixed(2)}</strong></td></tr>`; });
-        document.getElementById('live-leaderboard-rows').innerHTML = html;
-    });
-}
+document.getElementById('close-modal-btn').addEventListener('click', () => {
+    resultModal.style.display = "none";
+    initTest();
+});
 
-document.getElementById('typing-panel-container').addEventListener('click', () => document.getElementById('hidden-typing-input').focus());
-document.getElementById('live-typing-panel-container').addEventListener('click', () => document.getElementById('live-hidden-typing-input').focus());
+matterSelect.addEventListener('change', initTest);
+timeSelect.addEventListener('change', initTest);
+document.getElementById('reset-btn').addEventListener('click', initTest);
+document.getElementById('submit-btn').addEventListener('click', () => {
+    if (confirm("क्या आप वाकई अपनी टाइपिंग परीक्षा सबमिट करना चाहते हैं?")) endTest();
+});
 
-// ➔ अपग्रेडेड सिक्योर ऑटो-लोड ट्रिगर इंजन
 window.onload = () => {
-    initPracticeTest();
-    setTimeout(() => { if (targetWords.length === 0) { initPracticeTest(); } }, 200);
+    initTest();
+    hiddenInput.focus();
 };
 </script>
 </body>
