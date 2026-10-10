@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MP High Court Hindi Typing Simulator</title>
+    <title>MPHC Hindi Typing Simulator (Remington Gail Only)</title>
     <style>
         body { font-family: 'Arial', 'Mangal', sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; color: #333; }
         .container { max-width: 950px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         h2 { text-align: center; color: #1e3d59; margin-bottom: 5px; }
-        .subtitle { text-align: center; color: #666; margin-bottom: 25px; font-size: 0.95em; }
+        .subtitle { text-align: center; color: #d9534f; margin-bottom: 25px; font-size: 1em; font-weight: bold; }
         
         .config-panel { display: flex; justify-content: space-between; align-items: center; background: #f0f4f8; padding: 15px; border-radius: 6px; margin-bottom: 15px; border: 1px solid #dcdcdc; flex-wrap: wrap; gap: 15px; }
         .config-group { display: flex; align-items: center; gap: 8px; }
         .config-group label { font-weight: bold; color: #1e3d59; }
         .config-group select { padding: 6px 12px; border-radius: 4px; border: 1px solid #ccc; font-size: 14px; background: white; font-weight: bold; color: #1e3d59; cursor: pointer; }
+        .config-info { background: #ffebee; color: #c62828; padding: 6px 12px; border-radius: 4px; font-size: 14px; font-weight: bold; border: 1px solid #ef9a9a; }
         
         .file-upload-btn { background: #0288d1; color: white; padding: 6px 12px; border-radius: 4px; font-size: 14px; font-weight: bold; cursor: pointer; border: none; }
         #file-input { display: none; }
@@ -30,14 +31,14 @@
         .wrong-word { color: #c62828; text-decoration: line-through; background-color: #ffebee; border-radius: 4px; }
         .omitted-word { color: #7f8c8d; border-bottom: 2px dashed #7f8c8d; }
         
-        /* Typing Area - Resized to exactly match the Master Text Panel height */
+        /* Typing Area - Equal Size with Auto Scroll */
         .typing-panel-wrapper { border: 2px solid #1e3d59; border-radius: 6px; padding: 15px; background: #ffffff; min-height: 150px; max-height: 150px; overflow-y: auto; font-size: 22px; line-height: 2; margin-bottom: 20px; scroll-behavior: smooth; cursor: text; box-sizing: border-box; }
         .typing-panel-wrapper:focus-within { border-color: #17b978; box-shadow: 0 0 8px rgba(23, 185, 120, 0.2); }
         .typed-word-span { display: inline-block; margin-right: 10px; padding: 0 2px; border-radius: 4px; }
         .typed-correct { color: #2e7d32; background-color: #e8f5e9; }
         .typed-wrong { color: #c62828; background-color: #ffebee; text-decoration: line-through; }
         
-        /* Hidden Input Mirror Field for Remington Gail Engine */
+        /* Input Blink Cursor Configuration */
         #hidden-typing-input { position: absolute; left: -9999px; opacity: 0; }
         .input-blink-cursor { display: inline-block; width: 2px; height: 24px; background-color: #1e3d59; animation: cursorBlink 1s infinite; vertical-align: middle; }
         @keyframes cursorBlink { 50% { opacity: 0; } }
@@ -64,7 +65,7 @@
 <body>
 <div class="container">
     <h2>MPHC Hindi Typing Exam Simulation</h2>
-    <div class="subtitle">(Official Remington Gail / Inscript Mangal Font Engine)</div>
+    <div class="subtitle">⚠️ WARNING: Only Remington Gail (Mangal) Layout Active</div>
     
     <div class="config-panel">
         <div class="config-group">
@@ -86,6 +87,9 @@
                 <option value="1200">20 Min</option>
             </select>
         </div>
+        <div class="config-group">
+            <div class="config-info">Engine: Remington Gail Locked</div>
+        </div>
         <div>
             <label for="file-input" class="file-upload-btn">📁 Upload (.txt)</label>
             <input type="file" id="file-input" accept=".txt">
@@ -99,17 +103,14 @@
         <div class="stat-box">Backspace: <span id="backspace-count">0</span></div>
     </div>
 
-    <!-- Master Text Reference Window -->
     <div id="text-panel" class="text-panel"></div>
     
-    <!-- Resized Dynamic Multi-line Input Box -->
     <div id="typing-panel-container" class="typing-panel-wrapper">
         <span id="typed-history-container"></span>
         <span id="current-typing-word" style="background-color: #e3f2fd; border-radius: 4px; padding: 0 2px;"></span>
         <span class="input-blink-cursor"></span>
     </div>
     
-    <!-- Hidden input controller to receive system layout keystrokes -->
     <input type="text" id="hidden-typing-input" autocomplete="off">
     
     <div class="controls">
@@ -176,7 +177,6 @@ const scoreDisplay = document.getElementById('score-display');
 const backspaceDisplay = document.getElementById('backspace-count');
 const resultModal = document.getElementById('result-modal');
 
-// Focus Mirror Controller
 typingPanelContainer.addEventListener('click', () => hiddenInput.focus());
 
 function initTest() {
@@ -213,7 +213,6 @@ function initTest() {
 }
 
 function highlightWordAndScroll() {
-    // Reference Window Autoscroll
     document.querySelectorAll('.word').forEach(el => el.classList.remove('current-word'));
     const currentWordEl = document.getElementById(`word-${currentWordIndex}`);
     if (currentWordEl) {
@@ -227,7 +226,6 @@ function highlightWordAndScroll() {
         }
     }
 
-    // Typing Window Balanced Autoscroll
     if (currentWordIndex === 0) {
         typingPanelContainer.scrollTop = 0;
     } else {
@@ -304,13 +302,15 @@ hiddenInput.addEventListener('input', (e) => {
 });
 
 function evaluateWord(typedWord) {
-    const targetWord = targetWords[currentWordIndex];
+    // 100% सटीक मिलान .trim() स्ट्रिपिंग लॉजिक के साथ
+    const targetWord = targetWords[currentWordIndex].trim();
+    const cleanTypedWord = typedWord.trim();
     const wordEl = document.getElementById(`word-${currentWordIndex}`);
     
-    let isCorrect = (typedWord === targetWord);
+    let isCorrect = (cleanTypedWord === targetWord);
     let spanClass = isCorrect ? "typed-correct" : "typed-wrong";
     
-    typedHistoryContainer.innerHTML += `<span class="typed-word-span ${spanClass}">${typedWord}</span>`;
+    typedHistoryContainer.innerHTML += `<span class="typed-word-span ${spanClass}">${cleanTypedWord}</span>`;
     
     if (wordEl) {
         wordEl.classList.remove('current-word');
