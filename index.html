@@ -29,13 +29,15 @@
         .correct-word { color: #2e7d32; font-weight: bold; background-color: #e8f5e9; }
         .wrong-word { color: #c62828; text-decoration: line-through; background-color: #ffebee; }
         
-        .typing-panel-wrapper { border: 2px solid #1e3d59; border-radius: 6px; padding: 15px; background: #ffffff; min-height: 180px; max-height: 180px; overflow-y: auto; font-size: 20px; line-height: 1.8; margin-bottom: 20px; scroll-behavior: smooth; cursor: text; box-sizing: border-box; text-align: left; display: block; width: 100%; position: relative; word-wrap: break-word; white-space: pre-wrap; }
+        /* Typing Panel Wrapper - Reset padding to align blinker strictly to top-left */
+        .typing-panel-wrapper { border: 2px solid #1e3d59; border-radius: 6px; padding: 12px 15px; background: #ffffff; min-height: 180px; max-height: 180px; overflow-y: auto; font-size: 20px; line-height: 1.8; margin-bottom: 20px; scroll-behavior: smooth; cursor: text; box-sizing: border-box; text-align: left; display: block; width: 100%; position: relative; word-wrap: break-word; white-space: pre-wrap; }
         .typing-panel-wrapper:focus-within { border-color: #17b978; box-shadow: 0 0 8px rgba(23, 185, 120, 0.2); }
         
-        #hidden-typing-input { position: absolute; left: -9999px; opacity: 0; }
+        #hidden-typing-input { position: absolute; left: -9999px; opacity: 0; top: 0; }
+        #smooth-text-render { display: inline; text-align: left; float: left; white-space: pre-wrap; word-wrap: break-word; }
         
-        /* Fixed Inline Blinker - Always inline with continuous text spans */
-        .input-blink-cursor { display: inline-block; width: 2px; height: 22px; background-color: #1e3d59; animation: cursorBlink 1s infinite; vertical-align: text-bottom; margin-left: 1px; }
+        /* Precise Inline Blinker - Follows continuous text spans immediately without vertical gaps */
+        .input-blink-cursor { display: inline-block; width: 2px; height: 22px; background-color: #1e3d59; animation: cursorBlink 1s infinite; vertical-align: text-bottom; float: left; margin-left: 1px; position: relative; }
         @keyframes cursorBlink { 50% { opacity: 0; } }
         
         .controls { margin-top: 15px; display: flex; justify-content: space-between; align-items: center; }
@@ -228,7 +230,7 @@ legalMattersDatabase.push(
     "श्रम न्यायालय के समक्ष यह औद्योगिक विवाद संस्थान के एक सुरक्षा कर्मी की अवैध छंटनी को लेकर उत्पन्न हुआ है। प्रबंधन ने बिना कोई ठोस कारण बताए और बिना एक माह का अग्रिम नोटिस दिए कर्मचारी को तत्काल प्रभाव से सेवामुक्त कर दिया था जो कि औद्योगिक विवाद अधिनियम की धारा 25-एफ का खुला उल्लंघन प्रदर्शित करता है। प्रबंधन का यह तर्क था कि कर्मचारी ड्यूटी के दौरान लापरवाही बरतता था परंतु इस संबंध में कोई भी प्रारंभिक जांच रिकॉर्ड पर नहीं लाई गई। न्यायालय ने माना कि वैधानिक प्रक्रियाओं का पालन किए बिना सेवा से पृथक करना दुर्भावनापूर्ण है अतः श्रमिक को पिछले पूरे सेवा लाभों सहित पुनः बहाल करने का निर्देश जारी किया जाता है।",
     "परक्राम्य लिखित अधिनियम की धारा 138 के तहत यह परिवाद चेक अनादरण के कारण अभियुक्त को दंडित करने हेतु संस्थित किया गया है। परिवादी ने अभियुक्त को अपनी व्यावसायिक आवश्यकता हेतु पांच लाख रुपये का अल्पकालिक विधिक ऋण दिया था जिसके एवज में अभियुक्त ने एक बैंक चेक जारी किया था जो बैंक में प्रस्तुत करने पर अपर्याप्त कोष की टिप्पणी के साथ अनादृत होकर वापस आ गया। अभियुक्त ने यह प्रतिरक्षा ली कि उसने सुरक्षा स्वरूप यह चेक दिया था और उस पर हस्ताक्षर उसके नहीं हैं। न्यायालय ने विशेषज्ञ की रिपोर्ट तथा साक्ष्यों के आधार पर यह पाया कि अभियुक्त ऋण चुकाने के विधिक दायित्व से बचने का प्रयास कर रहा है अतः उसे दोषी मानकर कारावास की सजा सुनाई जाती है।",
     "यह सिविल वाद वादी द्वारा अनुबंध के विशिष्ट अनुपालन हेतु दायर किया गया है जिसके अंतर्गत प्रतिवादी ने अपनी अचल संपत्ति को एक निश्चित प्रतिफल राशि के बदले बेचने का लिखित इकरारनामा निष्पादित किया था और बयाना राशि भी प्राप्त कर ली थी परंतु नियत तिथि आने पर प्रतिवादी रजिस्ट्री कराने से मुकर गया। प्रतिवादी का कहना था कि बाजार दरें अचानक बढ़ जाने के कारण उक्त अनुबंध अब शून्य माना जाए। न्यायालय ने अनुबंध अधिनियम की व्याख्या करते हुए स्पष्ट किया कि एक बार वैध संविदा होने के पश्चात कोई भी पक्षकार अपनी विधिक प्रतिबद्धता से पीछे नहीं खंडित हो सकता है अतः वादी के पक्ष में डिक्री पारित की जाती है।",
-    "उपभोक्ता फोरम के समक्ष यह शिकायत एक कार खरीदार द्वारा विनिर्माण दोष के कारण वाहन को बदलने की मांग के साथ दर्ज कराई गई है। वाहन खरीदने के पहले सप्ताह से ही उसके इंजन और गियरबॉक्स में गंभीर तकनीकी खामियां आने लगीं जिसे बार-बार अधिकृत वर्कशॉप भेजने के बाद भी ठीक नहीं किया जा सका। ऑटोमोबाइल कंपनी ने यह तर्क दिया कि यह खराबी उपभोक्ता द्वारा वाहन के गलत संचालन के कारण हुई है। फोरम ने तकनीकी विशेषज्ञ की रिपोर्ट को सर्वोपरि मानते हुए यह माना कि वाहन में विनिर्माण के समय से ही दोष मौजूद था अतः कंपनी को नया वाहन देने अथवा पूरी राशि मय ब्याज वापस करने का आदेश दिया जाता है।",
+    "उपभोक्ता फोरम के समक्ष यह शिकायत एक कार खरीदार द्वारा विनिर्माण दोष के कारण वाहन को बदलने की मांग के साथ दर्ज कराई गई है। वाहन खरीदने के पहले सप्ताह से ही उसके इंजन और गियरबॉक्स में गंभीर तकनीकी खामियां आने लगीं जिसे बार-बार अधिकृत वर्कशॉप भेजने के बाद भी ठीक नहीं किया जा सकता है। ऑटोमोबाइल कंपनी ने यह तर्क दिया कि यह खराबी उपभोक्ता द्वारा वाहन के गलत संचालन के कारण हुई है। फोरम ने तकनीकी विशेषज्ञ की रिपोर्ट को सर्वोपरि मानते हुए यह माना कि वाहन में विनिर्माण के समय से ही दोष मौजूद था अतः कंपनी को नया वाहन देने अथवा पूरी राशि मय ब्याज वापस करने का आदेश दिया जाता है।",
     "सूचना प्रौद्योगिकी अधिनियम की धारा 66 के तहत यह आपराधिक मामला अभियुक्त द्वारा फर्जी सोशल मीडिया अकाउंट बनाकर एक प्रतिष्ठित नागरिक की छवि धूमिल करने तथा अश्लील संदेश प्रसारित करने के आरोप में पुलिस द्वारा दर्ज किया गया था। साइबर सेल की जांच रिपोर्ट में स्पष्ट हुआ कि जिस इंटरनेट प्रोटोकॉल एड्रेस से उक्त सामग्री अपलोड की गई थी वह अभियुक्त के मोबाइल फोन और वाई-फाई राउटर से पूरी तरह मेल खाता है। अभियुक्त ने कंप्यूटर साक्ष्यों के संकलन में प्रक्रियात्मक त्रुटि का लाभ उठाने का प्रयास किया परंतु न्यायालय ने इलेक्ट्रॉनिक साक्ष्यों की प्रामाणिकता को अकाट्य मानते हुए अभियुक्त को गंभीर विधिक कारावास और जुर्माने से दंडित किया है।",
     "केंद्रीय प्रशासनिक अधिकरण के आदेश के विरुद्ध यह रिट याचिका राज्य सरकार द्वारा एक वरिष्ठ अधिकारी के पेंशन लाभों को रोकने के निर्णय के समर्थन में दायर की गई है। अधिकारी के विरुद्ध सेवानिवृत्ति से ठीक एक माह पूर्व वित्तीय अनियमितता के आरोप में आरोप पत्र जारी किया गया था जिसके कारण उसकी ग्रेच्युटी रोक दी गई थी। माननीय उच्च न्यायालय ने स्पष्ट किया कि सिविल सेवा नियमों के तहत यदि कर्मचारी के विरुद्ध कोई अनुशासनात्मक कार्यवाही लंबित है तो विभाग को अंतिम जांच रिपोर्ट आने तक पेंशनभोगी हितलाभों को आंशिक रूप से रोकने का पूर्ण विधिक अधिकार प्राप्त है अतः अधिकरण का आदेश निरस्त किया जाता है।",
     "प्रतिलिपि अधिकार अधिनियम के उल्लंघन का यह मामला एक विख्यात लेखक द्वारा अपनी साहित्यिक कृति की सामग्री को बिना अनुमति एक डिजिटल प्लेटफॉर्म पर व्यावसायिक रूप से उपयोग किए जाने के विरोध में दायर किया गया है। प्रतिवादी का मुख्य तर्क यह था कि उन्होंने केवल शिक्षा और शोध के उद्देश्य से आंशिक सामग्री का उपयोग किया है जो फेयर डील के अंतर्गत आता है परंतु साक्ष्यों से यह स्पष्ट हुआ कि प्रतिवादी उस सामग्री को सशुल्क बेचकर भारी लाभ कमा रहा था। न्यायालय ने माना कि यह बौद्धिक संपदा की स्पष्ट चोरी है और प्रतिवादी पर भारी हर्जाना लगाते हुए उस प्लेटफॉर्म पर तुरंत प्रतिबंध लगा दिया है।",
@@ -245,6 +247,14 @@ const renderSpan = document.getElementById('smooth-text-render');
 const timerDisplay = document.getElementById('timer-display');
 const scoreDisplay = document.getElementById('score-display');
 const masterTextPanel = document.getElementById('master-text-panel');
+// आधा अक्षर और हलंत की विधिक तुलना के लिए यूनिकोड नॉर्मलाइजेशन फ़ंक्शन
+function cleanWordForComparison(word) {
+    if (!word) return "";
+    return word.trim()
+               .normalize('NFC')
+               .replace(/[\u200B-\u200D]/g, ''); // हिडन ZWJ/ZWNJ कैरेक्टर्स हटाना
+}
+
 function loadSelectedMatter() {
     const selectedIdx = document.getElementById('matter-select').value;
     if(selectedIdx !== 'custom') {
@@ -264,7 +274,6 @@ function renderMasterText() {
         span.textContent = word;
         masterTextPanel.appendChild(span);
     });
-    // फिक्स: डोम अलाइनमेंट चेक के बाद पहला शब्द निश्चित रूप से पीला हाईलाइट होगा
     if(document.getElementById('highlight-select').value === "on" && originalWordsArray.length > 0) {
         const firstWord = document.getElementById('word-0');
         if(firstWord) firstWord.classList.add('current-word');
@@ -286,7 +295,7 @@ function resetSimulatorState() {
     hiddenInput.value = "";
     renderSpan.textContent = "";
     
-    // फिक्स: रीसेट होने पर स्क्रॉल पोजीशन बिल्कुल शीर्ष पर लॉक होगी
+    // कर्सर और स्क्रॉल को बिल्कुल शुरुआत (Top-Left) पर लॉक करना
     masterTextPanel.scrollTop = 0;
     typingWrapper.scrollTop = 0;
 }
@@ -304,7 +313,6 @@ hiddenInput.addEventListener('input', (e) => {
     const typedText = hiddenInput.value;
     renderSpan.textContent = typedText;
     
-    // कर्सर पोजीशन के हिसाब से टाइपिंग कंटेनर स्क्रॉल ट्रैकिंग
     if (typingWrapper.scrollHeight > typingWrapper.clientHeight) {
         typingWrapper.scrollTop = typingWrapper.scrollHeight - typingWrapper.clientHeight + 40;
     }
@@ -320,7 +328,8 @@ hiddenInput.addEventListener('input', (e) => {
             wordSpan.className = "word";
 
             if (idx < currentWordIndex) {
-                if (typedWords[idx] === originalWordsArray[idx]) {
+                // आधा अक्षर/हलंत अनुकूलित मैचिंग इंजन का प्रयोग
+                if (cleanWordForComparison(typedWords[idx]) === cleanWordForComparison(originalWordsArray[idx])) {
                     wordSpan.classList.add("correct-word");
                 } else {
                     wordSpan.classList.add("wrong-word");
@@ -369,7 +378,7 @@ function endTest() {
     
     let correctWords = 0, incorrectWords = 0;
     typedWordsArray.forEach((word, index) => {
-        if (word === originalWordsArray[index]) correctWords++;
+        if (cleanWordForComparison(word) === cleanWordForComparison(originalWordsArray[index])) correctWords++;
         else incorrectWords++;
     });
     
@@ -406,7 +415,6 @@ function closeModal() {
     document.getElementById('result-modal').style.display = 'none';
 }
 
-// फिक्स: पेज लोड होते ही डोम को ट्रिगर कर के मैटर रेंडर करने का सटीक हुक
 window.addEventListener('DOMContentLoaded', () => {
     loadSelectedMatter();
     updateTimerConfig();
