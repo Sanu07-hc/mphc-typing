@@ -5,132 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MP High Court Hindi Typing Simulator</title>
     <style>
-        body { 
-            font-family: 'Arial', 'Mangal', sans-serif; 
-            background-color: #f4f6f9; 
-            margin: 0; 
-            padding: 20px; 
-            color: #333; 
-        }
-        .container { 
-            max-width: 950px; 
-            margin: 0 auto; 
-            background: #fff; 
-            padding: 30px; 
-            border-radius: 8px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-        }
-        h2 { 
-            text-align: center; 
-            color: #1e3d59; 
-            margin-bottom: 5px; 
-        }
-        .subtitle { 
-            text-align: center; 
-            color: #666; 
-            margin-bottom: 25px; 
-            font-size: 0.95em; 
-        }
-        .config-panel { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            background: #f0f4f8; 
-            padding: 15px; 
-            border-radius: 6px; 
-            margin-bottom: 15px; 
-            border: 1px solid #dcdcdc; 
-            flex-wrap: wrap; 
-            gap: 15px; 
-        }
-        .config-group { 
-            display: flex; 
-            align-items: center; 
-            gap: 8px; 
-        }
-        .config-group label { 
-            font-weight: bold; 
-            color: #1e3d59; 
-        }
-        .config-group select { 
-            padding: 6px 12px; 
-            border-radius: 4px; 
-            border: 1px solid #ccc; 
-            font-size: 14px; 
-            background: white; 
-            font-weight: bold; 
-            color: #1e3d59; 
-            cursor: pointer; 
-        }
-        .file-upload-btn { 
-            background: #0288d1; 
-            color: white; 
-            padding: 6px 12px; 
-            border-radius: 4px; 
-            font-size: 14px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            border: none; 
-        }
-        #file-input { 
-            display: none; 
-        }
-        .dashboard { 
-            display: flex; 
-            justify-content: space-between; 
-            background: #e8eef1; 
-            padding: 15px; 
-            border-radius: 6px; 
-            margin-bottom: 20px; 
-            font-weight: bold; 
-            flex-wrap: wrap; 
-            gap: 10px; 
-        }
-        .stat-box { 
-            min-width: 120px; 
-        }
-        .stat-box span { 
-            color: #d9534f; 
-            font-size: 1.1em; 
-        }
-        .text-panel { 
-            position: relative; 
-            border: 2px solid #ccd1d9; 
-            border-radius: 6px; 
-            padding: 15px; 
-            background: #fafafa; 
-            min-height: 180px; 
-            max-height: 180px; 
-            overflow-y: auto; 
-            font-size: 20px; 
-            line-height: 1.8; 
-            margin-bottom: 15px; 
-            user-select: none; 
-            scroll-behavior: smooth; 
-            box-sizing: border-box; 
-            text-align: left; 
-        }
-        .word { 
-            display: inline-block; 
-            margin-right: 6px; 
-            border-bottom: 2px solid transparent; 
-            padding: 0 2px; 
-            border-radius: 3px; 
-        }
-        .current-word { 
-            background-color: #fff9c4; 
-            border-bottom-color: #fbc02d; 
-        }
-        .correct-word { 
-            color: #2e7d32; 
-            font-weight: bold; 
-            background-color: #e8f5e9; 
-        }
-        .wrong-word { 
-            color: #c62828; 
-            text-decoration: line-through; 
-            background-color: #ffebee; 
-        }
+        body { font-family: 'Arial', 'Mangal', sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 950px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #1e3d59; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 25px; font-size: 0.95em; }
+        
+        .config-panel { display: flex; justify-content: space-between; align-items: center; background: #f0f4f8; padding: 15px; border-radius: 6px; margin-bottom: 15px; border: 1px solid #dcdcdc; flex-wrap: wrap; gap: 15px; }
+        .config-group { display: flex; align-items: center; gap: 8px; }
+        .config-group label { font-weight: bold; color: #1e3d59; }
+        .config-group select { padding: 6px 12px; border-radius: 4px; border: 1px solid #ccc; font-size: 14px; background: white; font-weight: bold; color: #1e3d59; cursor: pointer; }
+        
+        .file-upload-btn { background: #0288d1; color: white; padding: 6px 12px; border-radius: 4px; font-size: 14px; font-weight: bold; cursor: pointer; border: none; }
+        #file-input { display: none; }
+
+        .dashboard { display: flex; justify-content: space-between; background: #e8eef1; padding: 15px; border-radius: 6px; margin-bottom: 20px; font-weight: bold; flex-wrap: wrap; gap: 10px; }
+        .stat-box { min-width: 120px; }
+        .stat-box span { color: #d9534f; font-size: 1.1em; }
+        
+        .text-panel { position: relative; border: 2px solid #ccd1d9; border-radius: 6px; padding: 15px; background: #fafafa; min-height: 180px; max-height: 180px; overflow-y: auto; font-size: 20px; line-height: 1.8; margin-bottom: 15px; user-select: none; scroll-behavior: smooth; box-sizing: border-box; text-align: left; }
+        
+        .word { display: inline-block; margin-right: 6px; border-bottom: 2px solid transparent; padding: 0 2px; border-radius: 3px; }
+        .current-word { background-color: #fff9c4; border-bottom-color: #fbc02d; }
+        .correct-word { color: #2e7d32; font-weight: bold; background-color: #e8f5e9; }
+        .wrong-word { color: #c62828; text-decoration: line-through; background-color: #ffebee; }
+        
+        /* टाइपिंग बॉक्स की स्थिर संरचना जो ब्लिंकर को बिना फ़्लिकर के टॉप-लेफ्ट अलाइन रखती है */
         .typing-panel-wrapper { 
             border: 2px solid #1e3d59; 
             border-radius: 6px; 
@@ -153,22 +52,12 @@
             align-content: flex-start;
             align-items: center;
         }
-        .typing-panel-wrapper:focus-within { 
-            border-color: #17b978; 
-            box-shadow: 0 0 8px rgba(23, 185, 120, 0.2); 
-        }
-        #hidden-typing-input { 
-            position: absolute; 
-            left: -9999px; 
-            opacity: 0; 
-        }
-        #smooth-text-render { 
-            display: inline; 
-            text-align: left; 
-            white-space: pre-wrap; 
-            word-wrap: break-word; 
-            color: #333; 
-        }
+        .typing-panel-wrapper:focus-within { border-color: #17b978; box-shadow: 0 0 8px rgba(23, 185, 120, 0.2); }
+        
+        #hidden-typing-input { position: absolute; left: -9999px; opacity: 0; }
+        
+        #smooth-text-render { display: inline; text-align: left; white-space: pre-wrap; word-wrap: break-word; color: #333; }
+        
         .input-blink-cursor { 
             display: inline-block; 
             width: 2px; 
@@ -178,257 +67,112 @@
             margin-left: 2px;
             vertical-align: middle;
         }
-        @keyframes cursorBlink { 
-            50% { opacity: 0; } 
-        }
-        .controls { 
-            margin-top: 15px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-        }
-        button { 
-            background: #1e3d59; 
-            color: white; 
-            border: none; 
-            padding: 10px 20px; 
-            font-size: 16px; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            font-weight: bold; 
-        }
-        button:hover { 
-            background: #112233; 
-        }
-        #submit-btn { 
-            background: #2e7d32; 
-        }
-        #submit-btn:hover { 
-            background: #1b5e20; 
-        }
-        .modal { 
-            display: none; 
-            position: fixed; 
-            z-index: 1000; 
-            left: 0; 
-            top: 0; 
-            width: 100%; 
-            height: 100%; 
-            background-color: rgba(0,0,0,0.4); 
-            font-family: 'Segoe UI', Arial, sans-serif; 
-        }
-        .modal-content { 
-            background-color: #f0f4f9; 
-            margin: 3% auto; 
-            border: 1px solid #707070; 
-            width: 85%; 
-            max-width: 820px; 
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3); 
-            border-radius: 4px; 
-            overflow: hidden; 
-            position: relative; 
-            text-align: left; 
-        }
-        .window-titlebar { 
-            background: white; 
-            padding: 4px 10px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-bottom: 1px solid #d0d0d0; 
-            font-size: 13px; 
-            color: #333; 
-        }
-        .window-logo-title { 
-            display: flex; 
-            align-items: center; 
-            gap: 6px; 
-        }
-        .window-logo-icon { 
-            background: #ff7675; 
-            width: 12px; 
-            height: 12px; 
-            border-radius: 2px; 
-        }
-        .window-controls { 
-            display: flex; 
-            gap: 15px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            color: #555; 
-        }
-        .modal-body-container { 
-            padding: 15px 25px 20px 25px; 
-            background: white; 
-            margin: 10px; 
-            border: 1px solid #dcdcdc; 
-            border-radius: 3px; 
-        }
-        .brand-banner { 
-            text-align: center; 
-            color: #1e3d59; 
-            font-size: 20px; 
-            font-weight: bold; 
-            margin-bottom: 5px; 
-            font-family: sans-serif; 
-        }
-        .tab-container { 
-            display: flex; 
-            gap: 4px; 
-            border-bottom: 1px solid #ccc; 
-            margin-bottom: 10px; 
-            font-size: 11px; 
-        }
-        .tab-btn { 
-            background: #e1e1e1; 
-            border: 1px solid #ccc; 
-            border-bottom: none; 
-            padding: 4px 8px; 
-            border-top-left-radius: 3px; 
-            border-top-right-radius: 3px; 
-            font-weight: 600; 
-            color: #333; 
-            cursor: pointer; 
-        }
-        .tab-btn.active { 
-            background: white; 
-            margin-bottom: -1px; 
-            padding-bottom: 5px; 
-            border-top: 2px solid #0056b3; 
-        }
-        .result-subheader { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 12px; 
-        }
-        .result-title-text { 
-            color: #111; 
-            font-size: 21px; 
-            font-weight: bold; 
-            text-align: center; 
-            flex-grow: 1; 
-            font-family: serif; 
-        }
-        .print-btn { 
-            background: #f5f5f5; 
-            border: 1px solid #ababab; 
-            color: #333; 
-            padding: 3px 10px; 
-            font-size: 13px; 
-            border-radius: 3px; 
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            gap: 4px; 
-        }
-        .result-section-box { 
-            border: 1px solid #fbd2b7; 
-            background: #fffcf7; 
-            padding: 12px 20px; 
-            border-radius: 4px; 
-            margin-bottom: 10px; 
-        }
-        .result-section-title { 
-            font-size: 15px; 
-            font-weight: bold; 
-            color: #000; 
-            border-bottom: 1px dashed #fbd2b7; 
-            padding-bottom: 4px; 
-            margin-bottom: 8px; 
-        }
-        .result-row { 
-            display: flex; 
-            font-size: 14px; 
-            margin-bottom: 5px; 
-            color: #222; 
-        }
-        .result-label { 
-            width: 280px; 
-            font-weight: 500; 
-            display: flex; 
-            justify-content: space-between; 
-        }
-        .result-label::after { 
-            content: ":"; 
-            margin-right: 15px; 
-        }
-        .result-value { 
-            font-weight: bold; 
-            color: #000; 
-        }
-        .result-value-subtext { 
-            font-weight: normal; 
-            color: #666; 
-            margin-left: 5px; 
-        }
-        .final-score-row { 
-            color: #d63031; 
-            font-size: 15px; 
-            margin-top: 5px; 
-            padding-top: 5px; 
-            border-top: 1px dashed #fbd2b7; 
-        }
-        .info-note { 
-            font-size: 12px; 
-            color: #555; 
-            line-height: 1.4; 
-            margin: 8px 0; 
-        }
-        .modal-footer-buttons { 
-            display: flex; 
-            justify-content: flex-end; 
-            padding: 10px; 
-            background: #f0f4f9; 
-            border-top: 1px solid #dcdcdc; 
-        }
-        .action-footer-btn { 
-            background: #f5f5f5; 
-            border: 1px solid #ababab; 
-            color: #222; 
-            padding: 5px 25px; 
-            font-size: 13px; 
-            border-radius: 3px; 
-            cursor: pointer; 
-            font-weight: 500; 
-        }
-        .action-footer-btn:hover { 
-            background: #e5e5e5; 
-        }
+        @keyframes cursorBlink { 50% { opacity: 0; } }
+        
+        .controls { margin-top: 15px; display: flex; justify-content: space-between; align-items: center; }
+        button { background: #1e3d59; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #112233; }
+        #submit-btn { background: #2e7d32; }
+        #submit-btn:hover { background: #1b5e20; }
+        
+        /* --- MPHC Typing Result Theme --- */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); font-family: 'Segoe UI', Arial, sans-serif; }
+        .modal-content { background-color: #f0f4f9; margin: 3% auto; border: 1px solid #707070; width: 85%; max-width: 820px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); border-radius: 4px; overflow: hidden; position: relative; text-align: left; }
+        .window-titlebar { background: white; padding: 4px 10px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #d0d0d0; font-size: 13px; color: #333; }
+        .window-logo-title { display: flex; align-items: center; gap: 6px; }
+        .window-logo-icon { background: #ff7675; width: 12px; height: 12px; border-radius: 2px; }
+        .window-controls { display: flex; gap: 15px; font-weight: bold; cursor: pointer; color: #555; }
+        .modal-body-container { padding: 15px 25px 20px 25px; background: white; margin: 10px; border: 1px solid #dcdcdc; border-radius: 3px; }
+        .brand-banner { text-align: center; color: #1e3d59; font-size: 20px; font-weight: bold; margin-bottom: 5px; font-family: sans-serif; }
+        .tab-container { display: flex; gap: 4px; border-bottom: 1px solid #ccc; margin-bottom: 10px; font-size: 11px; }
+        .tab-btn { background: #e1e1e1; border: 1px solid #ccc; border-bottom: none; padding: 4px 8px; border-top-left-radius: 3px; border-top-right-radius: 3px; font-weight: 600; color: #333; cursor: pointer; }
+        .tab-btn.active { background: white; margin-bottom: -1px; padding-bottom: 5px; border-top: 2px solid #0056b3; }
+        .result-subheader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .result-title-text { color: #111; font-size: 21px; font-weight: bold; text-align: center; flex-grow: 1; font-family: serif; }
+        .print-btn { background: #f5f5f5; border: 1px solid #ababab; color: #333; padding: 3px 10px; font-size: 13px; border-radius: 3px; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+        .result-section-box { border: 1px solid #fbd2b7; background: #fffcf7; padding: 12px 20px; border-radius: 4px; margin-bottom: 10px; }
+        .result-section-title { font-size: 15px; font-weight: bold; color: #000; border-bottom: 1px dashed #fbd2b7; padding-bottom: 4px; margin-bottom: 8px; }
+        .result-row { display: flex; font-size: 14px; margin-bottom: 5px; color: #222; }
+        .result-label { width: 280px; font-weight: 500; display: flex; justify-content: space-between; }
+        .result-label::after { content: ":"; margin-right: 15px; }
+        .result-value { font-weight: bold; color: #000; }
+        .result-value-subtext { font-weight: normal; color: #666; margin-left: 5px; }
+        .final-score-row { color: #d63031; font-size: 15px; margin-top: 5px; padding-top: 5px; border-top: 1px dashed #fbd2b7; }
+        .info-note { font-size: 12px; color: #555; line-height: 1.4; margin: 8px 0; }
+        .modal-footer-buttons { display: flex; justify-content: flex-end; padding: 10px; background: #f0f4f9; border-top: 1px solid #dcdcdc; }
+        .action-footer-btn { background: #f5f5f5; border: 1px solid #ababab; color: #222; padding: 5px 25px; font-size: 13px; border-radius: 3px; cursor: pointer; font-weight: 500; }
+        .action-footer-btn:hover { background: #e5e5e5; }
     </style>
 </head>
 <body>
 <div class="container">
     <h2>MPHC Hindi Typing Exam Simulation</h2>
     <div class="subtitle">(Official Remington Gail / Inscript Mangal Font Engine)</div>
-    
     <div class="config-panel">
         <div class="config-group">
             <label for="matter-select">Select Matter:</label>
             <select id="matter-select">
-                <option value="legal_1">कानूनी मामला - 1 (Criminal Appeal IPC 302)</option>
-                <option value="legal_2">कानूनी मामला - 2 (Civil Suit)</option>
+                <option value="legal_1">Legal Matter 1 (Criminal Appeal)</option>
+                <option value="legal_2">Legal Matter 2 (Civil Suit)</option>
+                <option value="legal_3">Legal Matter 3 (Bail Application)</option>
+                <option value="legal_4">Legal Matter 4 (Cheque Bounce Sec 138)</option>
+                <option value="legal_5">Legal Matter 5 (Domestic Violence)</option>
+                <option value="legal_6">Legal Matter 6 (Motor Accident Claim)</option>
+                <option value="legal_7">Legal Matter 7 (Contract Dispute)</option>
+                <option value="legal_8">Legal Matter 8 (Property Partition)</option>
+                <option value="legal_9">Legal Matter 9 (Labour Dispute)</option>
+                <option value="legal_10">Legal Matter 10 (Consumer Protection)</option>
+                <option value="legal_11">Legal Matter 11 (Revenue Case)</option>
+                <option value="legal_12">Legal Matter 12 (Divorce Petition)</option>
+                <option value="legal_13">Legal Matter 13 (Injunction Suit)</option>
+                <option value="legal_14">Legal Matter 14 (Criminal Revision)</option>
+                <option value="legal_15">Legal Matter 15 (Land Acquisition)</option>
+                <option value="legal_16">Legal Matter 16 (Writ Petition)</option>
+                <option value="legal_17">Legal Matter 17 (Arbitration Case)</option>
+                <option value="legal_18">Legal Matter 18 (Cyber Crime Suit)</option>
+                <option value="legal_19">Legal Matter 19 (Family Court Matter)</option>
+                <option value="legal_20">Legal Matter 20 (Supreme Court Precedent)</option>
                 <option value="custom">कस्टम मैटर अपलोड करें (.txt)</option>
             </select>
         </div>
         <div class="config-group">
-            <label for="time-select">Test Time:</label>
+            <label for="time-select">Time:</label>
             <select id="time-select">
-                <option value="1">1 मिनट (त्वरित टेस्ट)</option>
-                <option value="5">5 मिनट</option>
-                <option value="10" selected>10 मिनट (आधिकारिक पैटर्न)</option>
+                <option value="1">1 Min</option>
+                <option value="5">5 Min</option>
+                <option value="10" selected>10 Min</option>
+            </select>
+        </div>
+        <div class="config-group">
+            <label for="backspace-select">Backspace Mode:</label>
+            <select id="backspace-select">
+                <option value="full" selected>Full Backspace</option>
+                <option value="disable">Disable Backspace</option>
+            </select>
+        </div>
+        <div class="config-group">
+            <label for="highlight-select">Word Highlight:</label>
+            <select id="highlight-select">
+                <option value="on" selected>ON</option>
+                <option value="off">OFF</option>
             </select>
         </div>
         <div>
-            <label id="upload-label" class="file-upload-btn" style="display:none;" for="file-input">फ़ाइल चुनें</label>
+            <label id="upload-label" class="file-upload-btn" style="display:none;" for="file-input">Upload (.txt)</label>
             <input type="file" id="file-input" accept=".txt">
         </div>
     </div>
-    <div class="dashboard">
-        <div class="stat-box">Timer: <span id="timer">10:00</span></div>
-        <div class="stat-box">Total Words: <span id="word-count">0</span></div>
-        <div class="stat-box">Typed: <span id="words-typed">0</span></div>
-        <div class="stat-box">Errors: <span id="error-count">0</span></div>
+
+    <div class="dashboard" style="background: #f0f4f8; padding: 10px 15px; border-radius: 4px; border: 1px solid #dcdcdc; margin-bottom: 15px;">
+        <div class="stat-box" style="color: #d9534f;">Time Left: <span id="timer" style="font-weight: bold;">10:00</span></div>
+        <div class="stat-box" style="color: #333;">Backspace Count: <span id="backspace-count" style="color: #d9534f; font-weight: bold;">0</span></div>
+        <div class="stat-box" style="color: #333;">Max Score: <span id="max-score" style="color: #d9534f; font-weight: bold;">50.00</span></div>
+    </div>
+
+    <div class="dashboard" style="display: flex; justify-content: space-between; background: #e8eef1; padding: 15px; border-radius: 6px; margin-bottom: 20px; font-weight: bold;">
+        <div class="stat-box">Total Words: <span id="word-count" style="color: #d9534f;">0</span></div>
+        <div class="stat-box">Typed: <span id="words-typed" style="color: #d9534f;">0</span></div>
+        <div class="stat-box">Errors: <span id="error-count" style="color: #d9534f;">0</span></div>
     </div>
 
     <div class="text-panel" id="source-panel"></div>
@@ -443,7 +187,6 @@
         <button id="submit-btn" disabled>Submit Result</button>
     </div>
 </div>
-
 <div id="result-modal" class="modal">
     <div class="modal-content">
         <div class="window-titlebar">
@@ -473,14 +216,15 @@
                 <div class="result-row"><div class="result-label">Gross Typing Speed</div><div id="res-g-wpm" class="result-value">0 <span class="result-value-subtext">WPM</span></div></div>
                 <div class="result-row"><div class="result-label">Net Evaluation Typing Speed</div><div id="res-n-wpm" class="result-value">0 <span class="result-value-subtext">WPM</span></div></div>
             </div>
+
             <div class="result-section-box">
                 <div class="result-section-title">Error Analytics & Final Marking Metric</div>
                 <div class="result-row"><div class="result-label">Total Wrong / Mismatched Words</div><div id="res-wrong" class="result-value">0</div></div>
+                <div class="result-row"><div class="result-label">Total Backspace Used</div><div id="res-backspace" class="result-value">0</div></div>
                 <div class="result-row"><div class="result-label">Gross Keystrokes Logged</div><div id="res-keys" class="result-value">0</div></div>
                 <div class="result-row"><div class="result-label">Accuracy Percentage</div><div id="res-accuracy" class="result-value">100%</div></div>
-                <div class="result-row final-score-row"><div class="result-label">Evaluated Marks Obtained</div><div id="res-marks" class="result-value" style="font-size:16px;">0.00 / 40.00</div></div>
+                <div class="result-row final-score-row"><div class="result-label">Evaluated Marks Obtained</div><div id="res-marks" class="result-value" style="font-size:16px;">0.00 / 50.00</div></div>
             </div>
-            
             <div class="info-note">
                 * Note: Evaluation criteria calculates 0.10 marks deduction penalty per wrong word framework aligned to MPHC recruitment assessment directives.
             </div>
@@ -493,11 +237,32 @@
 
 <script>
 const matterDatabase = {
-    legal_1: "इस आपराधिक अपील में माननीय उच्च न्यायालय के समक्ष यह मुख्य विचारणीय बिंदु प्रस्तुत किया गया है कि क्या विद्वान अधीनस्थ सत्र न्यायालय द्वारा अभियुक्त को भारतीय दंड संहिता की धारा 302 के अंतर्गत दी गई दोषसिद्धि वैधानिक साक्ष्यों पर आधारित है अथवा नहीं। अभियोजन पक्ष का यह मुख्य तर्क रहा है कि घटना के समय चश्मदीद गवाहों ने अभियुक्त को घातक हथियार के साथ मृतका पर वार करते हुए स्पष्ट रूप से देखा था। इसके विपरीत, बचाव पक्ष के विद्वान अधिवक्ता ने यह दलील दी है कि कथित प्रत्यक्षदर्शी गवाह वास्तव में घटना स्थल पर उपस्थित नहीं थे और उन्हें केवल पुरानी रंजिश के कारण झूठा फंसाया गया है। चिकित्सीय साक्ष्य और पोस्टमार्टम रिपोर्ट भी अभियोजन की कहानी का पूरी तरह समर्थन नहीं करती है। न्यायालय ने दोनों पक्षों की दलीलों को विस्तार से सुनने और पत्रावली पर उपलब्ध तमाम दस्तावेजी साक्ष्यों का सूक्ष्मता से परिशीलन करने के पश्चात यह पाया कि अधीनस्थ न्यायालय का निर्णय पूर्णतः विधि सम्मत है और उसमें किसी भी प्रकार के हस्तक्षेप की कोई विधिक आवश्यकता नहीं है। अतः यह अपील आधारहीन होने के कारण माननीय न्यायालय द्वारा अंतिम रूप से निरस्त की जाती है।",
-    legal_2: "वादी ने प्रतिवादी के विरुद्ध स्थायी निषेधाज्ञा और स्वत्व की घोषणा के लिए यह दीवानी वाद प्रस्तुत किया है। वाद पत्र के अनुसार विवादित भूमि वादी के पैतृक स्वत्व की संपत्ति है। प्रतिवादी का इस भूमि पर कोई विधिक अधिकार नहीं है परंतु वह दुर्भावनापूर्वक वादी के शांतिपूर्ण आधिपत्य में व्यवधान उत्पन्न करने का निरंतर प्रयास कर रहा है। प्रतिवादी ने अपने लिखित कथन में वादी के दावों का पूर्ण खंडन किया है और तर्क दिया है कि उक्त संपत्ति पर उसका स्वयं का कब्जा विगत बीस वर्षों से अबाधित रूप से चला आ रहा है। न्यायालय ने उभय पक्षों के अभिवचनों के आधार पर विवादक तय किए हैं। वादी ने अपने पक्ष के समर्थन में मौखिक साक्ष्य के अतिरिक्त राजस्व अभिलेख एवं सीमांकन प्रतिवेदन प्रस्तुत किया है। दस्तावेजों से स्पष्ट है कि विवादित सर्वे नंबर वादी के नाम पर दर्ज है। अतः वादी का स्वत्व विधिक रूप से प्रमाणित पाया जाता है और प्रतिवादी को स्थायी रूप से आदेशित किया जाता है कि वह वादी के कार्य में हस्तक्षेप न करे।"
+    legal_1: "इस आपराधिक अपील में माननीय उच्च न्यायालय के समक्ष यह मुख्य विचारणीय बिंदु प्रस्तुत किया गया है कि क्या विद्वान अधीनस्थ सत्र न्यायालय द्वारा अभियुक्त को भारतीय दंड संहिता की धारा 302 के अंतर्गत दी गई दोषसिद्धि वैधानिक साक्ष्यों पर आधारित है अथवा नहीं। अभियोजन पक्ष का यह मुख्य तर्क रहा है कि घटना के समय चश्मदीद गवाहों ने अभियुक्त को घातक हथियार के साथ मृतका पर वार करते हुए स्पष्ट रूप से देखा था। इसके विपरीत, बचाव पक्ष के विद्वान अधिवक्ता ने यह दलील दी है कि कथित प्रत्यक्षदर्शी गवाह वास्तव में घटना स्थल पर उपस्थित नहीं थे और उन्हें केवल पुरानी रंजिश के कारण झूठा फंसाया गया है। चिकित्सीय साक्ष्य और पोस्टमार्टम रिपोर्ट भी अभियोजन की कहानी का पूरी तरह समर्थन नहीं करती है। न्यायालय ने दोनों पक्षों की दलीलों को विस्तार से सुनने और पत्रावली पर उपलब्ध तमाम दस्तावेजी साक्ष्यों का सूक्ष्मता से परिशीलन करने के पश्चात यह पाया कि अधीनस्थ न्यायालय का निर्णय पूर्णतः विधि सम्मत है और उसमें किसी भी प्रकार के हस्तक्षेप की कोई विधिक आवश्यकता नहीं है। अतः यह अपील आधारहीन होने के कारण माननीय न्यायालय द्वारा अंतिम रूप से निरस्त की जाती है। घटना के विवरण के अनुसार सूचक ने आरक्षी केंद्र में यह प्रथम सूचना रिपोर्ट अंकित कराई थी कि जब उसका भाई रात्रि में अपने खेत से घर वापस लौट रहा था, तभी रास्ते में पहले से घात लगाए बैठे अभियुक्तों ने अचानक लाठी और कुल्हाड़ी से उस पर जानलेवा हमला कर दिया। चिल्लाने की आवाज सुनकर जब आसपास के ग्रामीण दौड़कर वहां पहुंचे, तब अभियुक्त जान से मारने की धमकी देते हुए मौके से फरार हो गए। घायल को तत्काल नजदीकी चिकित्सालय ले जाया गया जहां चिकित्सकों ने उसे मृत घोषित कर दिया। विचारण के दौरान अभियोजन ने कुल बारह गवाहों का परीक्षण कराया और महत्वपूर्ण दस्तावेजी साक्ष्य जैसे घटना स्थल का मानचित्र, जब्ती पत्रक और विधिक पंचनामा पटल पर प्रस्तुत किए। अधीनस्थ न्यायालय ने इन साक्ष्यों को विश्वसनीय मानते हुए अभियुक्त को आजीवन कारावास की सजा सुनाई। अपीलार्थी का तर्क है कि स्वतंत्र साक्षियों के बयानों में गंभीर विरोधाभास है और अनुसंधान अधिकारी ने निष्पक्ष जांच नहीं की है। परंतु पत्रावली के गहन अध्ययन से स्पष्ट है कि चोटों की प्रकृति और चश्मदीद गवाहों के बयान आपस में मेल खाते हैं।",
+    legal_2: "वादी ने प्रतिवादी के विरुद्ध स्थायी निषेधाज्ञा और स्वत्व की घोषणा के लिए यह दीवानी वाद प्रस्तुत किया है। वाद पत्र के अनुसार विवादित भूमि वादी के पैतृक स्वत्व की संपत्ति है। प्रतिवादी का इस भूमि पर कोई विधिक अधिकार नहीं है परंतु वह दुर्भावनापूर्वक वादी के शांतिपूर्ण आधिपत्य में व्यवधान उत्पन्न करने का निरंतर प्रयास कर रहा है। प्रतिवादी ने अपने लिखित कथन में वादी के दावों का पूर्ण खंडन किया है और तर्क दिया है कि उक्त संपत्ति पर उसका स्वयं का कब्जा विगत बीस वर्षों से अबाधित रूप से चला आ रहा है। न्यायालय ने उभय पक्षों के अभिवचनों के आधार पर विवादक तय किए हैं। वादी ने अपने पक्ष के समर्थन में मौखिक साक्ष्य के अतिरिक्त राजस्व अभिलेख एवं सीमांकन प्रतिवेदन प्रस्तुत किया है। दस्तावेजों से स्पष्ट है कि विवादित सर्वे नंबर वादी के नाम पर दर्ज है। अतः वादी का स्वत्व विधिक रूप से प्रमाणित पाया जाता है और प्रतिवादी को स्थायी रूप से आदेशित किया जाता है कि वह वादी के कार्य में हस्तक्षेप न करे। इस संपत्ति का इतिहास यह दर्शाता है कि यह मूल रूप से वादी के दादाजी के नाम पर हस्तांतरित की गई थी, जिसके बाद उनके विधिक वारिसों के बीच आपसी सहमति से विभाजन पत्र निष्पादित हुआ। राजस्व अभिलेखों में नामांतरण की प्रक्रिया सुचारू रूप से पूर्ण की गई थी और वादी नियमित रूप से शासकीय लगान का भुगतान करता आ रहा है। प्रतिवादी ने यह दावा किया था कि उसने वादी के भाइयों से इस भूमि का एक हिस्सा मौखिक समझौते के तहत क्रय किया था, परंतु वह इसके समर्थन में कोई विधिक पंजीकृत विलेख प्रस्तुत करने में पूर्णतः असफल रहा। भारतीय पंजीकरण अधिनियम के प्रावधानों के अंतर्गत अचल संपत्ति का हस्तांतरण केवल पंजीकृत विलेख द्वारा ही मान्य हो सकता है। मौखिक साक्ष्य के आधार पर लिखित विलेखों के विरुद्ध कोई विधिक मान्यता नहीं दी जा सकती। प्रतिवादी का यह कृत्य सरासर अतिक्रमण की श्रेणी में आता है। साक्ष्यों के विश्लेषण से यह निष्कर्ष निकलता है कि वादी का कब्जा विधिक और शांतिपूर्ण है, जबकि प्रतिवादी का हस्तक्षेप पूर्णतः अवैध और न्यायसंगत नहीं है।"
 };
-
-let currentMatterText = "";
+// पिछले मैटर के ठीक नीचे इस डेटाबेस एक्स्टेंशन को जोड़ें
+Object.assign(matterDatabase, {
+    legal_3: "यह आवेदन आवेदक की ओर से दंड प्रक्रिया संहिता की धारा 439 के अंतर्गत नियमित जमानत प्रदान किए जाने हेतु प्रस्तुत किया गया है। आवेदक के विरुद्ध संबंधित आरक्षी केंद्र में धोखाधड़ी, जालसाजी और कूटरचित दस्तावेज तैयार करने के संबंध में भारतीय दंड संहिता की विभिन्न धाराओं के तहत आपराधिक मामला पंजीबद्ध किया गया है। आवेदक के विद्वान अधिवक्ता ने यह तर्क दिया है कि आवेदक पूर्णतः निर्दोष है और उसे व्यावसायिक प्रतिद्वंद्विता के चलते इस मामले में झूठा घसीटा गया है। मामले की विवेचना पूर्ण हो चुकी है तथा आरोप पत्र सक्षम न्यायालय में दाखिल किया जा चुका है, इसलिए आवेदक को अब और अधिक समय तक न्यायिक अभिरक्षा में रखने का कोई विधिक औचित्य नहीं रह गया है। लोक अभियोजक ने जमानत का कड़ा विरोध करते हुए तर्क दिया कि यदि अभियुक्त को रिहा किया गया तो वह गवाहों को प्रभावित कर सकता है। न्यायालय ने अपराध की गंभीरता को देखते हुए शर्तों के साथ जमानत स्वीकार की। अभिलेख का अवलोकन करने से यह स्पष्ट होता है कि कथित वित्तीय विसंगतियों के संबंध में सभी आवश्यक बैंक दस्तावेज और संविदा प्रलेख पहले ही पुलिस अधिकारी द्वारा जब्त किए जा चुके हैं। आवेदक का कोई पूर्व आपराधिक इतिहास नहीं है और वह समाज का एक प्रतिष्ठित नागरिक है, जिसके फरार होने की कोई भी विभावना दृष्टिगोचर नहीं होती। विचारण की प्रक्रिया में लंबा समय लगने की संभावना है, और किसी भी व्यक्ति को बिना दोषसिद्धि के अनिश्चितकाल के लिए कारागार में निरुद्ध रखना व्यक्तिगत स्वतंत्रता के संवैधानिक सिद्धांतों के प्रतिकूल है। इन तमाम न्यायिक पहलुओं, न्यायदृष्टांतों और मामले के विशिष्ट तथ्यों को ध्यान में रखते हुए, न्यायालय इस निष्कर्ष पर पहुंचा है कि आवेदक को कठोर शर्तों के अधीन जमानत का लाभ दिया जाना न्यायसंगत होगा। अतः आवेदन स्वीकार कर आदेश दिया जाता है कि आवेदक पचास हजार रुपये की व्यक्तिगत बंधपत्र और इतनी ही राशि की दो स्थानीय प्रतिभूतियों की प्रस्तुति पर जमानत पर रिहा किया जाए।",
+    legal_4: "यह परिवाद पराक्रम्य लिखत अधिनियम की धारा 138 के अंतर्गत प्रतिवादी द्वारा जारी किए गए चेक के अनादरित होने के फलस्वरूप विधिक उपचार हेतु प्रस्तुत किया गया है। परिवादी के अनुसार, प्रतिवादी ने अपनी व्यावसायिक देनदारी और अल्पकालिक ऋण की अदायगी के लिए एक निश्चित धनराशि का चेक परिवादी के पक्ष में निष्पादित किया था। जब उक्त चेक को परिवादी द्वारा अपने बैंक खाते में भुगतान हेतु प्रस्तुत किया गया, तो बैंक द्वारा उसे खाता बंद होने अथवा खाते में अपर्याप्त राशि होने की लिखित टिप्पणी के साथ सकारण वापस कर दिया गया। परिवादी ने इसके पश्चात निर्धारित विधिक समयावधि के भीतर प्रतिवादी को पंजीकृत डाक द्वारा एक वैधानिक मांग नोटिस प्रेषित किया था, जिसमें पंद्रह दिनों के भीतर देय राशि का भुगतान करने का आग्रह किया गया था। प्रतिवादी को नोटिस प्राप्त होने के बावजूद उसकी ओर से कोई भुगतान नहीं किया गया और न ही कोई संतोषजनक उत्तर प्रस्तुत किया गया, जिससे यह स्पष्ट है कि उसका उद्देश्य परिवादी को आर्थिक क्षति पहुंचाना था। विचारण के दौरान परिवादी ने अपने मौखिक साक्ष्य के साथ-साथ मूल चेक, बैंक रिटर्न मेमो, विधिक नोटिस की प्रति और डाक रसीदें मुख्य साक्ष्य के रूप में प्रदर्शित कीं। प्रतिवादी ने अपने बचाव में यह दलील दी कि उसने उक्त चेक केवल सुरक्षा के तौर पर दिया था और उसकी कोई विधिक देनदारी अस्तित्व में नहीं थी। परंतु माननीय सर्वोच्च न्यायालय द्वारा प्रतिपादित विधि सिद्धांतों के अनुसार, चेक पर हस्ताक्षर होने की स्थिति में अधिनियम की धारा 139 के तहत परिवादी के पक्ष में विधिक उपधारणा निर्मित होती है, जिसे खंडित करने में प्रतिवादी पूर्णतः असफल रहा है। प्रतिवादी का आचरण और पत्रावली पर उपलब्ध अकाट्य साक्ष्य यह साबित करते हैं कि उसने जानबूझकर विधिक दायित्वों से बचने का प्रयास किया है, जो इस अधिनियम के तहत एक दंडनीय अपराध की श्रेणी में आता है।",
+    legal_5: "यह याचिका घरेलू हिंसा से महिलाओं का संरक्षण अधिनियम की धारा 12 के अंतर्गत व्यथित पत्नी द्वारा भरण-पोषण, निवास का अधिकार और मौद्रिक अनुतोष प्राप्त करने हेतु प्रस्तुत की गई है। आवेदिका का विवाह हिंदू रीति-रिवाज के अनुसार प्रतिवादी के साथ संपन्न हुआ था। विवाह के कुछ समय पश्चात से ही प्रतिवादी और उसके परिवार के सदस्यों द्वारा आवेदिका को अतिरिक्त दहेज की मांग को लेकर शारीरिक और मानसिक रूप से प्रताड़ित किया जाने लगा। आवेदिका को विभिन्न प्रकार के ताने दिए जाते थे और उसके साथ क्रूरता का व्यवहार किया जाता था, जिसके कारण उसका वैवाहिक जीवन अत्यंत कष्टप्रद हो गया। अंततः प्रतिवादी ने आवेदिका को उसके स्त्रीधन और व्यक्तिगत कपड़ों के बिना जबरन वैवाहिक घर से निकाल दिया। आवेदिका वर्तमान में अपने वृद्ध माता-पिता पर आश्रित है और उसके पास आजीविका का कोई स्वतंत्र साधन उपलब्ध नहीं है। प्रतिवादी एक प्रतिष्ठित बहुराष्ट्रीय कंपनी में कार्यरत है और उसका मासिक वेतन अत्यधिक है, जिससे वह आवेदिका को सम्मानजनक जीवन स्तर प्रदान करने में सक्षम है। प्रतिवादी ने इन सभी आरोपों को मनगढ़ंत बताते हुए खारिज किया और तर्क दिया कि आवेदिका बिना किसी न्यायसंगत कारण के अपनी मर्जी से मायके में रह रही है। न्यायालय ने उभय पक्षों के सामाजिक और आर्थिक स्तर का मूल्यांकन करने के उपरांत यह पाया कि आवेदिका के साथ घरेलू नातेदारी के भीतर विधिक रूप से हिंसा कारित की गई है। कानूनन प्रत्येक सक्षम पति का यह परम कर्तव्य है कि वह अपनी पत्नी को उसकी सामाजिक स्थिति के अनुरूप भरण-पोषण प्रदान करे। अतः प्रतिवादी की आय, आवश्यकताओं और रहन-सहन के स्तर को ध्यान में रखते हुए, न्यायालय प्रतिवादी को आदेशित करता है कि वह आवेदिका को प्रति माह भरण-पोषण राशि और किराए के आवास हेतु अतिरिक्त मौद्रिक सहायता नियत समय पर प्रदान करना सुनिश्चित करे।",
+    legal_6: "यह दावा याचिका मोटर यान अधिनियम की धारा 166 के अंतर्गत सड़क दुर्घटना में हुई गंभीर क्षति और मृत्यु के फलस्वरूप उचित प्रतिकर प्राप्त करने हेतु मृतक के आश्रितों द्वारा संस्थित की गई है। दावों के अनुसार, मृतक अपनी मोटरसाइकिल से अत्यंत सावधानीपूर्वक अपने गंतव्य की ओर जा रहा था, तभी विपरीत दिशा से आ रहे एक अनियंत्रित ट्रक ने, जिसे उसका चालक अत्यधिक तेज गति और लापरवाही से चला रहा था, मोटरसाइकिल को सीधी टक्कर मार दी। इस भीषण दुर्घटना के कारण मृतक को सिर और शरीर के अन्य अंगों पर घातक चोटें आईं, जिसके परिणामस्वरूप चिकित्सालय ले जाते समय रास्ते में ही उसकी असमय मृत्यु हो गई। घटना के तुरंत बाद स्थानीय पुलिस स्टेशन में ट्रक चालक के विरुद्ध आपराधिक मामला दर्ज किया गया था। मृतक अपनी मृत्यु के समय एक निजी प्रतिष्ठान में कार्यरत था और उसकी मासिक आय से ही पूरे परिवार का भरण-पोषण सुचारू रूप से चलता था। ट्रक का विधिक बीमा एक नामी बीमा कंपनी के पास वैध था। बीमा कंपनी ने अपनी लिखित आपत्ति में मुख्य रूप से यह तर्क प्रस्तुत किया कि दुर्घटना ट्रक चालक की लापरवाही से नहीं बल्कि स्वयं मृतक की असावधानी के कारण हुई थी और ट्रक चालक के पास वैध ड्राइविंग लाइसेंस उपलब्ध नहीं था। न्यायालय ने दुर्घटना स्थल के पंचनामे, प्रथम सूचना रिपोर्ट और चश्मदीद गवाहों के बयानों का गहन विश्लेषण करने के उपरांत यह पाया कि दुर्घटना पूरी तरह से ट्रक चालक द्वारा बरती गई घोर लापरवाही का सीधा परिणाम थी। मृतक की आयु, आश्रितों की संख्या और भविष्य की आर्थिक संभावनाओं के आधार पर उचित गणना की गई। न्यायालय ने बीमा कंपनी की तकनीकी आपत्तियों को निराधार पाते हुए आदेश पारित किया कि वह दावेदारागण को ब्याज सहित संपूर्ण प्रतिकर राशि का भुगतान निर्धारित अवधि के भीतर करे।",
+    legal_7: "वादी ने यह वाद संविदा के विनिर्दिष्ट अनुपालन और क्षतिपूर्ति की डिक्री पारित किए जाने हेतु प्रतिवादी के विरुद्ध सिविल न्यायालय में प्रस्तुत किया है। वाद के तथ्यों के अनुसार, वादी और प्रतिवादी के मध्य एक अचल संपत्ति के क्रय-विक्रय के संबंध में एक विधिक अनुबंध निष्पादित हुआ था। इस अनुबंध के तहत कुल प्रतिफल राशि तय की गई थी, जिसके आंशिक भुगतान के रूप में वादी ने एक बड़ी धनराशि अग्रिम बयाने के तौर पर प्रतिवादी को नकद एवं चेक के माध्यम से अदा की थी। संविदा की शर्तों के अनुसार शेष धनराशि का भुगतान करके रजिस्ट्री निष्पादित करने की एक समय-सीमा निर्धारित की गई थी। वादी नियत तिथि से पूर्व शेष राशि के साथ सब-रजिस्ट्रार कार्यालय में उपस्थित था और वह संविदा के अपने भाग को पूरा करने के लिए सदैव तत्पर और इच्छुक रहा था, परंतु प्रतिवादी जानबूझकर उपस्थित नहीं हुआ और उसने भूमि की रजिस्ट्री करने से साफ इंकार कर दिया। प्रतिवादी ने अपने प्रतिवाद पत्र में यह दलील दी कि समय सीमा संविदा का मुख्य तत्व थी और वादी निर्धारित समय के भीतर शेष राशि का प्रबंध करने में असमर्थ रहा था। न्यायालय ने दोनों पक्षों द्वारा प्रस्तुत मौखिक और दस्तावेजी साक्ष्यों का बारिकी से परीक्षण किया। पत्रावली पर मौजूद वादी के बैंक खातों के विवरण और प्रतिवादी को भेजे गए विधिक नोटिसों से यह अकाट्य रूप से प्रमाणित होता है कि वादी के पास पर्याप्त वित्तीय संसाधन उपलब्ध थे और वह संविदा के पालन हेतु पूरी तरह तैयार था। इसके विपरीत, प्रतिवादी का आचरण संविदा के उल्लंघन को दर्शाता है क्योंकि उसने उक्त संपत्ति को किसी अन्य तीसरे पक्ष को ऊंचे दामों पर बेचने का अनैतिक प्रयास किया था। विशिष्ट अनुतोष अधिनियम के प्रावधानों के अंतर्गत न्यायालय प्रतिवादी को आदेशित करता है कि वह वादी से शेष राशि प्राप्त कर अनुबंध के अनुसार संपत्ति का बैनामा वादी के पक्ष में पंजीकृत कराए।",
+    legal_8: "यह दीवानी वाद वादी द्वारा अपने सह-खातेदारों के विरुद्ध पैतृक अचल संपत्ति के विभाजन और पृथक कब्जे की घोषणा हेतु संस्थित किया गया है। वाद पत्र के अनुसार, विवादित कृषि भूमि और आवासीय मकान वादी के पूर्वजों की संयुक्त अर्जन की संपत्ति है, जिसका राजस्व अभिलेखों में संयुक्त रूप से नाम दर्ज है। वादी और प्रतिवादीगण इस संयुक्त हिंदू परिवार के विधिक सदस्य हैं और कानूनन संपत्ति के प्रत्येक हिस्से पर उनका समान अधिकार बनता है। वादी ने कुछ समय पूर्व प्रतिवादीगण से मौखिक रूप से अनुरोध किया था कि वे पैतृक संपत्ति का विधिक बंटवारा कर उसका हिस्सा अलग कर दें ताकि वह स्वतंत्र रूप से कृषि कार्य कर सके, परंतु प्रतिवादीगण ने दुर्भावनापूर्वक वादी के इस न्यायसंगत प्रस्ताव को अस्वीकार कर दिया और पूरी संपत्ति पर स्वयं का एकाधिकार स्थापित करने का अनुचित प्रयास करने लगे। प्रतिवादीगण ने अपने लिखित कथन में यह तर्क दिया कि पूर्व में ही एक पारिवारिक समझौते के तहत संपत्ति का पूर्ण और अंतिम विभाजन हो चुका है और वादी को उसका हिस्सा पहले ही नकद राशि के रूप में दिया जा चुका है, इसलिए यह वाद चलने योग्य नहीं है। न्यायालय ने विवादक तय करने के पश्चात राजस्व रिकॉर्ड, खसरा खतौनी और दोनों पक्षों के साक्ष्यों का परिशीलन किया। प्रतिवादीगण पत्रावली पर किसी भी प्रकार के पंजीकृत विभाजन विलेख या विधिक दस्तावेज को प्रस्तुत करने में असमर्थ रहे जो पूर्व विभाजन की कहानी को साबित कर सके। हिंदू उत्तराधिकार अधिनियम के अंतर्गत सह-दायिकी संपत्ति में प्रत्येक वारिस का जन्मसिद्ध अधिकार होता है और जब तक एक पंजीकृत विलेख द्वारा विभाजन साबित न हो, संपत्ति को संयुक्त ही माना जाएगा। अतः न्यायालय वादी के पक्ष में प्रारंभिक विभाजन डिक्री पारित करते हुए विवादित संपत्ति में उसका हिस्सा नियत करता है।",
+legal_9: "यह औद्योगिक विवाद श्रमिक संघ की ओर से प्रबंधन के विरुद्ध कर्मचारियों को बिना किसी विधिक प्रक्रिया के नौकरी से अवैध रूप से पृथक किए जाने और बकाया वेतन के भुगतान न होने के कारण श्रम न्यायालय के समक्ष प्रस्तुत किया गया है। श्रमिक के कथनों के अनुसार, वह पिछले पांच वर्षों से प्रतिष्ठान में निरंतर और निष्ठापूर्वक अपनी सेवाएं दे रहा था और उसका सेवा रिकॉर्ड पूर्णतः बेदाग रहा था। प्रबंधन ने बिना कोई कारण बताए, बिना किसी अनुशासनात्मक जांच के और बिना कोई पूर्व नोटिस या छंटनी मुआवजा दिए अचानक उसे सेवा से बाहर कर दिया, जो कि औद्योगिक विवाद अधिनियम के प्रावधानों का घोर उल्लंघन है। प्रबंधन ने अपने प्रतिवाद में यह दलील दी कि श्रमिक एक संविदा कर्मचारी था और उसकी सेवाएं अनुबंध की अवधि समाप्त होने के कारण स्वतः समाप्त हो गईं, साथ ही वह कार्य के प्रति हमेशा लापरवाह रहता था। श्रम न्यायालय ने प्रतिष्ठान के मस्टर रोल, वेतन पर्चियों और गवाहों के बयानों का बारिकी से परीक्षण किया। साक्ष्यों से यह स्पष्ट रूप से सिद्ध हुआ कि श्रमिक ने एक कैलेंडर वर्ष में दो सौ चालीस दिनों से अधिक निरंतर कार्य किया था, जिससे वह कानूनन नियमित कर्मचारी के समान संरक्षण का अधिकारी बन जाता है। प्रबंधन ने छंटनी के सिद्धांतों जैसे 'अंतिम आए, प्रथम जाए' का पालन नहीं किया और न ही कोई विधिक प्रक्रिया अपनाई। प्राकृतिक न्याय के सिद्धांतों की अनदेखी करके किया गया कोई भी सेवा समाप्ति आदेश पूर्णतः शून्य और अवैध होता है। अतः श्रम न्यायालय प्रबंधन के अवैध आदेश को निरस्त करते हुए श्रमिक को सेवा में निरंतरता, पिछले संपूर्ण बकाया वेतन और अन्य सभी विधिक लाभों के साथ काम पर वापस बहाल करने का ऐतिहासिक आदेश जारी करता है।",
+legal_10: "यह शिकायत उपभोक्ता संरक्षण अधिनियम के अंतर्गत जिला उपभोक्ता विवाद निवारण आयोग के समक्ष सेवा में घोर कमी और अनुचित व्यापार व्यवहार के कारण एक पीड़ित उपभोक्ता द्वारा दर्ज कराई गई है। शिकायतकर्ता ने प्रतिवादी कंपनी से एक कीमती इलेक्ट्रॉनिक उपकरण क्रय किया था, जिसके लिए कंपनी द्वारा एक वर्ष की पूर्ण वारंटी प्रदान की गई थी। उपकरण के क्रय करने के कुछ ही दिनों के भीतर उसमें गंभीर तकनीकी खराबी आ गई, जिसके कारण उसने काम करना पूरी तरह बंद कर दिया। शिकायतकर्ता ने तत्काल प्रतिवादी के अधिकृत सेवा केंद्र से संपर्क किया, परंतु सेवा केंद्र के कर्मचारियों ने उपकरण को सुधारने में अत्यधिक शिथिलता बरती और बाद में यह कहकर वारंटी लाभ देने से मना कर दिया कि खराबी उपभोक्ता की लापरवाही के कारण हुई है। प्रतिवादी कंपनी ने आयोग के समक्ष तर्क दिया कि उनके उत्पाद में कोई विनिर्माण दोष नहीं था और उन्होंने उपभोक्ता को नियमानुसार सर्वोत्तम सेवाएं प्रदान करने की कोशिश की थी। आयोग ने स्वतंत्र सरकारी तकनीकी विशेषज्ञ की रिपोर्ट और दोनों पक्षों के तर्कों का सूक्ष्मता से अवलोकन किया। विशेषज्ञ की रिपोर्ट से यह अकाट्य रूप से प्रमाणित हुआ कि उपकरण में विनिर्माण के समय से ही एक आंतरिक तकनीकी दोष मौजूद था, जिसे सुधारा जाना संभव नहीं था। वारंटी अवधि के दौरान उत्पाद में खराबी आने पर उसे बदलना या उपभोक्ता को पूर्ण धन वापस करना कंपनी का विधिक दायित्व है। ग्राहकों को मानसिक रूप से परेशान करना और दोषपूर्ण उत्पाद बेचना सेवा में कमी की श्रेणी में आता है। अतः जिला आयोग उपभोक्ता के अधिकारों का संरक्षण करते हुए प्रतिवादी कंपनी को आदेशित करता है कि वह उत्पाद की पूरी कीमत ब्याज सहित वापस करे और मानसिक प्रताड़ना हेतु उचित क्षतिपूर्ति राशि का भुगतान करे।"
+});// पिछले मैटर के ठीक नीचे इस डेटाबेस एक्स्टेंशन को जोड़ें
+Object.assign(matterDatabase, {
+    legal_11: "यह राजस्व अपील मध्य प्रदेश भू-राजस्व संहिता की धारा 44 के अंतर्गत उपखंड अधिकारी द्वारा पारित सीमांकन और नामांतरण के आदेश के विरुद्ध अतिरिक्त आयुक्त के न्यायालय के समक्ष प्रस्तुत की गई है। अपीलार्थी के तर्कों के अनुसार, विवादित भूमि उसके स्वत्व और आधिपत्य की है, जिस पर प्रतिवादी ने पटवारी और स्थानीय राजस्व अमले के साथ मिलीभगत करके अनुचित रूप से सीमांकन की कार्यवाही संचालित कराई। इस कथित सीमांकन की सूचना अपीलार्थी को विधिक रूप से तामील नहीं की गई थी और न ही उसे घटना स्थल पर उपस्थित रहने का अवसर दिया गया, जो प्राकृतिक न्याय के सिद्धांतों के पूर्णतः विपरीत है। प्रतिवादी ने अपने प्रतिवाद में यह दलील दी कि सीमांकन की कार्यवाही तहसीलदार के विधिक आदेश के पालन में पूर्णतः निष्पक्ष रूप से की गई थी और सीमांकन प्रतिवेदन पर उपस्थित ग्रामीणों के हस्ताक्षर मौजूद हैं, इसलिए इसमें किसी हस्तक्षेप की आवश्यकता नहीं है। राजस्व न्यायालय ने पत्रावली, फील्ड बुक और सीमांकन की दैनिक डायरी का सूक्ष्मता से परिशीलन किया। साक्ष्यों से यह स्पष्ट रूप से उजागर हुआ कि सीमांकन के समय पड़ोसी भूमि स्वामियों को मध्य प्रदेश भू-राजस्व संहिता के विधिक प्रावधानों के अनुसार कोई लिखित नोटिस जारी नहीं किया गया था। राजस्व नियमों के अंतर्गत बिना पूर्व सूचना के किया गया कोई भी सीमांकन अवैध और शून्य माना जाता है। न्यायालय ने यह भी पाया कि विवादित भूमि के खसरे में प्रतिवादी का नाम दुर्भावनापूर्वक अंकित किया गया था। अतः राजस्व न्यायालय अपीलार्थी के तर्कों को स्वीकार करते हुए अधीनस्थ न्यायालय के आदेश को निरस्त करता है और तहसीलदार को निर्देश देता है कि वह उभय पक्षों को सुनवाई का समुचित अवसर देकर नए सिरे से विधिक सीमांकन की कार्यवाही सुनिश्चित करें।",
+    legal_12: "यह याचिका हिंदू विवाह अधिनियम की धारा 13 के अंतर्गत विवाह विच्छेद अर्थात तलाक की डिक्री पारित किए जाने हेतु पति द्वारा पत्नी के विरुद्ध पारिवारिक न्यायालय के समक्ष संस्थित की गई है। विवाह के कुछ समय पश्चात से ही दोनों के मध्य वैचारिक मतभेद उत्पन्न हो गए थे। याचिका के अनुसार, अनावेदिका पत्नी का व्यवहार पति और उसके वृद्ध माता-पिता के प्रति अत्यंत क्रूर और अपमानजनक था। वह बिना किसी विधिक कारण के बार-बार वैवाहिक घर छोड़कर अपने मायके चली जाती थी और उसने पति के विरुद्ध विभिन्न झूठे आपराधिक मामले दर्ज कराने की धमकियां भी दीं, जिससे आवेदक का मानसिक स्वास्थ्य और सामाजिक प्रतिष्ठा अत्यंत प्रभावित हुई। अनावेदिका ने अपने लिखित कथन में इन सभी आरोपों का पूर्ण खंडन किया और प्रति-आरोप लगाया कि आवेदक और उसके परिजन उसे कम दहेज के लिए प्रताड़ित करते थे। न्यायालय ने दोनों पक्षों की गवाही, विवाह की तस्वीरों और काउंसलिंग रिपोर्ट का विस्तृत अवलोकन किया। काउंसलिंग के दौरान दोनों पक्षों ने स्पष्ट किया कि वे पिछले तीन वर्षों से पूरी तरह अलग रह रहे हैं और उनके बीच सुलह की कोई भी गुंजाइश शेष नहीं बची है। विधिक सिद्धांतों के अनुसार, यदि कोई विवाह पूरी तरह से टूट चुका हो और दोनों पक्ष एक साथ रहने में असमर्थ हों, तो उसे जबरन खींचना दोनों के प्रति क्रूरता है। मानसिक क्रूरता और परित्याग के आधार पर विवाह विच्छेद का आधार विधिक रूप से प्रमाणित होता है। अतः न्यायालय विवाह को विच्छेदित करते हुए तलाक की डिक्री जारी करता है और पति को आदेशित करता है कि वह पत्नी के सुरक्षित भविष्य हेतु एकमुश्त स्थायी भरण-पोषण राशि का भुगतान निर्धारित अवधि के भीतर करे।",
+    legal_13: "वादी ने प्रतिवादी के विरुद्ध अचल संपत्ति पर अनाधिकृत निर्माण को रोकने और शांतिपूर्ण आधिपत्य बनाए रखने हेतु स्थायी निषेधाज्ञा का यह सिविल वाद प्रस्तुत किया है। वाद पत्र के अनुसार, विवादित भूखंड वादी के स्वामित्व का है जिसे उसने एक पंजीकृत विक्रय विलेख के माध्यम से क्रय किया था। प्रतिवादी, जिसकी भूमि वादी के भूखंड से सटी हुई है, वादी की सीमा में जबरन अतिक्रमण करके एक पक्की दीवार का निर्माण करने का अवैध प्रयास कर रहा है। वादी ने जब इस कृत्य का विरोध किया, तो प्रतिवादी ने उसे गंभीर परिणाम भुगतने की धमकी दी। प्रतिवादी ने अपने लिखित कथन में तर्क दिया कि वह अपनी स्वयं की विधिक भूमि पर निर्माण कर रहा है और वादी का यह वाद दुर्भावना से प्रेरित है। न्यायालय ने विवादक तय करने के उपरांत एक कमिश्नर की नियुक्ति की ताकि मौके की वास्तविक स्थिति की जांच की जा सके। कमिश्नर की रिपोर्ट और राजस्व सीमांकन से यह साफ सिद्ध हुआ कि प्रतिवादी का निर्माण कार्य वादी के भूखंड की सीमा के भीतर लगभग दो फीट तक फैला हुआ है। विधिक सिद्धांतों के अनुसार, किसी भी व्यक्ति को किसी अन्य की निजी संपत्ति पर बिना विधिक प्रक्रिया के निर्माण करने का कोई अधिकार नहीं है। वादी के पक्ष में प्रथम दृष्टया मामला, सुविधा का संतुलन और अपूरणीय क्षति के तीनों विधिक तत्व पूरी तरह प्रमाणित होते हैं। प्रतिवादी का यह कृत्य वादी के विधिक अधिकारों का हनन है। अतः न्यायालय वादी के पक्ष में वाद डिक्री करते हुए प्रतिवादी को स्थायी रूप से निषेधित करता है कि वह वादी की भूमि पर कोई निर्माण न करे और अतिक्रमण को तत्काल हटाए।",
+    legal_14: "यह आपराधिक पुनरीक्षण याचिका दंड प्रक्रिया संहिता की धारा 397/401 के अंतर्गत विद्वान मुख्य न्यायिक मजिस्ट्रेट द्वारा अभियुक्त को दी गई दोषसिद्धि के आदेश के विरुद्ध सत्र न्यायालय के समक्ष प्रस्तुत की गई है। अधीनस्थ न्यायालय ने अभियुक्त को भारतीय दंड संहिता की धारा 325 के तहत गंभीर उपहति कारित करने के अपराध में एक वर्ष के सश्रम कारावास से दंडित किया था। पुनरीक्षणकर्ता के विद्वान अधिवक्ता ने मुख्य रूप से यह तर्क प्रस्तुत किया कि अधीनस्थ न्यायालय ने साक्ष्यों का मूल्यांकन करने में गंभीर भूल की है, क्योंकि घटना के समय कोई भी स्वतंत्र साक्षी उपस्थित नहीं था और पूरा मामला केवल घायल व्यक्ति के विरोधाभासी बयानों पर आधारित है। लोक अभियोजक ने इन तर्कों का प्रतिवाद करते हुए कहा कि घायल साक्षी का बयान किसी भी आपराधिक मामले में सबसे महत्वपूर्ण साक्ष्य होता है और चिकित्सीय रिपोर्ट से चोटों की प्रकृति पूरी तरह प्रमाणित है। न्यायालय ने पत्रावली और गवाहों के प्रतिपरीक्षण का गहनता से परिशीलन किया। साक्ष्यों से यह स्पष्ट हुआ कि घटना अचानक हुई थी और पुनरीक्षणकर्ता का कोई पूर्व नियोजित उद्देश्य नहीं था, परंतु उसने कुल्हाड़ी के पिछले हिस्से से वार किया था जिससे फरियादी की हड्डी टूट गई थी। न्यायालय ने दोषसिद्धि के आदेश को विधि सम्मत पाया, परंतु इस तथ्य को ध्यान में रखते हुए कि पुनरीक्षणकर्ता का यह प्रथम अपराध है और वह पिछले छह महीनों से जेल में निरुद्ध है, कारावास की अवधि को पहले से भुगती गई अवधि तक सीमित करना न्यायसंगत समझा। अतः पुनरीक्षण आंशिक रूप से स्वीकार करते हुए सजा को संशोधित किया जाता है और उसे रिहा करने का आदेश दिया जाता है।",
+    legal_15: "यह संदर्भ याचिका भूमि अर्जन अधिनियम की धारा 18 के अंतर्गत विशेष भूमि अर्जन अधिकारी द्वारा निर्धारित मुआवजे की राशि को चुनौती देते हुए और उचित बाजार मूल्य के आधार पर मुआवजा बढ़ाने हेतु जिला न्यायालय के समक्ष प्रस्तुत की गई है। सरकार ने एक सार्वजनिक सिंचाई परियोजना के निर्माण हेतु याचिकाकर्ता की उपजाऊ कृषि भूमि का विधिक रूप से अर्जन किया था। भूमि अर्जन अधिकारी ने उक्त भूमि को असिंचित मानकर अत्यंत कम दर पर मुआवजे का निर्धारण किया, जिससे व्यथित होकर याचिकाकर्ता ने यह संदर्भ प्रस्तुत किया। याचिकाकर्ता का तर्क है कि उसकी भूमि अत्यंत उपजाऊ और राष्ट्रीय राजमार्ग के समीप स्थित थी, जिसका व्यावसायिक मूल्य बहुत अधिक था। प्रतिवादी राज्य सरकार ने अपने जवाब में तर्क दिया कि मुआवजे की गणना तत्कालीन कलेक्टर गाइडलाइन और रजिस्ट्री के आंकड़ों के आधार पर पूर्णतः वैज्ञानिक तरीके से की गई है, इसलिए मुआवजा बढ़ाने का कोई आधार नहीं है। न्यायालय ने उभय पक्षों के साक्ष्यों, भूमि के आसपास की व्यावसायिक रजिस्ट्रियों और पटवारी की रिपोर्ट का बारीकी से परीक्षण किया। साक्ष्यों से यह अकाट्य रूप से सिद्ध हुआ कि याचिकाकर्ता की भूमि पर दो कुएं और आधुनिक सिंचाई प्रणाली उपलब्ध थी, जिससे वह वर्ष में तीन फसलें लेता था। कानूनन मुआवजा निर्धारित करते समय भूमि की वास्तविक प्रकृति, स्थिति और भविष्य की क्षमता को ध्यान में रखा जाना अनिवार्य है। अतः न्यायालय भूमि अर्जन अधिकारी के अवार्ड को संशोधित करते हुए याचिकाकर्ता की भूमि का बाजार मूल्य पुनर्गठित करता है और प्रतिवादी को आदेशित करता है कि वह बढ़ी हुई राशि पर नियमानुसार सोलेशियम और ब्याज का भुगतान करे।",
+    legal_16: "यह रिट याचिका भारत के संविधान के अनुच्छेद 226 के अंतर्गत याचिकाकर्ता द्वारा राज्य सरकार के एक आदेश को चुनौती देते हुए प्रस्तुत की गई है, जिसके माध्यम से उसे बिना किसी विभागीय जांच के सेवा से अनिवार्य रूप से सेवानिवृत्त कर दिया गया था। याचिकाकर्ता एक शासकीय विभाग में प्रशासनिक पद पर कार्यरत था। उसका तर्क है कि आक्षेपित आदेश पूर्णतः दुर्भावनापूर्ण, मनमाना और भारतीय संविधान के अनुच्छेद 14 एवं 311 का स्पष्ट उल्लंघन है। सरकार ने अपने प्रतिवाद में यह दलील दी कि याचिकाकर्ता का सेवा रिकॉर्ड पिछले कुछ वर्षों में अत्यंत खराब था और जनहित को ध्यान में रखते हुए प्रशासनिक दक्षता बनाए रखने के लिए यह निर्णय लिया गया, जो कि सेवा नियमों के अनुकूल है। माननीय उच्च न्यायालय ने विभाग की गोपनीय चरित्रावली और सेवा पत्रावली को मंगाकर उसका गहनता से अवलोकन किया। रिकॉर्ड से यह स्पष्ट हुआ कि याचिकाकर्ता को कभी भी कोई प्रतिकूल टिप्पणी या चेतावनी जारी नहीं की गई थी और अचानक एक राजनीतिक शिकायत के आधार पर यह दंडात्मक आदेश पारित कर दिया गया। प्रशासनिक शक्तियों का प्रयोग हमेशा निष्पक्ष और पारदर्शी होना चाहिए, उसे किसी व्यक्तिगत प्रतिशोध का साधन नहीं बनाया जा सकता। प्राकृतिक न्याय के सिद्धांतों के अनुसार किसी भी कर्मचारी के विरुद्ध कोई भी दंडात्मक कार्रवाई करने से पूर्व उसे अपना पक्ष रखने का अवसर देना अनिवार्य विधिक प्रक्रिया है। अतः माननीय उच्च न्यायालय इस रिट याचिका को स्वीकार करते हुए आक्षेपित आदेश को असंवैधानिक घोषित कर निरस्त करता है और याचिकाकर्ता को संपूर्ण पिछले सेवा लाभों के साथ पद पर बहाल करने का निर्देश देता है।",
+legal_17: "यह आवेदन मध्यस्थता और सुलह अधिनियम की धारा 11 के अंतर्गत वाणिज्यिक अनुबंध के तहत उत्पन्न विवादों के निपटारे हेतु एक स्वतंत्र मध्यस्थ (Arbitrator) की नियुक्ति किए जाने के संबंध में माननीय उच्च न्यायालय के समक्ष प्रस्तुत किया गया है। पक्षों के मध्य एक बड़े निर्माण कार्य का विधिक अनुबंध निष्पादित हुआ था, जिसमें एक विशिष्ट क्लॉज शामिल था कि किसी भी विवाद की स्थिति में मामला मध्यस्थता को संदर्भित किया जाएगा। वादी के अनुसार, उसने अनुबंध की शर्तों के अनुरूप संपूर्ण निर्माण कार्य समय पर पूर्ण कर दिया था, परंतु प्रतिवादी ने अंतिम बिलों का भुगतान करने से अनुचित रूप से इंकार कर दिया। वादी ने मध्यस्थ की नियुक्ति हेतु प्रतिवादी को लिखित नोटिस प्रेषित किया था, जिसका प्रतिवादी ने कोई विधिक उत्तर नहीं दिया। प्रतिवादी ने न्यायालय के समक्ष यह तर्क दिया कि अनुबंध में कुछ विसंगतियां थीं और वादी का दावा समय-बाधित (Time-barred) है, इसलिए मध्यस्थ की नियुक्ति नहीं की जा सकती। न्यायालय ने अनुबंध प्रलेखों और पक्षों के मध्य हुए पत्राचार का परिशीलन किया। विधिक सिद्धांतों के अनुसार, मध्यस्थता आवेदन की सुनवाई करते समय न्यायालय को केवल मध्यस्थता समझौते के अस्तित्व की जांच करनी होती है, दावों के गुण-दोष का निर्धारण स्वयं मध्यस्थ द्वारा किया जाता है। जब तक मध्यस्थता क्लॉज वैध है, मामले को मध्यस्थ को सौंपना कानूनन अनिवार्य है। अतः माननीय न्यायालय प्रतिवादी के तर्कों को खारिज करते हुए मध्य प्रदेश उच्च न्यायालय के एक सेवानिवृत्त न्यायाधीश को स्वतंत्र मध्यस्थ के रूप में नियुक्त करता है और उन्हें मध्यस्थता नियमों के अंतर्गत निर्धारित समय-सीमा के भीतर पंचाट पारित करने का निर्देश देता है।",
+legal_18: "यह आपराधिक शिकायत सूचना प्रौद्योगिकी अधिनियम (IT Act) की धारा 66डी और भारतीय दंड संहिता की विभिन्न धाराओं के अंतर्गत एक राष्ट्रीयकृत बैंक के खाताधारक के साथ हुए ऑनलाइन वित्तीय साइबर अपराध के संबंध में प्रस्तुत की गई है। शिकायत के अनुसार, फरियादी को एक अज्ञात मोबाइल नंबर से कॉल प्राप्त हुआ, जिसमें कॉलर ने स्वयं को बैंक का मुख्य प्रबंधक बताते हुए फरियादी के खाते को ब्लॉक होने से बचाने के बहाने गोपनीय केवाईसी विवरण और वन-टाइम पासवर्ड (OTP) प्राप्त कर लिया। इसके तुरंत बाद, फरियादी के बैंक खाते से एक बड़ी धनराशि अनधिकृत रूप से विभिन्न वॉलेट्स में स्थानांतरित कर दी गई। फरियादी ने तत्काल इसकी सूचना साइबर पुलिस और संबंधित बैंक को दी। जांच के दौरान साइबर सेल ने आईपी एड्रेस और कॉल डिटेल रिकॉर्ड्स के माध्यम से अभियुक्त को गिरफ्तार किया और उसके पास से अपराध में प्रयुक्त सिम कार्ड और मोबाइल फोन जब्त किए। अभियुक्त के विद्वान अधिवक्ता ने तर्क दिया कि अभियुक्त का इस अपराध से कोई सीधा संबंध नहीं है और उसे केवल संदेह के आधार पर फंसाया गया है। अभियोजन ने इलेक्ट्रॉनिक साक्ष्यों को साक्ष्य अधिनियम की धारा 65बी के विधिक प्रमाणपत्र के साथ पटल पर प्रस्तुत किया। बैंक के सर्वर लॉग्स और डिजिटल फुटप्रिंट्स से यह अकाट्य रूप से प्रमाणित हुआ कि फरियादी के खाते से पैसे अभियुक्त के निजी डिजिटल वॉलेट में ही ट्रांसफर हुए थे। डिजिटल युग में साइबर अपराध समाज की आर्थिक सुरक्षा के लिए एक गंभीर खतरा हैं, जिनमें कठोर विधिक रुख अपनाया जाना आवश्यक है। अतः न्यायालय साक्ष्यों को विश्वसनीय मानते हुए अभियुक्त की जमानत याचिका खारिज करता है।",
+legal_19: "यह याचिका संरक्षक और प्रतिपाल्य अधिनियम (Guardianship Act) की धारा 25 के अंतर्गत नाबालिग बच्चे की विधिक अभिरक्षा (Custody) प्राप्त करने हेतु माता द्वारा पिता के विरुद्ध पारिवारिक न्यायालय के समक्ष प्रस्तुत की गई है। पक्षों का विवाह कुछ वर्ष पूर्व हुआ था और उनका एक पांच वर्षीय पुत्र है। वैवाहिक कलह के कारण दोनों अलग रह रहे हैं और बच्चा वर्तमान में पिता के पास है। माता का तर्क है कि पिता अत्यधिक मदिरापान करता है और बच्चे की शिक्षा तथा स्वास्थ्य के प्रति पूरी तरह उदासीन है, जिससे बच्चे का भविष्य अंधकारमय हो रहा है। इसके विपरीत, पिता ने तर्क दिया कि माता कामकाजी महिला है और उसके पास बच्चे की देखभाल के लिए पर्याप्त समय उपलब्ध नहीं है, जबकि वह स्वयं बच्चे को सर्वोत्तम सुविधाएं प्रदान कर रहा है। न्यायालय ने नाबालिग बच्चे को व्यक्तिगत रूप से चैंबर में बुलाकर उससे बातचीत की और उसकी इच्छा को जानने का प्रयास किया। विधिक सिद्धांतों के अनुसार, बच्चे की अभिरक्षा का निर्धारण करते समय माता-पिता के विधिक अधिकारों से ऊपर बच्चे के कल्याण और उसके सुरक्षित भविष्य (Welfare of the Child) को सर्वोपरि महत्व दिया जाना अनिवार्य है। पांच वर्ष की निविदा आयु के बच्चे को मां के स्नेह और निरंतर देखभाल की सर्वाधिक आवश्यकता होती है। पिता की वित्तीय स्थिति अच्छी होने मात्र से बच्चे का मानसिक विकास सुनिश्चित नहीं हो सकता। अतः न्यायालय बच्चे के सर्वोत्तम हित को ध्यान में रखते हुए विधिक अभिरक्षा माता को सौंपने का आदेश जारी करता है और पिता को प्रत्येक माह के अंत में बच्चे से मिलने का विधिक अधिकार प्रदान करता है।",
+legal_20: "यह दीवानी अपील माननीय सर्वोच्च न्यायालय द्वारा प्रतिपादित महत्वपूर्ण विधिक सिद्धांतों और नजीरों के प्रकाश में अधीनस्थ प्राधिकारियों के एक त्रुटिपूर्ण निर्णय को चुनौती देते हुए प्रस्तुत की गई है। मामले के मुख्य तथ्य यह दर्शाते हैं कि एक प्रशासनिक ट्रिब्यूनल ने याचिकाकर्ता के दावों को यह कहते हुए खारिज कर दिया था कि उसके पास अधिकार क्षेत्र का अभाव है। अपीलकर्ता के विद्वान वरिष्ठ अधिवक्ता ने तर्क दिया कि ट्रिब्यूनल का यह निष्कर्ष माननीय सर्वोच्च न्यायालय के संवैधानिक पीठ द्वारा हाल ही में पारित ऐतिहासिक फैसले के सिद्धांतों के सर्वथा विपरीत है, जिसमें स्पष्ट किया गया था कि ट्रिब्यूनल के पास ऐसे विशिष्ट मामलों की सुनवाई करने की पूर्ण विधिक शक्ति और क्षेत्राधिकार निहित है। प्रतिवादी ने इसके विपरीत यह दलील दी कि उक्त निर्णय के तथ्य वर्तमान मामले पर सीधे लागू नहीं होते हैं। न्यायालय ने दोनों पक्षों की दलीलों को विस्तार से सुनने और न्यायदृष्टांतों का सूक्ष्मता से परिशीलन करने के पश्चात यह पाया कि भारत के संविधान के अनुच्छेद 141 के अंतर्गत सर्वोच्च न्यायालय द्वारा घोषित कानून भारत के राज्यक्षेत्र के भीतर सभी न्यायालयों और अधिकरणों पर पूरी तरह आबद्धकर (Binding) है। अधीनस्थ ट्रिब्यूनल द्वारा सर्वोच्च न्यायालय की नजीर की अनदेखी करना न्यायशास्त्र के सिद्धांतों का घोर उल्लंघन और कानून की स्थापित प्रक्रिया के प्रति अनादर को प्रदर्शित करता है। कानून की एकरूपता और न्यायिक अनुशासन बनाए रखने के लिए यह आवश्यक है कि सभी अधीनस्थ संस्थाएं सर्वोच्च न्यायिक निर्णयों का अक्षरशः पालन करें। अतः माननीय न्यायालय अधीनस्थ ट्रिब्यूनल के आक्षेपित निर्णय को न्यायसंगत न पाते हुए उसे निरस्त करता है और मामले को गुण-दोष के आधार पर पुनः त्वरित सुनवाई हेतु ट्रिब्यूनल को वापस प्रेषित करता है।"
+});let currentMatterText = "";
 let sourceWords = [];
 let typedWords = [];
 let currentWordIndex = 0;
@@ -506,6 +271,7 @@ let timeLeft = 600;
 let timerInterval = null;
 let isTestActive = false;
 let grossKeystrokes = 0;
+let backspaceCount = 0;
 
 const sourcePanel = document.getElementById("source-panel");
 const hiddenInput = document.getElementById("hidden-typing-input");
@@ -515,10 +281,13 @@ const timerDisplay = document.getElementById("timer");
 const wordCountDisplay = document.getElementById("word-count");
 const typedDisplay = document.getElementById("words-typed");
 const errorDisplay = document.getElementById("error-count");
+const backspaceDisplay = document.getElementById("backspace-count");
 const startBtn = document.getElementById("start-btn");
 const submitBtn = document.getElementById("submit-btn");
 const matterSelect = document.getElementById("matter-select");
 const timeSelect = document.getElementById("time-select");
+const backspaceSelect = document.getElementById("backspace-select");
+const highlightSelect = document.getElementById("highlight-select");
 const fileInput = document.getElementById("file-input");
 const uploadLabel = document.getElementById("upload-label");
 
@@ -536,9 +305,11 @@ function initializeTest() {
     currentWordIndex = 0;
     typedWords = [];
     grossKeystrokes = 0;
+    backspaceCount = 0;
     
     typedDisplay.textContent = "0";
     errorDisplay.textContent = "0";
+    backspaceDisplay.textContent = "0";
     smoothRender.innerHTML = "&#8203;";
     hiddenInput.value = "";
     
@@ -549,9 +320,14 @@ function initializeTest() {
 }
 
 function renderSourceWords() {
-    sourcePanel.innerHTML = sourceWords.map((word, idx) => 
-        `<span class="word ${idx === 0 ? 'current-word' : ''}" id="w-${idx}">${word}</span>`
-    ).join(" ");
+    const isHighlight = highlightSelect.value === "on";
+    sourcePanel.innerHTML = sourceWords.map((word, idx) => {
+        let classes = "word";
+        if (isHighlight && idx === currentWordIndex) {
+            classes += " current-word";
+        }
+        return `<span class="${classes}" id="w-${idx}">${word}</span>`;
+    }).join(" ");
 }
 
 function updateTimerDisplay() {
@@ -562,8 +338,10 @@ function updateTimerDisplay() {
 
 matterSelect.addEventListener("change", initializeTest);
 timeSelect.addEventListener("change", initializeTest);
+highlightSelect.addEventListener("change", renderSourceWords);
+
 fileInput.addEventListener("change", function(e) {
-    const file = e.target.files;
+    const file = e.target.files[0];
     if (file) {
         const reader = new FileReader();
         reader.onload = function(evt) {
@@ -580,6 +358,20 @@ typeWrapper.addEventListener("click", () => {
     if(isTestActive) hiddenInput.focus();
 });
 
+// बैकस्पेस प्रिवेंशन इंजन (MPHC पैटर्न रिस्ट्रिक्शन)
+hiddenInput.addEventListener("keydown", (e) => {
+    if (!isTestActive) return;
+    
+    if (e.key === "Backspace") {
+        if (backspaceSelect.value === "disable") {
+            e.preventDefault(); // बैकस्पेस ब्लॉक करें
+            return;
+        }
+        backspaceCount++;
+        backspaceDisplay.textContent = backspaceCount;
+    }
+});
+
 startBtn.addEventListener("click", () => {
     if(!isTestActive) {
         isTestActive = true;
@@ -587,6 +379,8 @@ startBtn.addEventListener("click", () => {
         submitBtn.disabled = false;
         matterSelect.disabled = true;
         timeSelect.disabled = true;
+        backspaceSelect.disabled = true;
+        highlightSelect.disabled = true;
         fileInput.disabled = true;
         hiddenInput.focus();
         
@@ -604,10 +398,13 @@ startBtn.addEventListener("click", () => {
         submitBtn.disabled = true;
         matterSelect.disabled = false;
         timeSelect.disabled = false;
+        backspaceSelect.disabled = false;
+        highlightSelect.disabled = false;
         fileInput.disabled = false;
         initializeTest();
     }
 });
+
 submitBtn.addEventListener("click", endTest);
 
 hiddenInput.addEventListener("input", (e) => {
@@ -652,7 +449,9 @@ function evaluateCurrentWord(word) {
 
     if(currentWordIndex < sourceWords.length) {
         const nextWordSpan = document.getElementById(`w-${currentWordIndex}`);
-        nextWordSpan.className = "word current-word";
+        if (highlightSelect.value === "on") {
+            nextWordSpan.className = "word current-word";
+        }
         if(nextWordSpan.offsetTop > (sourcePanel.scrollTop + sourcePanel.offsetHeight - 50)) {
             sourcePanel.scrollTop = nextWordSpan.offsetTop - 30;
         }
@@ -680,16 +479,18 @@ function endTest() {
     let netWPM = Math.round(netWords / timeSpentMins);
     let accuracy = grossWords > 0 ? Math.round((netWords / grossWords) * 100) : 100;
     
-    let finalMarks = Math.max(0, 40.00 - (wrongWords * 0.10)).toFixed(2);
+    // MPHC आधिकारिक मूल्यांकन 50.00 मार्क्स स्केल के अनुसार
+    let finalMarks = Math.max(0, 50.00 - (wrongWords * 0.10)).toFixed(2);
 
     document.getElementById("res-gross").textContent = grossWords;
     document.getElementById("res-net").textContent = netWords;
     document.getElementById("res-g-wpm").innerHTML = `${grossWPM} <span class="result-value-subtext">WPM</span>`;
     document.getElementById("res-n-wpm").innerHTML = `${netWPM} <span class="result-value-subtext">WPM</span>`;
     document.getElementById("res-wrong").textContent = wrongWords;
+    document.getElementById("res-backspace").textContent = backspaceCount;
     document.getElementById("res-keys").textContent = grossKeystrokes;
     document.getElementById("res-accuracy").textContent = `${accuracy}%`;
-    document.getElementById("res-marks").textContent = `${finalMarks} / 40.00`;
+    document.getElementById("res-marks").textContent = `${finalMarks} / 50.00`;
 
     document.getElementById("result-modal").style.display = "block";
 }
@@ -700,6 +501,8 @@ function closeModal() {
     submitBtn.disabled = true;
     matterSelect.disabled = false;
     timeSelect.disabled = false;
+    backspaceSelect.disabled = false;
+    highlightSelect.disabled = false;
     fileInput.disabled = false;
     initializeTest();
 }
