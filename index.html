@@ -161,8 +161,6 @@
             position: absolute; 
             left: -9999px; 
             opacity: 0; 
-            width: 1px; 
-            height: 1px; 
         }
         #smooth-text-render { 
             display: inline; 
@@ -178,6 +176,7 @@
             background-color: #1e3d59; 
             animation: cursorBlink 1s infinite; 
             margin-left: 2px;
+            vertical-align: middle;
         }
         @keyframes cursorBlink { 
             50% { opacity: 0; } 
@@ -379,7 +378,6 @@
         .modal-footer-buttons { 
             display: flex; 
             justify-content: flex-end; 
-            gap: 10px; 
             padding: 10px; 
             background: #f0f4f9; 
             border-top: 1px solid #dcdcdc; 
@@ -408,9 +406,8 @@
         <div class="config-group">
             <label for="matter-select">Select Matter:</label>
             <select id="matter-select">
-                <option value="legal_1">कानूनी मामला - 1 (आपराधिक अपील IPC 302)</option>
-                <option value="legal_2">कानूनी मामला - 2 (दीवानी स्वत्व वाद)</option>
-                <option value="legal_3">कानूनी मामला - 3 (जमानत आवेदन पत्र)</option>
+                <option value="legal_1">कानूनी मामला - 1 (Criminal Appeal IPC 302)</option>
+                <option value="legal_2">कानूनी मामला - 2 (Civil Suit)</option>
                 <option value="custom">कस्टम मैटर अपलोड करें (.txt)</option>
             </select>
         </div>
@@ -476,7 +473,6 @@
                 <div class="result-row"><div class="result-label">Gross Typing Speed</div><div id="res-g-wpm" class="result-value">0 <span class="result-value-subtext">WPM</span></div></div>
                 <div class="result-row"><div class="result-label">Net Evaluation Typing Speed</div><div id="res-n-wpm" class="result-value">0 <span class="result-value-subtext">WPM</span></div></div>
             </div>
-
             <div class="result-section-box">
                 <div class="result-section-title">Error Analytics & Final Marking Metric</div>
                 <div class="result-row"><div class="result-label">Total Wrong / Mismatched Words</div><div id="res-wrong" class="result-value">0</div></div>
@@ -484,6 +480,7 @@
                 <div class="result-row"><div class="result-label">Accuracy Percentage</div><div id="res-accuracy" class="result-value">100%</div></div>
                 <div class="result-row final-score-row"><div class="result-label">Evaluated Marks Obtained</div><div id="res-marks" class="result-value" style="font-size:16px;">0.00 / 40.00</div></div>
             </div>
+            
             <div class="info-note">
                 * Note: Evaluation criteria calculates 0.10 marks deduction penalty per wrong word framework aligned to MPHC recruitment assessment directives.
             </div>
@@ -497,8 +494,7 @@
 <script>
 const matterDatabase = {
     legal_1: "इस आपराधिक अपील में माननीय उच्च न्यायालय के समक्ष यह मुख्य विचारणीय बिंदु प्रस्तुत किया गया है कि क्या विद्वान अधीनस्थ सत्र न्यायालय द्वारा अभियुक्त को भारतीय दंड संहिता की धारा 302 के अंतर्गत दी गई दोषसिद्धि वैधानिक साक्ष्यों पर आधारित है अथवा नहीं। अभियोजन पक्ष का यह मुख्य तर्क रहा है कि घटना के समय चश्मदीद गवाहों ने अभियुक्त को घातक हथियार के साथ मृतका पर वार करते हुए स्पष्ट रूप से देखा था। इसके विपरीत, बचाव पक्ष के विद्वान अधिवक्ता ने यह दलील दी है कि कथित प्रत्यक्षदर्शी गवाह वास्तव में घटना स्थल पर उपस्थित नहीं थे और उन्हें केवल पुरानी रंजिश के कारण झूठा फंसाया गया है। चिकित्सीय साक्ष्य और पोस्टमार्टम रिपोर्ट भी अभियोजन की कहानी का पूरी तरह समर्थन नहीं करती है। न्यायालय ने दोनों पक्षों की दलीलों को विस्तार से सुनने और पत्रावली पर उपलब्ध तमाम दस्तावेजी साक्ष्यों का सूक्ष्मता से परिशीलन करने के पश्चात यह पाया कि अधीनस्थ न्यायालय का निर्णय पूर्णतः विधि सम्मत है और उसमें किसी भी प्रकार के हस्तक्षेप की कोई विधिक आवश्यकता नहीं है। अतः यह अपील आधारहीन होने के कारण माननीय न्यायालय द्वारा अंतिम रूप से निरस्त की जाती है।",
-    legal_2: "वादी ने प्रतिवादी के विरुद्ध स्थायी निषेधाज्ञा और स्वत्व की घोषणा के लिए यह दीवानी वाद प्रस्तुत किया है। वाद पत्र के अनुसार विवादित भूमि वादी के पैतृक स्वत्व की संपत्ति है। प्रतिवादी का इस भूमि पर कोई विधिक अधिकार नहीं है परंतु वह दुर्भावनापूर्वक वादी के शांतिपूर्ण आधिपत्य में व्यवधान उत्पन्न करने का निरंतर प्रयास कर रहा है। प्रतिवादी ने अपने लिखित कथन में वादी के दावों का पूर्ण खंडन किया है और तर्क दिया है कि उक्त संपत्ति पर उसका स्वयं का कब्जा विगत बीस वर्षों से अबाधित रूप से चला आ रहा है। न्यायालय ने उभय पक्षों के अभिवचनों के आधार पर विवादक तय किए हैं। वादी ने अपने पक्ष के समर्थन में मौखिक साक्ष्य के अतिरिक्त राजस्व अभिलेख एवं सीमांकन प्रतिवेदन प्रस्तुत किया है। दस्तावेजों से स्पष्ट है कि विवादित सर्वे नंबर वादी के नाम पर दर्ज है। अतः वादी का स्वत्व विधिक रूप से प्रमाणित पाया जाता है और प्रतिवादी को स्थायी रूप से आदेशित किया जाता है कि वह वादी के कार्य में हस्तक्षेप न करे।",
-    legal_3: "यह आवेदन आवेदक की ओर से दंड प्रक्रिया संहिता की धारा 439 के अंतर्गत नियमित जमानत प्रदान किए जाने हेतु प्रस्तुत किया गया है। आवेदक के विरुद्ध संबंधित आरक्षी केंद्र में धोखाधड़ी, जालसाजी और कूटरचित दस्तावेज तैयार करने के संबंध में भारतीय दंड संहिता की विभिन्न धाराओं के तहत आपराधिक मामला पंजीबद्ध किया गया है। आवेदक के विद्वान अधिवक्ता ने यह तर्क दिया है कि आवेदक पूर्णतः निर्दोष है और उसे व्यावसायिक प्रतिद्वंद्विता के चलते इस मामले में झूठा घसीटा गया है। मामले की विवेचना पूर्ण हो चुकी है तथा आरोप पत्र सक्षम न्यायालय में दाखिल किया जा चुका है, इसलिए आवेदक को अब और अधिक समय तक न्यायिक अभिरक्षा में रखने का कोई विधिक औचित्य नहीं रह गया है। लोक अभियोजक ने जमानत का कड़ा विरोध करते हुए तर्क दिया कि यदि अभियुक्त को रिहा किया गया तो वह गवाहों को प्रभावित कर सकता है। न्यायालय ने अपराध की गंभीरता को देखते हुए शर्तों के साथ जमानत स्वीकार की।"
+    legal_2: "वादी ने प्रतिवादी के विरुद्ध स्थायी निषेधाज्ञा और स्वत्व की घोषणा के लिए यह दीवानी वाद प्रस्तुत किया है। वाद पत्र के अनुसार विवादित भूमि वादी के पैतृक स्वत्व की संपत्ति है। प्रतिवादी का इस भूमि पर कोई विधिक अधिकार नहीं है परंतु वह दुर्भावनापूर्वक वादी के शांतिपूर्ण आधिपत्य में व्यवधान उत्पन्न करने का निरंतर प्रयास कर रहा है। प्रतिवादी ने अपने लिखित कथन में वादी के दावों का पूर्ण खंडन किया है और तर्क दिया है कि उक्त संपत्ति पर उसका स्वयं का कब्जा विगत बीस वर्षों से अबाधित रूप से चला आ रहा है। न्यायालय ने उभय पक्षों के अभिवचनों के आधार पर विवादक तय किए हैं। वादी ने अपने पक्ष के समर्थन में मौखिक साक्ष्य के अतिरिक्त राजस्व अभिलेख एवं सीमांकन प्रतिवेदन प्रस्तुत किया है। दस्तावेजों से स्पष्ट है कि विवादित सर्वे नंबर वादी के नाम पर दर्ज है। अतः वादी का स्वत्व विधिक रूप से प्रमाणित पाया जाता है और प्रतिवादी को स्थायी रूप से आदेशित किया जाता है कि वह वादी के कार्य में हस्तक्षेप न करे।"
 };
 
 let currentMatterText = "";
@@ -525,6 +521,7 @@ const matterSelect = document.getElementById("matter-select");
 const timeSelect = document.getElementById("time-select");
 const fileInput = document.getElementById("file-input");
 const uploadLabel = document.getElementById("upload-label");
+
 function initializeTest() {
     if(matterSelect.value === "custom") {
         uploadLabel.style.display = "inline-block";
@@ -566,7 +563,7 @@ function updateTimerDisplay() {
 matterSelect.addEventListener("change", initializeTest);
 timeSelect.addEventListener("change", initializeTest);
 fileInput.addEventListener("change", function(e) {
-    const file = e.target.files[0];
+    const file = e.target.files;
     if (file) {
         const reader = new FileReader();
         reader.onload = function(evt) {
@@ -630,7 +627,7 @@ hiddenInput.addEventListener("input", (e) => {
         hiddenInput.value = "";
         smoothRender.innerHTML = "&#8203;";
     } else {
-        smoothRender.textContent = val;
+        smoothRender.textContent = val.length > 0 ? val : "\u200B";
     }
 });
 
